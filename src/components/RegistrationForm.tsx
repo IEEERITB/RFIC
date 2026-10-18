@@ -18,13 +18,16 @@ import {
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { ExternalLink, CheckCircle2 } from "lucide-react";
+import { ExternalLink, CheckCircle2, X } from "lucide-react";
+
+export const WHATSAPP_GROUP_URL = "https://chat.whatsapp.com/H8zM8URfnS98mMCONT2E2L";
 
 export function RegistrationForm() {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isIeeeMember, setIsIeeeMember] = useState(false);
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
+  const [showWhatsAppModal, setShowWhatsAppModal] = useState(false);
 
   const form = useForm<RegistrationFormValues>({
     resolver: zodResolver(registrationSchema),
@@ -59,12 +62,21 @@ export function RegistrationForm() {
 
       toast({
         title: "Registration Successful!",
-        description: "Your spot has been reserved! Make sure you join the official WhatsApp group for live access links.",
+        description: "Your spot has been reserved! Joining the WhatsApp community is mandatory for all access links.",
         variant: "default",
-        className: "bg-sky-600 text-white border-none",
+        className: "bg-emerald-600 text-white border-none",
       });
       
       setRegistrationSuccess(true);
+      setShowWhatsAppModal(true);
+
+      // Attempt to immediately open WhatsApp invite link in a new tab
+      try {
+        window.open(WHATSAPP_GROUP_URL, "_blank");
+      } catch (err) {
+        console.error("Popup was prevented:", err);
+      }
+
       form.reset();
     } catch (error: any) {
       toast({
@@ -78,7 +90,7 @@ export function RegistrationForm() {
   }
 
   return (
-    <section className="py-20 bg-slate-50 border-t border-slate-200" id="register">
+    <section className="py-20 bg-slate-50 border-t border-slate-200 relative" id="register">
       <div className="container mx-auto px-4 max-w-3xl">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-slate-900 mb-4">Secure Your Spot</h2>
@@ -110,7 +122,7 @@ export function RegistrationForm() {
                   All live lecture Zoom links, EDA lab credentials, design files, and physical silicon <strong>TAPEOUT announcements</strong> are shared exclusively through this community group.
                 </p>
                 <a
-                  href="https://chat.whatsapp.com/IEEE-RFIC-OpenSilicon"
+                  href={WHATSAPP_GROUP_URL}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-5 rounded-xl flex items-center justify-center gap-2 text-sm shadow-md shadow-emerald-600/30 transition-transform hover:scale-[1.02]"
@@ -324,7 +336,7 @@ export function RegistrationForm() {
                   </div>
 
                   <a
-                    href="https://chat.whatsapp.com/IEEE-RFIC-OpenSilicon"
+                    href={WHATSAPP_GROUP_URL}
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => form.setValue("joinedWhatsapp", true, { shouldValidate: true })}
@@ -368,6 +380,68 @@ export function RegistrationForm() {
         )}
       </div>
       </div>
+
+      {/* Compulsory WhatsApp Notification Modal Popup */}
+      {showWhatsAppModal && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/75 backdrop-blur-md animate-in fade-in duration-200"
+          role="dialog"
+          aria-modal="true"
+        >
+          <div className="relative w-full max-w-lg bg-white rounded-3xl shadow-2xl border-2 border-emerald-500 p-6 sm:p-8 space-y-6 text-center animate-in zoom-in-95 duration-200">
+            {/* Close Button */}
+            <button
+              onClick={() => setShowWhatsAppModal(false)}
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-700 p-2 rounded-full hover:bg-slate-100 transition-colors"
+              aria-label="Close notification"
+            >
+              <X size={20} />
+            </button>
+
+            {/* Icon */}
+            <div className="w-20 h-20 rounded-3xl bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto shadow-inner ring-8 ring-emerald-50">
+              <svg className="w-10 h-10 fill-emerald-600" viewBox="0 0 24 24">
+                <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.699c.974.55 1.954.88 2.8.88 3.179 0 5.767-2.587 5.768-5.766.001-3.18-2.586-5.766-5.772-5.766zm6.73 9.475c-.328.92-1.639 1.704-2.28 1.765-.635.06-1.465.083-2.392-.214-1.127-.361-2.525-1.144-3.69-2.308-1.428-1.427-2.38-3.158-2.677-4.102-.303-.967-.02-1.928.384-2.454.275-.357.653-.52 1.017-.52.235 0 .445.023.616.035.215.015.424-.047.585.344.209.51.714 1.745.777 1.874.063.129.105.281.02.45-.084.17-.126.275-.252.423-.127.148-.27.33-.385.443-.128.125-.262.261-.113.518.148.256.66 1.088 1.417 1.762.974.869 1.796 1.139 2.052 1.267.257.128.406.107.558-.069.152-.176.654-.763.83-1.024.175-.262.35-.218.59-.129.24.088 1.52.717 1.782.848.262.131.437.197.502.307.065.109.065.633-.263 1.553z" />
+              </svg>
+            </div>
+
+            {/* Notification Text */}
+            <div className="space-y-2">
+              <span className="inline-flex items-center gap-1.5 bg-red-100 text-red-700 border border-red-200 text-[11px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">
+                Compulsory Step Required
+              </span>
+              <h3 className="text-2xl font-black text-slate-900 tracking-tight">
+                Join the Official WhatsApp Community
+              </h3>
+              <p className="text-slate-600 text-sm leading-relaxed max-w-md mx-auto pt-1">
+                Your spot is confirmed! However, all live lecture Zoom links, EDA lab credentials, design resources, and <strong>physical silicon TAPEOUT announcements</strong> are distributed <strong>exclusively</strong> via our official WhatsApp community.
+              </p>
+            </div>
+
+            {/* Actions */}
+            <div className="space-y-3 pt-2">
+              <a
+                href={WHATSAPP_GROUP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setShowWhatsAppModal(false)}
+                className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 px-6 rounded-2xl flex items-center justify-center gap-2.5 text-base shadow-xl shadow-emerald-600/30 transition-all hover:scale-[1.02] active:scale-95"
+              >
+                <span>Join Official WhatsApp Group Now</span>
+                <ExternalLink size={18} />
+              </a>
+
+              <button
+                type="button"
+                onClick={() => setShowWhatsAppModal(false)}
+                className="w-full text-xs font-semibold text-slate-500 hover:text-slate-800 py-1.5 transition-colors"
+              >
+                I have already joined the WhatsApp group
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
