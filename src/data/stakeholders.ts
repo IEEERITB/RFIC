@@ -95,6 +95,5 @@ export const stakeholders: Stakeholder[] = [
     avatarUrl: "/stakeholders/yug-bhimani.png",
     bio: "Full-Stack Developer and Engineering Student leading the web platform architecture, digital infrastructure, and registration systems for the IEEE RF IC Design Series.",
     linkedInUrl: "https://www.linkedin.com/in/yug-bhimani-628407337",
-    githubUrl: "https://github.com/YugBhimaniii/RFIC",
   },
 ];
