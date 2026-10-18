@@ -32,8 +32,8 @@ export const modules: Module[] = [
     focusArea: "Device Physics & PDK",
     technicalTopics: [
       "High-frequency parasitic behaviors in MOSFETs",
-      "SiGe BiCMOS physics",
-      "Deep dive into the IHP SG13G2 130nm PDK"
+      "Semiconductor & BiCMOS physics",
+      "Deep dive into Open-Source PDKs (OS PDKs)"
     ],
     fossTooling: ["Xschem", "Ngspice"],
     date: "Sept 6, 2026",
@@ -123,11 +123,11 @@ export const modules: Module[] = [
     focusArea: "Tape-Out & Careers",
     technicalTopics: [
       "Multi-Project Wafer (MPW) pipelines",
-      "Efabless/IHP open shuttle submission",
+      "Open MPW shuttle submission & Student Tape-Out",
       "Vector Network Analyzer (VNA) validation",
-      "Career roadmap"
+      "Career roadmap & silicon tape-out pathways"
     ],
-    fossTooling: ["IHP Open-Silicon Service"],
+    fossTooling: ["Open-Silicon Tape-Out Flow"],
     date: "Sept 27, 2026",
     time: "10:00 AM - 1:00 PM IST",
     speakerIds: ["dr_gs_javed", "krzysztof_herman"]

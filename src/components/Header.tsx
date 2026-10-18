@@ -19,7 +19,7 @@ export function Header() {
           <Link href="#overview" className="hover:text-sky-600 transition-colors">Overview</Link>
           <Link href="#toolchain" className="hover:text-sky-600 transition-colors">Toolchain</Link>
           <Link href="#curriculum" className="hover:text-sky-600 transition-colors">Curriculum</Link>
-          <Link href="#speakers" className="hover:text-sky-600 transition-colors">Speakers</Link>
+          <Link href="#stakeholders" className="hover:text-sky-600 transition-colors">Stakeholders</Link>
           <Link href="#schedule" className="hover:text-sky-600 transition-colors">Schedule</Link>
         </nav>
         <div>

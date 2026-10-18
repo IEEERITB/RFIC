@@ -23,7 +23,7 @@ export function ScrollExpandSection() {
             Master the Physical Layer
           </h3>
           <p className="text-lg md:text-xl text-slate-800 font-medium leading-relaxed max-w-2xl mx-auto drop-shadow-sm">
-            Dive deep into 130nm SiGe BiCMOS technology. From schematic to layout to tape-out, experience true end-to-end open-source silicon design.
+            Dive deep into industry Open-Source PDKs (OS PDKs). From schematic to physical layout and DRC/LVS verification, successful student chip designs will advance to actual physical Silicon TAPEOUT.
           </p>
         </div>
       </div>

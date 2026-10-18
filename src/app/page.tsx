@@ -4,7 +4,7 @@ import { HeroSection } from "@/components/HeroSection";
 import { ScrollExpandSection } from "@/components/ScrollExpandSection";
 import { ToolchainMatrix } from "@/components/ToolchainMatrix";
 import { CurriculumSection } from "@/components/CurriculumSection";
-import { SpeakersSection } from "@/components/SpeakersSection";
+import { StakeholdersSection } from "@/components/StakeholdersSection";
 import { CertificationSection } from "@/components/CertificationSection";
 import { ScheduleSection } from "@/components/ScheduleSection";
 import { RegistrationForm } from "@/components/RegistrationForm";
@@ -17,7 +17,7 @@ export default function Home() {
       <ScrollExpandSection />
       <ToolchainMatrix />
       <CurriculumSection />
-      <SpeakersSection />
+      <StakeholdersSection />
       <CertificationSection />
       <ScheduleSection />
       <RegistrationForm />

@@ -1,0 +1,50 @@
+1) replace Speaker section with stakeholder section
+following things will be there:
+a) Series Guide & Mentor
+
+Vinayak Pachakwade
+-linkedin link- https://www.linkedin.com/in/pachkawade/?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3BTJy%2FWu23TXGdTw5CrVFbag%3D%3D (pic yhi se utha lo)
+-portfolio link- www.vpachkawadeworld.com
+-about section frame from portfolio site
+
+b) Course Curator
+
+Souhadra Shrivastava 
+-linkedin- https://in.linkedin.com/in/souhadra-shrivastava (pic sent u on whatsaap)
+-portfolio- www.github.com/Souhadra
+-about- Electronics & Telecom engineer, AI Engineer, and IEEE-published researcher working at the intersection of photonics and AI/ML
+
+
+c)Faculty Advisor
+-https://www.msrit.edu/department/faculty-detail.html?dept=te&ID=8 (yha se ache se analyze krke daal do jo shi lage)
+-linkedin- 
+
+d)Organisers 
+
+me-
+linkedin- https://www.linkedin.com/in/priyanshu-trivedi-4a8746293 (pic ritb IEEE ki ho inhone site bani h udhr se utha lo)
+-mail ID- trivedipriyanshu@ieee.org priyanshuranjan.academic@gmail.com (dono mail unke mailbox ek baar mein show kr jae aise ho to kr dena)
+-about - Final-year Electronics and Telecommunication Engineering undergraduate at M.S. Ramaiah Institute of Technology, Bengaluru, working across embedded hardware, digital IC verification, and edge AI. Engineering experience spans designing electromechanical avionics systems for Edhitha UAS, building accelerated computer vision pipelines on embedded accelerators, and deploying agentic workflows. As Chair of IEEE Sensors Council RIT-B and Founding Chair of IEEE TEMS RIT-B, spearheads large-scale student initiatives, bridging academic study with open-source EDA workflows and physical silicon fabrication via the IEEE Open Silicon initiative.
+
+Yashita- course manager
+linkedin-https://www.linkedin.com/in/yashitha-dore-b58834326?utm_source=share_via&utm_content=profile&utm_medium=member_android
+about- Yashitha D
+
+ECE undergraduate with experience in FPGA design, Verilog HDL, RTL verification, and embedded systems. Gained industry experience at Bharat Electronics Limited (BEL) and Vaidisys Technologies, working on FPGA design, synthesis, and timing analysis. Hands-on experience in ALU design, ESP32-based battery management systems, and sensor-integrated wearable technology. Vice Secretary of the IEEE Sensors Council, contributing to technical events and student engagement.
+
+ATHAR SUDHIR RAO (technical lead)
+linkedin- https://www.linkedin.com/in/atharv-rao-42aa422a0 (pic sent u on whatsaap)
+about- Final-year Electronics and Telecommunication Engineering student with hands-on experience across mixed-signal architectures, RF systems, and VLSI design. Previously interned at National Aerospace Laboratories, where they designed a 16-bit SAR ADC using discrete ICs, and developed wearable textile antennas for healthcare applications. Technical expertise spans digital design with Verilog, FPGA-based prototyping, PCB layout in KiCad, and electromagnetic modeling using Ansys HFSS.
+
+u- webmaster
+
+
+2) our series USP is we are providing TAPEOUT for student designs, successful chip designs
+
+3) IEEE certification, credentialed, etc.. we'll be providing
+
+4) remove specified addressed PDK'd. jst use OS PDK's
+
+5) IEEE logo first, then ieee bangalore section, then IEEE SENSORS COUNCIL, the IEEE OPRN SILICON logo(sent on WhatsApp)
+
+6) registration mwin wo WhatsApp group compulsory join krne ka

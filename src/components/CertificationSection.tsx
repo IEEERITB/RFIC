@@ -44,11 +44,17 @@ export function CertificationSection() {
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle2 className="text-sky-600 shrink-0 mt-0.5" size={20} />
-                  <span className="text-slate-700 text-sm">Pass automated DRC/LVS checks on the IHP SG13G2 PDK</span>
+                  <span className="text-slate-700 text-sm">Pass automated DRC/LVS checks on leading Open-Source PDKs (OS PDKs)</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <CheckCircle2 className="text-sky-600 shrink-0 mt-0.5" size={20} />
                   <span className="text-slate-700 text-sm">Submit via public GitHub repository with reproducible testbenches</span>
+                </li>
+                <li className="flex items-start gap-3 bg-amber-50/80 p-2.5 rounded-lg border border-amber-200">
+                  <CheckCircle2 className="text-amber-600 shrink-0 mt-0.5" size={20} />
+                  <span className="text-amber-900 text-sm font-semibold">
+                    Series USP: Top validated designs qualify for physical silicon TAPEOUT shuttle fabrication!
+                  </span>
                 </li>
               </ul>
             </CardContent>

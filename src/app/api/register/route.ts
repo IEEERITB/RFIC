@@ -20,8 +20,10 @@ export async function POST(request: Request) {
       );
     }
 
+    const { joinedWhatsapp, ...dbData } = validatedData as any;
+
     const participant = await prisma.participant.create({
-      data: validatedData,
+      data: dbData,
     });
 
     // Temporarily disabled automated emails as requested

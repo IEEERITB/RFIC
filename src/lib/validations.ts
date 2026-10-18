@@ -20,6 +20,9 @@ export const registrationSchema = z.object({
     "INTERMEDIATE_ANALOG",
     "ADVANCED_RF"
   ], { required_error: "Please select your experience level." }),
+  joinedWhatsapp: z.boolean().refine((val) => val === true, {
+    message: "Joining the WhatsApp group is mandatory to receive live session links and updates.",
+  }),
 });
 
 export type RegistrationFormValues = z.infer<typeof registrationSchema>;
