@@ -10,16 +10,19 @@ export function HeroSection() {
     <section className="relative pt-32 pb-20 overflow-hidden min-h-[90vh] flex flex-col justify-center" id="overview">
       <Squares direction="diagonal" speed={0.5} squareSize={40} borderColor="#e2e8f0" hoverFillColor="#f1f5f9" />
 
-      <div className="container mx-auto px-4 relative z-10 text-center max-w-4xl">
+      <div className="container mx-auto px-4 relative z-10 text-center max-w-5xl">
         <div className="mb-10">
-          <div className="flex flex-col md:flex-row justify-center items-center gap-6 opacity-95">
-            <div className="bg-white p-3 rounded-xl shadow-lg h-24 flex items-center justify-center min-w-[160px]">
+          <div className="flex flex-wrap justify-center items-center gap-6 opacity-95">
+            <div className="bg-white p-3 rounded-xl shadow-lg h-24 flex items-center justify-center min-w-[170px] max-w-[210px] hover:scale-105 transition-transform duration-200">
+              <img src="/logos/ieee-opensilicon.png" alt="IEEE openSilicon" className="max-h-full w-auto object-contain" />
+            </div>
+            <div className="bg-white p-3 rounded-xl shadow-lg h-24 flex items-center justify-center min-w-[160px] hover:scale-105 transition-transform duration-200">
               <img src="/logos/ieee-sensors-council.png" alt="IEEE Sensors Council" className="max-h-full w-auto object-contain" />
             </div>
-            <div className="bg-white p-3 rounded-xl shadow-lg h-24 flex items-center justify-center min-w-[160px]">
+            <div className="bg-white p-3 rounded-xl shadow-lg h-24 flex items-center justify-center min-w-[160px] hover:scale-105 transition-transform duration-200">
               <img src="/logos/ieee-bangalore.png" alt="IEEE Bangalore Section" className="max-h-full w-auto object-contain" />
             </div>
-            <div className="bg-white p-3 rounded-xl shadow-lg h-24 flex items-center justify-center min-w-[160px]">
+            <div className="bg-white p-3 rounded-xl shadow-lg h-24 flex items-center justify-center min-w-[160px] hover:scale-105 transition-transform duration-200">
               <img src="/logos/ieee-ramaiah.jpg" alt="IEEE Ramaiah" className="max-h-full w-auto object-contain" />
             </div>
           </div>
