@@ -58,15 +58,29 @@ export function HeroSection() {
           </Badge>
         </div>
 
-        <div className="flex flex-col sm:flex-row justify-center gap-4">
-          <Link href="#register" className="w-full sm:w-auto">
-            <StarBorder as="div" className="w-full h-full rounded-full">
-              <div className="px-8 py-3 w-full font-semibold text-white rounded-full">
-                Register for Free
-              </div>
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+          <Link href="#register" className="w-full sm:w-auto inline-block">
+            <StarBorder
+              as="div"
+              color="#ffffff"
+              trailColor="#ffffff"
+              duration={4}
+              direction="clockwise"
+              stars={1}
+              trailLength={0.3}
+              thickness={1}
+              radius={12}
+              glow={0.6}
+              hover="lap"
+              sparkle={false}
+              clickPulse
+              theme="dark"
+              className="w-full sm:w-auto px-8 py-3.5 text-base font-semibold shadow-lg shadow-black/10 cursor-pointer"
+            >
+              Register for Free
             </StarBorder>
           </Link>
-          <Button size="lg" variant="outline" className="w-full sm:w-auto h-auto py-3 px-8 bg-white border border-slate-300 text-slate-900 hover:bg-slate-50 text-base font-semibold rounded-full shadow-sm">
+          <Button size="lg" variant="outline" className="w-full sm:w-auto h-auto py-3.5 px-8 bg-white border border-slate-300 text-slate-900 hover:bg-slate-50 text-base font-semibold rounded-xl shadow-sm">
             Download Syllabus
           </Button>
         </div>

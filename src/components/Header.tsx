@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { StarBorder } from './react-bits/StarBorder';
 
 export function Header() {
   return (
@@ -23,8 +24,26 @@ export function Header() {
           <Link href="#schedule" className="hover:text-sky-600 transition-colors">Schedule</Link>
         </nav>
         <div>
-          <Link href="#register" className="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded-md font-semibold text-sm transition-colors shadow-md shadow-sky-600/20">
-            Register Now
+          <Link href="#register" className="inline-block">
+            <StarBorder
+              as="div"
+              color="#ffffff"
+              trailColor="#ffffff"
+              duration={4}
+              direction="clockwise"
+              stars={1}
+              trailLength={0.3}
+              thickness={1}
+              radius={8}
+              glow={0.6}
+              hover="lap"
+              sparkle={false}
+              clickPulse
+              theme="dark"
+              className="px-4 py-2 text-xs font-semibold tracking-wide uppercase cursor-pointer shadow-sm shadow-black/10"
+            >
+              Register Now
+            </StarBorder>
           </Link>
         </div>
       </div>

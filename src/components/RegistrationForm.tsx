@@ -19,6 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { ExternalLink, CheckCircle2, X } from "lucide-react";
+import { StarBorder } from "./react-bits/StarBorder";
 
 export const WHATSAPP_GROUP_URL = "https://chat.whatsapp.com/H8zM8URfnS98mMCONT2E2L";
 
@@ -402,9 +403,27 @@ export function RegistrationForm() {
                 />
               </div>
 
-              <Button type="submit" disabled={isSubmitting} className="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold h-12 text-lg shadow-md shadow-sky-600/20 mt-8">
+              <StarBorder
+                as="button"
+                type="submit"
+                disabled={isSubmitting}
+                color="#ffffff"
+                trailColor="#ffffff"
+                duration={4}
+                direction="clockwise"
+                stars={1}
+                trailLength={0.3}
+                thickness={1}
+                radius={12}
+                glow={0.6}
+                hover="lap"
+                sparkle={false}
+                clickPulse
+                theme="dark"
+                className="w-full h-12 text-lg font-bold shadow-lg shadow-black/15 mt-8 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              >
                 {isSubmitting ? "Registering..." : "Submit Registration"}
-              </Button>
+              </StarBorder>
             </form>
           </Form>
         )}
