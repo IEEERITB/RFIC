@@ -1,3 +1,5 @@
+"use client";
+
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { modules } from "@/data/modules";
@@ -68,10 +70,21 @@ export function CurriculumSection() {
                         const spk = speakers.find(s => s.id === id);
                         return spk ? (
                           <div key={id} className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-full pl-1 pr-3 py-1">
-                            <div className="w-6 h-6 rounded-full bg-sky-100 flex items-center justify-center text-xs font-bold text-sky-700">
-                              {spk.name.charAt(0)}
+                            <div className="w-6 h-6 rounded-full bg-sky-100 flex items-center justify-center text-xs font-bold text-sky-700 overflow-hidden relative shrink-0">
+                              {spk.avatarUrl ? (
+                                <img
+                                  src={spk.avatarUrl}
+                                  alt={spk.name}
+                                  className="w-full h-full object-cover"
+                                  onError={(e) => {
+                                    (e.currentTarget as HTMLElement).style.display = "none";
+                                  }}
+                                />
+                              ) : (
+                                spk.name.charAt(0)
+                              )}
                             </div>
-                            <span className="text-sm text-slate-700">{spk.name}</span>
+                            <span className="text-sm text-slate-700 font-medium">{spk.name}</span>
                           </div>
                         ) : null;
                       })}

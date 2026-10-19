@@ -1,3 +1,5 @@
+"use client";
+
 import { Card, CardContent } from "@/components/ui/card";
 import { speakers } from "@/data/speakers";
 import { Link as LinkIcon } from "lucide-react";
@@ -18,8 +20,19 @@ export function SpeakersSection() {
             <Card key={spk.id} className="bg-white border-slate-200 shadow-sm hover:border-sky-300 hover:shadow-md transition-all group">
               <CardContent className="p-6">
                 <div className="flex items-start justify-between mb-4">
-                  <div className="w-16 h-16 rounded-full bg-slate-50 border-2 border-slate-200 group-hover:border-sky-400 transition-colors flex items-center justify-center text-xl font-bold text-sky-700 overflow-hidden">
-                    {spk.name.charAt(0)}
+                  <div className="w-16 h-16 rounded-full bg-slate-50 border-2 border-slate-200 group-hover:border-sky-400 transition-colors flex items-center justify-center text-xl font-bold text-sky-700 overflow-hidden relative shrink-0">
+                    {spk.avatarUrl ? (
+                      <img
+                        src={spk.avatarUrl}
+                        alt={spk.name}
+                        className="w-full h-full object-cover object-center"
+                        onError={(e) => {
+                          (e.currentTarget as HTMLElement).style.display = "none";
+                        }}
+                      />
+                    ) : (
+                      spk.name.charAt(0)
+                    )}
                   </div>
                   {spk.linkedInUrl && (
                     <Link href={spk.linkedInUrl} target="_blank" className="text-slate-400 hover:text-sky-600 transition-colors">

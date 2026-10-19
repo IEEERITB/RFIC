@@ -12,16 +12,16 @@ export interface Module {
 export const modules: Module[] = [
   {
     moduleNumber: 1,
-    title: "Orientation, Circuit Simulation via eSim & RF Transceiver Architectures",
+    title: "Orientation, Circuit Simulation via eSim & High-Frequency Transceiver Architectures",
     focusArea: "Orientation & Architectural Theory",
     technicalTopics: [
-      "Part 1.1: Series Orientation, Circuit Simulation via eSim & OS EDA Toolchain Setup (Led by Sumanto Kar)",
-      "Part 1.2: High-Frequency Wireless Transceiver Architectures — Homodyne vs Heterodyne, Image Rejection, Link Budget, Noise Figure (NF), Linearity (1-dB Compression & IIP3)"
+      "Part 1.1: Series Orientation, Circuit Simulation via eSim and OS EDA Toolchain Setup (Led by Sumanto Kar, FOSSEE, IIT Bombay)",
+      "Part 1.2: High-Frequency Wireless Transceiver Architectures & System Specs — Homodyne vs Heterodyne, Image Rejection, Link Budget, Noise Figure (NF), Linearity (1-dB Compression & IIP3) (Led by Dr. Darshak Bhatt, IIT Roorkee)"
     ],
     fossTooling: ["eSim", "Ngspice", "OS EDA Toolchain"],
     date: "Oct 24, 2026",
     time: "From 7:30 PM IST",
-    speakerIds: ["sumanto_kar"]
+    speakerIds: ["sumanto_kar", "dr_darshak_bhatt"]
   },
   {
     moduleNumber: 2,
@@ -69,19 +69,19 @@ export const modules: Module[] = [
   },
   {
     moduleNumber: 5,
-    title: "Frequency Mixers & Local Oscillator Interfacing",
-    focusArea: "Mixers & LO",
+    title: "Frequency Mixers, Intermodulation & LO Interfacing",
+    focusArea: "Mixers, Intermodulation & LO",
     technicalTopics: [
-      "Passive vs Active Mixers",
-      "Double-Balanced Gilbert Cells",
-      "Conversion gain",
-      "Isolation parameters",
-      "PLL synthesizer interface"
+      "Passive vs Active Mixers (Down-conversion & Up-conversion topologies)",
+      "Double-Balanced Gilbert Cell architectures",
+      "Intermodulation Distortion, 1-dB Compression Point & IIP3 Calculations",
+      "Port-to-Port Isolation, Conversion Gain & Noise Figure Metrics",
+      "LO Driver Buffering & PLL Synthesizer Interfacing"
     ],
-    fossTooling: ["Ngspice (Multi-tone analysis)"],
+    fossTooling: ["Ngspice (Multi-tone analysis)", "Xschem"],
     date: "Nov 7, 2026",
     time: "From 7:30 PM IST",
-    speakerIds: []
+    speakerIds: ["dr_darshak_bhatt"]
   },
   {
     moduleNumber: 6,
