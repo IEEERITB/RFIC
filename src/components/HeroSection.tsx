@@ -5,6 +5,7 @@ import { GridPattern } from "./magicui/grid-pattern";
 import { NumberTicker } from "./magicui/number-ticker";
 import { ShimmerButton } from "./magicui/shimmer-button";
 import { Cpu, Calendar, ShieldCheck, Sparkles, BookOpen, ArrowRight, CheckCircle2 } from "lucide-react";
+import { SwarmCursor } from "./SwarmCursor";
 
 export function HeroSection() {
   const partners = [
@@ -35,6 +36,24 @@ export function HeroSection() {
       className="relative pt-24 sm:pt-32 pb-16 sm:pb-24 overflow-hidden min-h-[92vh] flex flex-col justify-center bg-white"
       id="overview"
     >
+      {/* Interactive RF Silicon Carrier Swarm Cursor Effect */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+        <SwarmCursor
+          count={350}
+          size={2.4}
+          spread={90}
+          swirl={0.6}
+          speed={0.85}
+          clickEffect="burst"
+          color="#0284c7"
+          accentColor="#38bdf8"
+          lightMode={true}
+          targets="a, button, [data-swarm-target]"
+          hideCursor={false}
+          className="w-full h-full"
+        />
+      </div>
+
       {/* Magic UI Architectural Grid Pattern */}
       <GridPattern
         width={40}
