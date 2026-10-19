@@ -1,7 +1,6 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { HeroSection } from "@/components/HeroSection";
-import { TechTextSection } from "@/components/TechTextSection";
 import { ScrollExpandSection } from "@/components/ScrollExpandSection";
 import { ToolchainMatrix } from "@/components/ToolchainMatrix";
 import { CurriculumSection } from "@/components/CurriculumSection";
@@ -17,7 +16,6 @@ export default function Home() {
       <main className="min-h-screen bg-transparent flex flex-col transition-colors duration-500">
         <Header />
         <HeroSection />
-        <TechTextSection />
         <ScrollExpandSection />
         <ToolchainMatrix />
         <CurriculumSection />
