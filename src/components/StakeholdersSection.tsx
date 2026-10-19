@@ -94,7 +94,7 @@ function StakeholderCard({ person, isCompact = false }: { person: Stakeholder; i
               <img
                 src={person.avatarUrl}
                 alt={person.name}
-                className="w-full h-full object-cover object-top"
+                className="w-full h-full object-cover object-center"
                 onError={() => setImgError(true)}
               />
             ) : (
