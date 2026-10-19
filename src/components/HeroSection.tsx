@@ -11,22 +11,22 @@ export function HeroSection() {
     {
       name: "IEEE - Advancing Technology for Humanity",
       logo: "/logos/ieee.svg",
-      imageClass: "h-11 sm:h-13 md:h-14 w-auto max-w-[135px] sm:max-w-[160px]",
+      imageClass: "max-h-9 sm:max-h-11 md:max-h-12 max-w-[85%] w-auto",
     },
     {
       name: "IEEE Bangalore Section",
       logo: "/logos/ieee-bangalore.png",
-      imageClass: "h-11 sm:h-12 md:h-13 w-auto max-w-[155px] sm:max-w-[185px]",
+      imageClass: "max-h-9 sm:max-h-11 md:max-h-11 max-w-[88%] w-auto",
     },
     {
       name: "IEEE Sensors Council",
       logo: "/logos/ieee-sensors-council.png",
-      imageClass: "h-10 sm:h-12 md:h-13 w-auto max-w-[160px] sm:max-w-[190px]",
+      imageClass: "max-h-8 sm:max-h-10 md:max-h-11 max-w-[90%] w-auto",
     },
     {
       name: "IEEE openSilicon",
       logo: "/logos/ieee-opensilicon.png",
-      imageClass: "h-11 sm:h-12 md:h-13 w-auto max-w-[160px] sm:max-w-[190px]",
+      imageClass: "max-h-9 sm:max-h-10 md:max-h-11 max-w-[88%] w-auto",
     },
   ];
 
@@ -72,13 +72,13 @@ export function HeroSection() {
               {partners.map((partner, index) => (
                 <div
                   key={index}
-                  className="w-full h-20 sm:h-22 md:h-24 px-4 py-3 flex items-center justify-center rounded-xl bg-white border border-slate-200 hover:border-sky-300 hover:shadow-xs transition-all duration-200 group"
+                  className="w-full h-18 sm:h-20 md:h-22 px-3 py-2.5 flex items-center justify-center rounded-xl bg-white border border-slate-200 hover:border-sky-300 hover:shadow-xs transition-all duration-200 overflow-hidden group"
                   title={partner.name}
                 >
                   <img
                     src={partner.logo}
                     alt={partner.name}
-                    className={`${partner.imageClass} object-contain transition-transform duration-200 group-hover:scale-105`}
+                    className={`${partner.imageClass} object-contain max-h-full max-w-full transition-transform duration-200 group-hover:scale-105 shrink-0`}
                   />
                 </div>
               ))}
