@@ -25,9 +25,6 @@ export function HeroSection() {
             <div className="bg-white p-3 rounded-xl shadow-lg h-24 flex items-center justify-center min-w-[170px] max-w-[210px] hover:scale-105 transition-transform duration-200">
               <img src="/logos/ieee-opensilicon.png" alt="IEEE openSilicon" className="max-h-full w-auto object-contain" />
             </div>
-            <div className="bg-white p-3 rounded-xl shadow-lg h-24 flex items-center justify-center min-w-[150px] hover:scale-105 transition-transform duration-200">
-              <img src="/logos/ieee-ramaiah.jpg" alt="IEEE Ramaiah" className="max-h-full w-auto object-contain" />
-            </div>
           </div>
         </div>
 

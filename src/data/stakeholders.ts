@@ -2,7 +2,7 @@ export interface Stakeholder {
   id: string;
   name: string;
   role: string;
-  category: "guide" | "curator" | "advisor" | "organiser";
+  category: "guide" | "curator" | "advisor" | "mentor" | "organiser";
   categoryLabel: string;
   organization: string;
   avatarUrl?: string;
@@ -27,6 +27,19 @@ export const stakeholders: Stakeholder[] = [
     portfolioUrl: "https://www.vpachkawadeworld.com",
   },
   {
+    id: "sumanto_kar",
+    name: "Sumanto Kar",
+    role: "Technical Mentor • Module 1.1 Lead",
+    category: "mentor",
+    categoryLabel: "Technical Mentor",
+    organization: "Project Research Engineer, FOSSEE, IIT Bombay • Open-Source EDA",
+    avatarUrl: "/stakeholders/sumanto-kar.jpg",
+    bio: "Sumanto Kar completed his M.Tech in Industrial Engineering & Operations Research from IIT Bombay and B.E. in Electronics Engineering from Mumbai University. His interests lie in contributing to open-source EDA tools. He is actively involved with the FOSSEE project, contributing to the development, integration, documentation, and outreach of eSim, an open-source EDA platform used across universities in India. His work focuses on strengthening open technical ecosystems, enabling reproducible engineering workflows, and bridging the gap between academic research and community-driven software development.",
+    linkedInUrl: "https://www.linkedin.com/in/sumanto-kar-0424391a9",
+    portfolioUrl: "https://homepages.iitb.ac.in/~sumantokar/",
+    githubUrl: "https://github.com/Eyantra698Sumanto",
+  },
+  {
     id: "souhadra_shrivastava",
     name: "Souhadra Shrivastava",
     role: "Course Curator",
@@ -37,7 +50,6 @@ export const stakeholders: Stakeholder[] = [
     bio: "Electronics & Telecom engineer, AI Engineer, and IEEE-published researcher working at the intersection of photonics and AI/ML.",
     linkedInUrl: "https://in.linkedin.com/in/souhadra-shrivastava",
     githubUrl: "https://github.com/Souhadra",
-    portfolioUrl: "https://github.com/Souhadra",
   },
   {
     id: "dr_ramya_hr",
@@ -45,11 +57,10 @@ export const stakeholders: Stakeholder[] = [
     role: "Faculty Advisor",
     category: "advisor",
     categoryLabel: "Faculty Advisor",
-    organization: "Assistant Professor, Dept. of ETE, Ramaiah Institute of Technology (MSRIT)",
+    organization: "Associate Professor, Dept. of ETE, Ramaiah Institute of Technology (MSRIT)",
     avatarUrl: "/stakeholders/dr-ramya-hr.jpg",
-    bio: "Assistant Professor in the Department of Electronics & Telecommunication Engineering at M.S. Ramaiah Institute of Technology, Bengaluru. Holds a Ph.D. and M.Tech from VTU with over 18+ years of academic and research experience across Logic Design, Microcontrollers, and Applied Machine Learning, actively mentoring student professional chapters.",
+    bio: "Associate Professor in the Department of Electronics and Telecommunication Engineering at M.S. Ramaiah Institute of Technology with 21 years of experience. Her research interests span neural networks, fuzzy logic, machine learning, and Verilog design. She has published extensively in Scopus-indexed journals and conferences, with focus on medical image fusion, machine learning applications in healthcare, and signal processing. Dr. Ramya has established industry collaborations with Intel-Altera, Texas Instruments India, and Starcom Information Technology Limited to develop specialized labs and courses. She holds a design patent for \"Multiband Antenna Tuning Device for 5G Networks\" (Patent No. 450853-001).",
     portfolioUrl: "https://www.msrit.edu/department/faculty-detail.html?dept=te&ID=8",
-    emails: ["ramya_hr@msrit.edu"],
   },
   {
     id: "priyanshu_trivedi",
@@ -61,7 +72,6 @@ export const stakeholders: Stakeholder[] = [
     avatarUrl: "/stakeholders/priyanshu-trivedi.jpg",
     bio: "Final-year Electronics and Telecommunication Engineering undergraduate at M.S. Ramaiah Institute of Technology, Bengaluru, working across embedded hardware, digital IC verification, and edge AI. Engineering experience spans designing electromechanical avionics systems for Edhitha UAS, building accelerated computer vision pipelines on embedded accelerators, and deploying agentic workflows. As Chair of IEEE Sensors Council RIT-B and Founding Chair of IEEE TEMS RIT-B, spearheads large-scale student initiatives, bridging academic study with open-source EDA workflows and physical silicon fabrication via the IEEE Open Silicon initiative.",
     linkedInUrl: "https://www.linkedin.com/in/priyanshu-trivedi-4a8746293",
-    emails: ["trivedipriyanshu@ieee.org", "priyanshuranjan.academic@gmail.com"],
   },
   {
     id: "yashitha_d",

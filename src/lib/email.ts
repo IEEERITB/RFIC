@@ -19,7 +19,7 @@ export async function sendRegistrationEmail(email: string, fullName: string) {
         <div style="background-color: #f3f4f6; padding: 20px; border-radius: 6px; margin: 25px 0;">
           <h3 style="margin-top: 0; color: #111827; font-size: 16px;">Next Steps:</h3>
           <ul style="color: #4b5563; line-height: 1.6; font-size: 14px; margin-bottom: 0;">
-            <li>Mark your calendar for the weekend sessions in September.</li>
+            <li>Mark your calendar for the weekend sessions starting October 24 at 7:30 PM IST.</li>
             <li>Ensure you have a reliable internet connection and a laptop ready for the interactive lab components.</li>
             <li>We will email you the meeting links 48 hours before the first session.</li>
           </ul>

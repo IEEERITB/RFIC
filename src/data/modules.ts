@@ -12,19 +12,16 @@ export interface Module {
 export const modules: Module[] = [
   {
     moduleNumber: 1,
-    title: "High-Frequency Wireless Transceiver Architectures",
-    focusArea: "Architectural Theory",
+    title: "Orientation, Circuit Simulation via eSim & RF Transceiver Architectures",
+    focusArea: "Orientation & Architectural Theory",
     technicalTopics: [
-      "Homodyne vs Heterodyne",
-      "Image Rejection",
-      "Link Budget",
-      "Noise Figure (NF)",
-      "Linearity (1-dB Compression & IIP3)"
+      "Part 1.1: Series Orientation, Circuit Simulation via eSim & OS EDA Toolchain Setup (Led by Sumanto Kar)",
+      "Part 1.2: High-Frequency Wireless Transceiver Architectures — Homodyne vs Heterodyne, Image Rejection, Link Budget, Noise Figure (NF), Linearity (1-dB Compression & IIP3)"
     ],
-    fossTooling: [],
-    date: "Sept 5, 2026",
-    time: "10:00 AM - 1:00 PM IST",
-    speakerIds: []
+    fossTooling: ["eSim", "Ngspice", "OS EDA Toolchain"],
+    date: "Oct 24, 2026",
+    time: "From 7:30 PM IST",
+    speakerIds: ["sumanto_kar"]
   },
   {
     moduleNumber: 2,
@@ -36,8 +33,8 @@ export const modules: Module[] = [
       "Deep dive into Open-Source PDKs (OS PDKs)"
     ],
     fossTooling: ["Xschem", "Ngspice"],
-    date: "Sept 6, 2026",
-    time: "10:00 AM - 1:00 PM IST",
+    date: "Oct 25, 2026",
+    time: "From 7:30 PM IST",
     speakerIds: ["abdur_rahman"]
   },
   {
@@ -51,8 +48,8 @@ export const modules: Module[] = [
       "Wideband matching"
     ],
     fossTooling: ["Xschem", "Ngspice", "Python (scikit-rf, matplotlib)"],
-    date: "Sept 12, 2026",
-    time: "10:00 AM - 1:00 PM IST",
+    date: "Oct 31, 2026",
+    time: "From 7:30 PM IST",
     speakerIds: []
   },
   {
@@ -66,8 +63,8 @@ export const modules: Module[] = [
       "Thermal bottlenecks"
     ],
     fossTooling: ["Xschem", "Ngspice"],
-    date: "Sept 13, 2026",
-    time: "10:00 AM - 1:00 PM IST",
+    date: "Nov 1, 2026",
+    time: "From 7:30 PM IST",
     speakerIds: []
   },
   {
@@ -82,8 +79,8 @@ export const modules: Module[] = [
       "PLL synthesizer interface"
     ],
     fossTooling: ["Ngspice (Multi-tone analysis)"],
-    date: "Sept 19, 2026",
-    time: "10:00 AM - 1:00 PM IST",
+    date: "Nov 7, 2026",
+    time: "From 7:30 PM IST",
     speakerIds: []
   },
   {
@@ -98,8 +95,8 @@ export const modules: Module[] = [
       "On-chip planar inductors"
     ],
     fossTooling: ["KLayout"],
-    date: "Sept 20, 2026",
-    time: "10:00 AM - 1:00 PM IST",
+    date: "Nov 8, 2026",
+    time: "From 7:30 PM IST",
     speakerIds: []
   },
   {
@@ -113,8 +110,8 @@ export const modules: Module[] = [
       "Post-layout re-simulation"
     ],
     fossTooling: ["KLayout Geometry DRC", "Netgen", "openEMS"],
-    date: "Sept 26, 2026",
-    time: "10:00 AM - 1:00 PM IST",
+    date: "Nov 14, 2026",
+    time: "From 7:30 PM IST",
     speakerIds: ["yegappan_sethu", "sumanto_kar"]
   },
   {
@@ -128,8 +125,8 @@ export const modules: Module[] = [
       "Career roadmap & silicon tape-out pathways"
     ],
     fossTooling: ["Open-Silicon Tape-Out Flow"],
-    date: "Sept 27, 2026",
-    time: "10:00 AM - 1:00 PM IST",
+    date: "Nov 15, 2026",
+    time: "From 7:30 PM IST",
     speakerIds: ["dr_gs_javed", "krzysztof_herman"]
   }
 ];

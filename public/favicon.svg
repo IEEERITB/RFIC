@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F172A"/>
+      <stop offset="100%" stop-color="#070D18"/>
+    </linearGradient>
+    <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="50%" stop-color="#0284C7"/>
+      <stop offset="100%" stop-color="#00629B"/>
+    </linearGradient>
+    <linearGradient id="diamondGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0284C7"/>
+      <stop offset="100%" stop-color="#00629B"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Container with high dark-mode contrast -->
+  <rect x="20" y="20" width="472" height="472" rx="110" fill="url(#bgGrad)"/>
+  <rect x="20" y="20" width="472" height="472" rx="110" fill="none" stroke="url(#borderGrad)" stroke-width="12" stroke-opacity="0.95"/>
+  
+  <!-- Stylized RF Silicon Grid & Traces -->
+  <path d="M 256 32 L 256 112 M 256 400 L 256 480 M 32 256 L 112 256 M 400 256 L 480 256" stroke="#0284C7" stroke-width="8" stroke-linecap="round" stroke-opacity="0.45"/>
+  <circle cx="256" cy="112" r="7" fill="#38BDF8" fill-opacity="0.9"/>
+  <circle cx="256" cy="400" r="7" fill="#38BDF8" fill-opacity="0.9"/>
+  <circle cx="112" cy="256" r="7" fill="#38BDF8" fill-opacity="0.9"/>
+  <circle cx="400" cy="256" r="7" fill="#38BDF8" fill-opacity="0.9"/>
+
+  <!-- IEEE Blue Diamond Emblem -->
+  <!-- Outer Diamond -->
+  <path d="M 256 96 L 400 256 L 256 416 L 112 256 Z" fill="url(#diamondGrad)" stroke="#38BDF8" stroke-width="10" stroke-linejoin="round"/>
+  
+  <!-- Inner Diamond fill -->
+  <path d="M 256 126 L 370 256 L 256 386 L 142 256 Z" fill="#0A2540"/>
+
+  <!-- Iconic IEEE Electromagnetic field / right-hand dipole loop -->
+  <!-- Vertical central arrow -->
+  <line x1="256" y1="168" x2="256" y2="348" stroke="#FFFFFF" stroke-width="16" stroke-linecap="round"/>
+  <polygon points="256,140 238,180 274,180" fill="#FFFFFF"/>
+  
+  <!-- Magnetic induction loop -->
+  <ellipse cx="256" cy="256" rx="72" ry="34" fill="none" stroke="#38BDF8" stroke-width="14"/>
+  <polygon points="328,248 340,266 318,264" fill="#38BDF8"/>
+  <polygon points="184,264 172,246 194,248" fill="#38BDF8"/>
+</svg>

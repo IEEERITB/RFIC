@@ -14,8 +14,9 @@ export const speakers: Speaker[] = [
     name: "Sumanto Kar",
     roleTitle: "Series Lead Mentor & Module Instructor",
     organization: "FOSSEE, IIT Bombay",
-    avatarUrl: "/avatars/sumanto.png",
-    bio: "Expert in open-source EDA tools and RF IC Design. Lead mentor for the flagship series.",
+    avatarUrl: "/stakeholders/sumanto-kar.jpg",
+    bio: "Project Research Engineer at FOSSEE, IIT Bombay. Lead contributor to eSim open-source EDA platform and Technical Mentor for the IEEE RF IC Design Series.",
+    linkedInUrl: "https://www.linkedin.com/in/sumanto-kar-0424391a9",
   },
 
   {
