@@ -19,7 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { ExternalLink, CheckCircle2, X, AlertCircle, ShieldCheck, User, Building, Award, MessageCircle, Loader2 } from "lucide-react";
-import { StarBorder } from "./react-bits/StarBorder";
+import { ShimmerButton } from "./magicui/shimmer-button";
 
 export const WHATSAPP_GROUP_URL = "https://chat.whatsapp.com/H8zM8URfnS98mMCONT2E2L";
 
@@ -519,24 +519,13 @@ export function RegistrationForm() {
 
                 {/* Submit Action */}
                 <div className="pt-2">
-                  <StarBorder
-                    as="button"
+                  <ShimmerButton
                     type="submit"
                     disabled={isSubmitting}
-                    color="#ffffff"
-                    trailColor="#38bdf8"
-                    duration={3.5}
-                    direction="clockwise"
-                    stars={1}
-                    trailLength={0.35}
-                    thickness={1.5}
-                    radius={14}
-                    glow={0.7}
-                    hover="lap"
-                    sparkle={false}
-                    clickPulse
-                    theme="dark"
-                    className="w-full h-14 text-base sm:text-lg font-bold shadow-xl shadow-sky-950/15 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    shimmerColor="#38bdf8"
+                    background="#0284c7"
+                    borderRadius="16px"
+                    className="w-full h-14 text-base sm:text-lg font-bold shadow-xl shadow-sky-600/20 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     {isSubmitting ? (
                       <span className="flex items-center gap-2">
@@ -546,7 +535,7 @@ export function RegistrationForm() {
                     ) : (
                       <span>Complete Free Registration</span>
                     )}
-                  </StarBorder>
+                  </ShimmerButton>
                   <p className="text-center text-[11px] text-slate-500 mt-3">
                     By registering, you agree to receive session links and technical lab credentials via email and WhatsApp.
                   </p>

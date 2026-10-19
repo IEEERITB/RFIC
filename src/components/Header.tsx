@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { StarBorder } from "./react-bits/StarBorder";
+import { ShimmerButton } from "./magicui/shimmer-button";
 import { Menu, X, ArrowRight } from "lucide-react";
 
 export function Header() {
@@ -89,25 +89,14 @@ export function Header() {
             href="#register"
             className="hidden sm:inline-block focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 rounded-xl"
           >
-            <StarBorder
-              as="div"
-              color="#ffffff"
-              trailColor="#38bdf8"
-              duration={3.5}
-              direction="clockwise"
-              stars={1}
-              trailLength={0.35}
-              thickness={1.5}
-              radius={10}
-              glow={0.7}
-              hover="lap"
-              sparkle={false}
-              clickPulse
-              theme="dark"
-              className="px-4 py-2 text-xs font-bold tracking-wider uppercase cursor-pointer shadow-sm hover:shadow-md transition-shadow"
+            <ShimmerButton
+              shimmerColor="#38bdf8"
+              background="#0284c7"
+              borderRadius="12px"
+              className="px-4 py-2 text-xs font-bold tracking-wider uppercase shadow-sm hover:shadow-md"
             >
               Register Now
-            </StarBorder>
+            </ShimmerButton>
           </Link>
 
           {/* Mobile Hamburger Button */}

@@ -1,63 +1,95 @@
-import { Badge } from "@/components/ui/badge";
+"use client";
+
 import Link from "next/link";
-import { Squares } from "./react-bits/Squares";
-import { SplitText } from "./react-bits/SplitText";
-import { StarBorder } from "./react-bits/StarBorder";
-import { Cpu, Calendar, ShieldCheck, Sparkles, BookOpen, ArrowRight } from "lucide-react";
+import { GridPattern } from "./magicui/grid-pattern";
+import { Marquee } from "./magicui/marquee";
+import { NumberTicker } from "./magicui/number-ticker";
+import { ShimmerButton } from "./magicui/shimmer-button";
+import { Cpu, Calendar, ShieldCheck, Sparkles, BookOpen, ArrowRight, CheckCircle2 } from "lucide-react";
 
 export function HeroSection() {
+  const partners = [
+    { name: "IEEE", logo: "/logos/ieee.svg" },
+    { name: "IEEE Bangalore Section", logo: "/logos/ieee-bangalore.png" },
+    { name: "IEEE Sensors Council", logo: "/logos/ieee-sensors-council.png" },
+    { name: "IEEE openSilicon", logo: "/logos/ieee-opensilicon.png" },
+  ];
+
   return (
     <section
       className="relative pt-24 sm:pt-32 pb-16 sm:pb-24 overflow-hidden min-h-[92vh] flex flex-col justify-center bg-white"
       id="overview"
     >
-      <Squares
-        direction="diagonal"
-        speed={0.4}
-        squareSize={44}
-        borderColor="#e2e8f0"
-        hoverFillColor="#f1f5f9"
+      {/* Magic UI Architectural Grid Pattern */}
+      <GridPattern
+        width={40}
+        height={40}
+        x={-1}
+        y={-1}
+        strokeDasharray="2 4"
+        squares={[
+          [3, 3],
+          [6, 2],
+          [8, 5],
+          [4, 7],
+          [10, 3],
+          [12, 6],
+          [15, 4],
+        ]}
+        className="opacity-75"
       />
 
       <div className="container mx-auto px-4 sm:px-6 relative z-10 text-center max-w-5xl">
-        {/* Institutional Partner Banner */}
-        <div className="mb-8 sm:mb-12">
-          <div className="inline-flex flex-col items-center gap-3 bg-white/90 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-slate-200/90 shadow-sm max-w-4xl mx-auto">
-            <span className="text-[11px] font-bold text-slate-500 uppercase tracking-widest">
-              Joint Flagship Initiative
-            </span>
-            <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-8">
-              <div className="h-10 sm:h-12 flex items-center justify-center grayscale hover:grayscale-0 transition-all opacity-85 hover:opacity-100">
-                <img src="/logos/ieee.svg" alt="IEEE" className="max-h-8 sm:max-h-9 w-auto object-contain" />
-              </div>
-              <div className="h-8 sm:h-10 w-[1px] bg-slate-200 hidden sm:block" />
-              <div className="h-10 sm:h-12 flex items-center justify-center grayscale hover:grayscale-0 transition-all opacity-85 hover:opacity-100">
-                <img src="/logos/ieee-bangalore.png" alt="IEEE Bangalore Section" className="max-h-8 sm:max-h-10 w-auto object-contain" />
-              </div>
-              <div className="h-8 sm:h-10 w-[1px] bg-slate-200 hidden sm:block" />
-              <div className="h-10 sm:h-12 flex items-center justify-center grayscale hover:grayscale-0 transition-all opacity-85 hover:opacity-100">
-                <img src="/logos/ieee-sensors-council.png" alt="IEEE Sensors Council" className="max-h-9 sm:max-h-11 w-auto object-contain" />
-              </div>
-              <div className="h-8 sm:h-10 w-[1px] bg-slate-200 hidden sm:block" />
-              <div className="h-10 sm:h-12 flex items-center justify-center grayscale hover:grayscale-0 transition-all opacity-85 hover:opacity-100">
-                <img src="/logos/ieee-opensilicon.png" alt="IEEE openSilicon" className="max-h-8 sm:max-h-10 w-auto object-contain" />
-              </div>
+        {/* Magic UI Institutional Partner Marquee */}
+        <div className="mb-8 sm:mb-12 max-w-3xl mx-auto">
+          <div className="relative overflow-hidden rounded-2xl bg-white/80 backdrop-blur-md p-3 sm:p-4 border border-slate-200/90 shadow-2xs">
+            <div className="flex items-center justify-between px-3 pb-2 border-b border-slate-100">
+              <span className="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1.5">
+                <span className="h-1.5 w-1.5 rounded-full bg-sky-500 animate-pulse" />
+                Joint Flagship Initiative • Academic & Industry Patrons
+              </span>
+              <span className="text-[10px] sm:text-xs font-mono font-medium text-slate-400">
+                IEEE Bangalore
+              </span>
+            </div>
+
+            <div className="relative w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)] pt-2">
+              <Marquee pauseOnHover className="[--duration:25s] [--gap:3rem]">
+                {partners.map((partner, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center gap-3 grayscale hover:grayscale-0 transition-all opacity-80 hover:opacity-100 shrink-0 cursor-default"
+                  >
+                    <img
+                      src={partner.logo}
+                      alt={partner.name}
+                      className="h-7 sm:h-8 w-auto object-contain"
+                    />
+                    <span className="text-xs font-semibold text-slate-700 hidden sm:inline">
+                      {partner.name}
+                    </span>
+                  </div>
+                ))}
+              </Marquee>
             </div>
           </div>
         </div>
 
         {/* Live Status Pill */}
-        <div className="inline-flex items-center gap-2 mb-6 border border-sky-300/80 text-sky-800 bg-sky-50/90 backdrop-blur-xs px-4 py-1.5 rounded-full text-xs font-semibold shadow-xs">
+        <div className="inline-flex items-center gap-2 mb-6 border border-sky-300/80 text-sky-800 bg-sky-50/90 backdrop-blur-xs px-4 py-1.5 rounded-full text-xs font-semibold shadow-2xs">
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
           </span>
-          <span>Physical Silicon Tape-Out Track • Registration Open</span>
+          <span>Physical Silicon Tape-Out Track • Candidate Registration Live</span>
         </div>
 
-        {/* Main Headline */}
-        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight text-slate-900 mb-6 leading-[1.1]">
-          <SplitText text="Master RF IC Design for 5G/6G on Open-Source Silicon" delay={0.08} />
+        {/* Main Headline with high-impact typography */}
+        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight text-slate-900 mb-6 leading-[1.12]">
+          Master RF IC Design for 5G/6G on{" "}
+          <span className="bg-gradient-to-r from-sky-600 via-teal-600 to-sky-700 bg-clip-text text-transparent">
+            Open-Source Silicon
+          </span>
         </h1>
 
         {/* Subtitle */}
@@ -65,52 +97,61 @@ export function HeroSection() {
           An intensive 8-Module Masterclass bridging high-frequency architectural theory, zero-cost FOSS EDA pipelines, and open-source MPW shuttle tape-outs with industry-standard <strong>Open-Source PDKs (OS PDKs)</strong>. Top validated designs qualify for physical silicon tape-out fabrication!
         </p>
 
-        {/* Technical Highlights Bar */}
-        <div className="flex flex-wrap justify-center gap-2.5 sm:gap-3.5 mb-10 max-w-4xl mx-auto">
-          <span className="inline-flex items-center gap-1.5 bg-slate-50 border border-slate-200/90 text-slate-700 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold shadow-2xs">
-            <Calendar size={14} className="text-sky-600 shrink-0" />
-            <span>4 Weekends • 8 Modules</span>
-          </span>
-          <span className="inline-flex items-center gap-1.5 bg-slate-50 border border-slate-200/90 text-slate-700 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold shadow-2xs">
-            <Cpu size={14} className="text-teal-600 shrink-0" />
-            <span>Zero-Cost FOSS EDA Tools</span>
-          </span>
-          <span className="inline-flex items-center gap-1.5 bg-slate-50 border border-slate-200/90 text-slate-700 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold shadow-2xs">
-            <Sparkles size={14} className="text-indigo-600 shrink-0" />
-            <span>IHP & SkyWater 130nm PDKs</span>
-          </span>
-          <span className="inline-flex items-center gap-1.5 bg-amber-50 border border-amber-300/80 text-amber-900 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold shadow-2xs">
-            <span className="text-amber-500">★</span>
-            <span>Tape-Out for Top Student Designs</span>
-          </span>
-          <span className="inline-flex items-center gap-1.5 bg-emerald-50 border border-emerald-300/80 text-emerald-900 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold shadow-2xs">
-            <ShieldCheck size={14} className="text-emerald-600 shrink-0" />
-            <span>IEEE Dual-Tier Certification</span>
-          </span>
+        {/* Magic UI NumberTicker Metric Showcase */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-10 max-w-3xl mx-auto">
+          <div className="bg-white/90 backdrop-blur-xs border border-slate-200/90 rounded-2xl p-3.5 sm:p-4 shadow-2xs hover:border-sky-300 transition-colors">
+            <div className="text-2xl sm:text-3xl font-extrabold text-slate-900 flex items-center justify-center gap-0.5">
+              <NumberTicker value={8} />
+              <span className="text-sky-600 text-lg sm:text-xl font-bold">Mod</span>
+            </div>
+            <div className="text-[11px] sm:text-xs font-semibold text-slate-500 uppercase tracking-wider mt-1">
+              Intensive Modules
+            </div>
+          </div>
+
+          <div className="bg-white/90 backdrop-blur-xs border border-slate-200/90 rounded-2xl p-3.5 sm:p-4 shadow-2xs hover:border-teal-300 transition-colors">
+            <div className="text-2xl sm:text-3xl font-extrabold text-slate-900 flex items-center justify-center gap-0.5">
+              <NumberTicker value={100} />
+              <span className="text-teal-600 text-lg sm:text-xl font-bold">%</span>
+            </div>
+            <div className="text-[11px] sm:text-xs font-semibold text-slate-500 uppercase tracking-wider mt-1">
+              FOSS EDA Toolchain
+            </div>
+          </div>
+
+          <div className="bg-white/90 backdrop-blur-xs border border-slate-200/90 rounded-2xl p-3.5 sm:p-4 shadow-2xs hover:border-indigo-300 transition-colors">
+            <div className="text-2xl sm:text-3xl font-extrabold text-slate-900 flex items-center justify-center gap-0.5">
+              <NumberTicker value={130} />
+              <span className="text-indigo-600 text-lg sm:text-xl font-bold">nm</span>
+            </div>
+            <div className="text-[11px] sm:text-xs font-semibold text-slate-500 uppercase tracking-wider mt-1">
+              Foundry Silicon PDKs
+            </div>
+          </div>
+
+          <div className="bg-white/90 backdrop-blur-xs border border-slate-200/90 rounded-2xl p-3.5 sm:p-4 shadow-2xs hover:border-emerald-300 transition-colors">
+            <div className="text-2xl sm:text-3xl font-extrabold text-slate-900 flex items-center justify-center gap-0.5">
+              <span className="text-emerald-600 text-lg sm:text-xl font-bold">$</span>
+              <NumberTicker value={0} />
+            </div>
+            <div className="text-[11px] sm:text-xs font-semibold text-slate-500 uppercase tracking-wider mt-1">
+              License Barriers
+            </div>
+          </div>
         </div>
 
-        {/* Action CTAs */}
+        {/* Action CTAs using Magic UI ShimmerButton */}
         <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
           <Link href="#register" className="w-full sm:w-auto inline-block">
-            <StarBorder
-              as="div"
-              color="#ffffff"
-              trailColor="#38bdf8"
-              duration={3.5}
-              direction="clockwise"
-              stars={1}
-              trailLength={0.35}
-              thickness={1.5}
-              radius={14}
-              glow={0.7}
-              hover="lap"
-              sparkle={false}
-              clickPulse
-              theme="dark"
-              className="w-full sm:w-auto px-8 py-4 text-base font-bold shadow-lg shadow-sky-950/10 cursor-pointer"
+            <ShimmerButton
+              shimmerColor="#38bdf8"
+              background="#0284c7"
+              borderRadius="16px"
+              className="w-full sm:w-auto px-8 py-4 text-base font-bold shadow-lg shadow-sky-600/20"
             >
-              Register for Free
-            </StarBorder>
+              <span>Register for Masterclass</span>
+              <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+            </ShimmerButton>
           </Link>
 
           <Link
@@ -118,8 +159,7 @@ export function HeroSection() {
             className="w-full sm:w-auto inline-flex items-center justify-center gap-2 py-3.5 px-7 bg-white hover:bg-slate-50 border border-slate-300 text-slate-800 hover:text-sky-700 text-base font-semibold rounded-2xl shadow-xs transition-all hover:border-sky-300 active:scale-95"
           >
             <BookOpen size={18} className="text-sky-600" />
-            <span>View 8-Module Curriculum</span>
-            <ArrowRight size={16} className="text-slate-400" />
+            <span>Explore 8-Module Curriculum</span>
           </Link>
         </div>
       </div>

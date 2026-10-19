@@ -1,7 +1,7 @@
 "use client";
 
-import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { SpotlightCard } from "./react-bits/SpotlightCard";
 import { stakeholders, Stakeholder } from "@/data/stakeholders";
 import { Globe, Mail, Sparkles, Users } from "lucide-react";
 import Link from "next/link";
@@ -103,12 +103,11 @@ function StakeholderCard({
   const mailtoHref = person.emails ? `mailto:${person.emails.join(",")}` : undefined;
 
   return (
-    <Card
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+    <SpotlightCard
+      spotlightColor="rgba(2, 132, 199, 0.12)"
       className="bg-white/95 backdrop-blur-xs border-slate-200/90 shadow-2xs hover:shadow-lg hover:border-sky-300 transition-all duration-300 flex flex-col h-full rounded-2xl overflow-hidden group cursor-pointer"
     >
-      <CardContent className="p-5 sm:p-6 flex flex-col flex-1">
+      <div className="p-5 sm:p-6 flex flex-col flex-1">
         <div className="flex items-start justify-between gap-3 mb-4">
           {/* Avatar */}
           <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden bg-gradient-to-br from-sky-50 to-slate-100 border-2 border-slate-200/80 group-hover:border-sky-500 transition-colors shrink-0 shadow-inner">
@@ -224,7 +223,7 @@ function StakeholderCard({
         >
           {person.bio}
         </p>
-      </CardContent>
-    </Card>
+      </div>
+    </SpotlightCard>
   );
 }

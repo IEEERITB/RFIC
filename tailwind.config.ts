@@ -56,6 +56,29 @@ const config: Config = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      keyframes: {
+        marquee: {
+          from: { transform: "translateX(0)" },
+          to: { transform: "translateX(calc(-100% - var(--gap)))" },
+        },
+        "marquee-vertical": {
+          from: { transform: "translateY(0)" },
+          to: { transform: "translateY(calc(-100% - var(--gap)))" },
+        },
+        shimmer: {
+          "0%, 90%, 100%": {
+            "background-position": "calc(-100% - var(--shimmer-width)) 0",
+          },
+          "30%, 60%": {
+            "background-position": "calc(100% + var(--shimmer-width)) 0",
+          },
+        },
+      },
+      animation: {
+        marquee: "marquee var(--duration, 30s) linear infinite",
+        "marquee-vertical": "marquee-vertical var(--duration, 30s) linear infinite",
+        shimmer: "shimmer 8s infinite",
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],
