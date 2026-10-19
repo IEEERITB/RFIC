@@ -106,3 +106,22 @@
     @apply font-sans;
   }
 }
+
+/* Explicit line clamping for stakeholder bios */
+.stakeholder-bio-clamped {
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 5 !important;
+  line-clamp: 5 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  transition: all 0.3s ease;
+}
+
+.group:hover .stakeholder-bio-clamped,
+.stakeholder-bio-clamped:hover {
+  display: block !important;
+  -webkit-line-clamp: unset !important;
+  line-clamp: unset !important;
+  overflow: visible !important;
+}

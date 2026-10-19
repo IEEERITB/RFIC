@@ -73,6 +73,7 @@ export function StakeholdersSection() {
 
 function StakeholderCard({ person, isCompact = true }: { person: Stakeholder; isCompact?: boolean }) {
   const [imgError, setImgError] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   // Initial letters for avatar fallback
   const initials = person.name
@@ -85,7 +86,11 @@ function StakeholderCard({ person, isCompact = true }: { person: Stakeholder; is
   const mailtoHref = person.emails ? `mailto:${person.emails.join(",")}` : undefined;
 
   return (
-    <Card className="bg-white border-slate-200/80 shadow-sm hover:shadow-lg hover:border-sky-300 transition-all duration-300 flex flex-col h-full rounded-2xl overflow-hidden group">
+    <Card 
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="bg-white border-slate-200/80 shadow-sm hover:shadow-lg hover:border-sky-300 transition-all duration-300 flex flex-col h-full rounded-2xl overflow-hidden group cursor-pointer"
+    >
       <CardContent className="p-6 flex flex-col flex-1">
         <div className="flex items-start justify-between gap-4 mb-4">
           {/* Avatar */}
@@ -165,7 +170,16 @@ function StakeholderCard({ person, isCompact = true }: { person: Stakeholder; is
         </div>
 
         {/* Bio */}
-        <p className={`text-slate-600 text-xs md:text-sm leading-relaxed flex-1 ${isCompact ? "line-clamp-5 group-hover:line-clamp-none hover:line-clamp-none transition-all duration-300" : ""}`}>
+        <p 
+          style={isCompact && !isHovered ? {
+            display: '-webkit-box',
+            WebkitLineClamp: 5,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis'
+          } : undefined}
+          className={`text-slate-600 text-xs md:text-sm leading-relaxed flex-1 ${isCompact ? "stakeholder-bio-clamped line-clamp-5 group-hover:line-clamp-none hover:line-clamp-none" : ""}`}
+        >
           {person.bio}
         </p>
 
