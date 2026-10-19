@@ -35,12 +35,12 @@ export function RegistrationForm() {
       fullName: "",
       email: "",
       phone: "",
-      category: "STUDENT_RIT",
+      category: "",
       institutionOrCompany: "",
       ieeeMember: false,
       ieeeMembershipId: "",
       githubHandle: "",
-      experienceLevel: "BEGINNER",
+      experienceLevel: "",
       joinedWhatsapp: false,
     },
   });
@@ -154,7 +154,7 @@ export function RegistrationForm() {
                     <FormItem>
                       <FormLabel className="text-slate-900">Full Name</FormLabel>
                       <FormControl>
-                        <Input placeholder="John Doe" className="bg-white border-slate-300 text-slate-900 placeholder:text-slate-400 focus-visible:ring-sky-500" {...field} />
+                        <Input placeholder="Enter your full name" className="bg-white border-slate-300 text-slate-900 placeholder:text-slate-400 focus-visible:ring-sky-500" {...field} />
                       </FormControl>
                       <FormMessage className="text-red-500" />
                     </FormItem>
@@ -167,7 +167,7 @@ export function RegistrationForm() {
                     <FormItem>
                       <FormLabel className="text-slate-900">Email Address</FormLabel>
                       <FormControl>
-                        <Input type="email" placeholder="john@example.com" className="bg-white border-slate-300 text-slate-900 placeholder:text-slate-400 focus-visible:ring-sky-500" {...field} />
+                        <Input type="email" placeholder="Enter your official / student email address" className="bg-white border-slate-300 text-slate-900 placeholder:text-slate-400 focus-visible:ring-sky-500" {...field} />
                       </FormControl>
                       <FormMessage className="text-red-500" />
                     </FormItem>
@@ -183,7 +183,7 @@ export function RegistrationForm() {
                     <FormItem>
                       <FormLabel className="text-slate-900">Phone (Optional)</FormLabel>
                       <FormControl>
-                        <Input type="tel" placeholder="+1..." className="bg-white border-slate-300 text-slate-900 placeholder:text-slate-400 focus-visible:ring-sky-500" {...field} />
+                        <Input type="tel" placeholder="+91 98765 43210" className="bg-white border-slate-300 text-slate-900 placeholder:text-slate-400 focus-visible:ring-sky-500" {...field} />
                       </FormControl>
                       <FormMessage className="text-red-500" />
                     </FormItem>
@@ -196,18 +196,18 @@ export function RegistrationForm() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-slate-900">Participant Category</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select onValueChange={field.onChange} value={field.value || undefined}>
                         <FormControl>
                           <SelectTrigger className="bg-white border-slate-300 text-slate-900 placeholder:text-slate-400 focus-visible:ring-sky-500">
                             <SelectValue placeholder="Select a category" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent className="bg-white border-slate-300 text-slate-900 placeholder:text-slate-400 focus-visible:ring-sky-500">
-                          <SelectItem value="STUDENT_RIT">Student (RIT)</SelectItem>
-                          <SelectItem value="STUDENT_EXTERNAL">Student (External)</SelectItem>
-                          <SelectItem value="RESEARCH_SCHOLAR">Research Scholar / PhD</SelectItem>
-                          <SelectItem value="INDUSTRY_YP">Industry / Young Professional</SelectItem>
-                          <SelectItem value="ACADEMIA">Academia / Faculty</SelectItem>
+                          <SelectItem value="Student (Ramaiah / MSRIT)">Student (Ramaiah / MSRIT)</SelectItem>
+                          <SelectItem value="Student (External College / University)">Student (External College / University)</SelectItem>
+                          <SelectItem value="Research Scholar / PhD Candidate">Research Scholar / PhD Candidate</SelectItem>
+                          <SelectItem value="Industry / Working Professional">Industry / Working Professional</SelectItem>
+                          <SelectItem value="Faculty / Academia">Faculty / Academia</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage className="text-red-500" />
@@ -223,7 +223,7 @@ export function RegistrationForm() {
                   <FormItem>
                     <FormLabel className="text-slate-900">Institution or Company Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="University of XYZ / Intel" className="bg-white border-slate-300 text-slate-900 placeholder:text-slate-400 focus-visible:ring-sky-500" {...field} />
+                      <Input placeholder="e.g. Ramaiah Institute of Technology / Intel / TI" className="bg-white border-slate-300 text-slate-900 placeholder:text-slate-400 focus-visible:ring-sky-500" {...field} />
                     </FormControl>
                     <FormMessage className="text-red-500" />
                   </FormItem>
@@ -277,22 +277,22 @@ export function RegistrationForm() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-                 <FormField
+                  <FormField
                   control={form.control}
                   name="experienceLevel"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-slate-900">Experience Level</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select onValueChange={field.onChange} value={field.value || undefined}>
                         <FormControl>
                           <SelectTrigger className="bg-white border-slate-300 text-slate-900 placeholder:text-slate-400 focus-visible:ring-sky-500">
-                            <SelectValue placeholder="Select level" />
+                            <SelectValue placeholder="Select experience level" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent className="bg-white border-slate-300 text-slate-900 placeholder:text-slate-400 focus-visible:ring-sky-500">
-                          <SelectItem value="BEGINNER">Beginner (No prior tape-out)</SelectItem>
-                          <SelectItem value="INTERMEDIATE_ANALOG">Intermediate (Basic Analog/VLSI)</SelectItem>
-                          <SelectItem value="ADVANCED_RF">Advanced (RF IC / Past Tape-outs)</SelectItem>
+                          <SelectItem value="Beginner (No prior tape-out)">Beginner (No prior tape-out)</SelectItem>
+                          <SelectItem value="Intermediate (Basic Analog/VLSI)">Intermediate (Basic Analog/VLSI)</SelectItem>
+                          <SelectItem value="Advanced (RF IC / Past Tape-outs)">Advanced (RF IC / Past Tape-outs)</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage className="text-red-500" />
