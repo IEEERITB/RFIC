@@ -3,7 +3,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { stakeholders, Stakeholder } from "@/data/stakeholders";
-import { Globe, Mail, Sparkles } from "lucide-react";
+import { Globe, Mail, Sparkles, Users } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -28,27 +28,37 @@ export function StakeholdersSection() {
   const organisers = stakeholders.filter((s) => s.category === "organiser");
 
   return (
-    <section className="py-24 bg-transparent relative overflow-hidden transition-colors duration-500" id="stakeholders" data-bgcolor="#ffffff" data-textcolor="#0f172a">
-      <div className="container mx-auto px-4 max-w-6xl relative z-10">
-        <div className="text-center mb-16">
-          <Badge variant="outline" className="mb-4 border-sky-300 text-sky-700 bg-sky-50 px-3 py-1 text-xs uppercase tracking-wider font-semibold">
+    <section
+      className="py-20 sm:py-24 bg-transparent relative overflow-hidden transition-colors duration-500"
+      id="stakeholders"
+      data-bgcolor="#ffffff"
+      data-textcolor="#0f172a"
+    >
+      <div className="container mx-auto px-4 sm:px-6 max-w-6xl relative z-10">
+        <div className="text-center mb-12 sm:mb-16">
+          <Badge
+            variant="outline"
+            className="mb-4 border-sky-300 text-sky-700 bg-sky-50 px-3 py-1 text-xs uppercase tracking-wider font-semibold"
+          >
             Program Leadership & Team
           </Badge>
-          <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight mb-4">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-4">
             Meet the Stakeholders
           </h2>
-          <p className="text-slate-600 max-w-2xl mx-auto text-base md:text-lg">
+          <p className="text-slate-600 max-w-2xl mx-auto text-base sm:text-lg">
             Guiding the masterclass from theoretical foundations to physical open-source silicon tape-out.
           </p>
         </div>
 
         {/* Section 1: Advisory & Curation */}
-        <div className="mb-16">
-          <div className="flex items-center gap-2 mb-8 border-b border-slate-200 pb-3">
-            <Sparkles className="w-5 h-5 text-sky-600" />
-            <h3 className="text-xl font-bold text-slate-800">Series Mentorship & Advisory</h3>
+        <div className="mb-14 sm:mb-16">
+          <div className="flex items-center gap-2 mb-6 sm:mb-8 border-b border-slate-200 pb-3">
+            <Sparkles className="w-5 h-5 text-sky-600 shrink-0" />
+            <h3 className="text-lg sm:text-xl font-bold text-slate-800">
+              Series Mentorship & Advisory
+            </h3>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5 sm:gap-6">
             {leadership.map((person) => (
               <StakeholderCard key={person.id} person={person} isCompact={true} />
             ))}
@@ -57,10 +67,13 @@ export function StakeholdersSection() {
 
         {/* Section 2: Organizing Committee */}
         <div>
-          <div className="flex items-center gap-2 mb-8 border-b border-slate-200 pb-3">
-            <h3 className="text-xl font-bold text-slate-800">Organising Committee</h3>
+          <div className="flex items-center gap-2 mb-6 sm:mb-8 border-b border-slate-200 pb-3">
+            <Users className="w-5 h-5 text-sky-600 shrink-0" />
+            <h3 className="text-lg sm:text-xl font-bold text-slate-800">
+              Organising Committee
+            </h3>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
             {organisers.map((person) => (
               <StakeholderCard key={person.id} person={person} isCompact={true} />
             ))}
@@ -71,7 +84,13 @@ export function StakeholdersSection() {
   );
 }
 
-function StakeholderCard({ person, isCompact = true }: { person: Stakeholder; isCompact?: boolean }) {
+function StakeholderCard({
+  person,
+  isCompact = true,
+}: {
+  person: Stakeholder;
+  isCompact?: boolean;
+}) {
   const [imgError, setImgError] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -86,15 +105,15 @@ function StakeholderCard({ person, isCompact = true }: { person: Stakeholder; is
   const mailtoHref = person.emails ? `mailto:${person.emails.join(",")}` : undefined;
 
   return (
-    <Card 
+    <Card
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="bg-white border-slate-200/80 shadow-sm hover:shadow-lg hover:border-sky-300 transition-all duration-300 flex flex-col h-full rounded-2xl overflow-hidden group cursor-pointer"
+      className="bg-white/95 backdrop-blur-xs border-slate-200/90 shadow-2xs hover:shadow-lg hover:border-sky-300 transition-all duration-300 flex flex-col h-full rounded-2xl overflow-hidden group cursor-pointer"
     >
-      <CardContent className="p-6 flex flex-col flex-1">
-        <div className="flex items-start justify-between gap-4 mb-4">
+      <CardContent className="p-5 sm:p-6 flex flex-col flex-1">
+        <div className="flex items-start justify-between gap-3 mb-4">
           {/* Avatar */}
-          <div className="relative w-20 h-20 rounded-2xl overflow-hidden bg-gradient-to-br from-sky-50 to-slate-100 border-2 border-slate-200/80 group-hover:border-sky-500 transition-colors shrink-0 shadow-inner">
+          <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden bg-gradient-to-br from-sky-50 to-slate-100 border-2 border-slate-200/80 group-hover:border-sky-500 transition-colors shrink-0 shadow-inner">
             {person.avatarUrl && !imgError ? (
               <img
                 src={person.avatarUrl}
@@ -103,7 +122,7 @@ function StakeholderCard({ person, isCompact = true }: { person: Stakeholder; is
                 onError={() => setImgError(true)}
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center font-bold text-xl text-sky-700 bg-gradient-to-br from-sky-100 via-sky-50 to-slate-100">
+              <div className="w-full h-full flex items-center justify-center font-bold text-lg sm:text-xl text-sky-700 bg-gradient-to-br from-sky-100 via-sky-50 to-slate-100">
                 {initials}
               </div>
             )}
@@ -116,8 +135,8 @@ function StakeholderCard({ person, isCompact = true }: { person: Stakeholder; is
                 href={person.linkedInUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                title="LinkedIn Profile"
-                className="w-8 h-8 rounded-lg bg-slate-100 hover:bg-[#0A66C2] text-slate-500 hover:text-white flex items-center justify-center transition-all duration-200 shadow-sm"
+                title={`${person.name}'s LinkedIn Profile`}
+                className="w-8 h-8 rounded-lg bg-slate-100 hover:bg-[#0A66C2] text-slate-500 hover:text-white flex items-center justify-center transition-all duration-200 shadow-2xs focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500"
               >
                 <LinkedinIcon className="w-4 h-4" />
               </Link>
@@ -127,8 +146,8 @@ function StakeholderCard({ person, isCompact = true }: { person: Stakeholder; is
                 href={person.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                title="GitHub Profile"
-                className="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-900 text-slate-500 hover:text-white flex items-center justify-center transition-all duration-200 shadow-sm"
+                title={`${person.name}'s GitHub Profile`}
+                className="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-900 text-slate-500 hover:text-white flex items-center justify-center transition-all duration-200 shadow-2xs focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500"
               >
                 <GithubIcon className="w-4 h-4" />
               </Link>
@@ -138,8 +157,8 @@ function StakeholderCard({ person, isCompact = true }: { person: Stakeholder; is
                 href={person.portfolioUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                title="Website / Faculty Profile"
-                className="w-8 h-8 rounded-lg bg-slate-100 hover:bg-emerald-600 text-slate-500 hover:text-white flex items-center justify-center transition-all duration-200 shadow-sm"
+                title={`${person.name}'s Faculty Profile / Website`}
+                className="w-8 h-8 rounded-lg bg-slate-100 hover:bg-emerald-600 text-slate-500 hover:text-white flex items-center justify-center transition-all duration-200 shadow-2xs focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500"
               >
                 <Globe size={16} />
               </Link>
@@ -147,8 +166,8 @@ function StakeholderCard({ person, isCompact = true }: { person: Stakeholder; is
             {mailtoHref && (
               <a
                 href={mailtoHref}
-                title={person.emails?.join(", ")}
-                className="w-8 h-8 rounded-lg bg-slate-100 hover:bg-amber-600 text-slate-500 hover:text-white flex items-center justify-center transition-all duration-200 shadow-sm"
+                title={`Send email to ${person.name}`}
+                className="w-8 h-8 rounded-lg bg-slate-100 hover:bg-amber-600 text-slate-500 hover:text-white flex items-center justify-center transition-all duration-200 shadow-2xs focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500"
               >
                 <Mail size={16} />
               </a>
@@ -163,7 +182,7 @@ function StakeholderCard({ person, isCompact = true }: { person: Stakeholder; is
               person.role.split("•").map((part, idx) => (
                 <span
                   key={idx}
-                  className={`inline-flex items-center rounded-md px-2 py-0.5 text-[11px] font-semibold tracking-tight ${
+                  className={`inline-flex items-center rounded-md px-2 py-0.5 text-[10px] sm:text-[11px] font-semibold tracking-tight ${
                     idx === 0
                       ? "bg-sky-50 text-sky-700 border border-sky-200/80"
                       : "bg-teal-50 text-teal-700 border border-teal-200/80"
@@ -173,12 +192,12 @@ function StakeholderCard({ person, isCompact = true }: { person: Stakeholder; is
                 </span>
               ))
             ) : (
-              <span className="inline-flex items-center rounded-md px-2 py-0.5 text-[11px] font-semibold bg-sky-50 text-sky-700 border border-sky-200/80">
+              <span className="inline-flex items-center rounded-md px-2 py-0.5 text-[10px] sm:text-[11px] font-semibold bg-sky-50 text-sky-700 border border-sky-200/80">
                 {person.role}
               </span>
             )}
           </div>
-          <h4 className="text-lg font-bold text-slate-900 group-hover:text-sky-600 transition-colors leading-snug">
+          <h4 className="text-base sm:text-lg font-bold text-slate-900 group-hover:text-sky-600 transition-colors leading-snug">
             {person.name}
           </h4>
           <p className="text-xs text-slate-500 font-medium mb-3 line-clamp-1">
@@ -187,15 +206,23 @@ function StakeholderCard({ person, isCompact = true }: { person: Stakeholder; is
         </div>
 
         {/* Bio */}
-        <p 
-          style={isCompact && !isHovered ? {
-            display: '-webkit-box',
-            WebkitLineClamp: 5,
-            WebkitBoxOrient: 'vertical',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis'
-          } : undefined}
-          className={`text-slate-600 text-xs md:text-sm leading-relaxed flex-1 ${isCompact ? "stakeholder-bio-clamped line-clamp-5 group-hover:line-clamp-none hover:line-clamp-none" : ""}`}
+        <p
+          style={
+            isCompact && !isHovered
+              ? {
+                  display: "-webkit-box",
+                  WebkitLineClamp: 5,
+                  WebkitBoxOrient: "vertical",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }
+              : undefined
+          }
+          className={`text-slate-600 text-xs sm:text-sm leading-relaxed flex-1 ${
+            isCompact
+              ? "stakeholder-bio-clamped line-clamp-5 group-hover:line-clamp-none hover:line-clamp-none"
+              : ""
+          }`}
         >
           {person.bio}
         </p>
