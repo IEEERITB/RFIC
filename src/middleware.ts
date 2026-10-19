@@ -19,6 +19,16 @@ export function middleware(req: NextRequest) {
       }
     }
 
+    // Never send WWW-Authenticate header to background prefetch requests
+    const isPrefetch =
+      req.headers.get('purpose') === 'prefetch' ||
+      req.headers.get('next-router-prefetch') === '1' ||
+      req.headers.get('x-middleware-prefetch') === '1';
+
+    if (isPrefetch) {
+      return new NextResponse('Auth required', { status: 401 });
+    }
+
     return new NextResponse('Auth required', {
       status: 401,
       headers: {

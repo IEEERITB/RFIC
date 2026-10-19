@@ -104,11 +104,6 @@ export function Footer() {
                   Participant Registration
                 </Link>
               </li>
-              <li>
-                <Link href="/admin" className="text-slate-500 hover:text-slate-400 transition-colors">
-                  Admin Portal
-                </Link>
-              </li>
             </ul>
 
             <div className="pt-2">
