@@ -209,7 +209,7 @@ export function RegistrationForm() {
                           </FormLabel>
                           <FormControl>
                             <Input
-                              placeholder="e.g. Priyanshu Trivedi"
+                              placeholder="Name"
                               className="bg-white border-slate-200 text-slate-900 placeholder:text-slate-400 focus-visible:ring-2 focus-visible:ring-sky-500 rounded-xl"
                               {...field}
                             />
