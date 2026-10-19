@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { GridPattern } from "./magicui/grid-pattern";
-import { Marquee } from "./magicui/marquee";
 import { NumberTicker } from "./magicui/number-ticker";
 import { ShimmerButton } from "./magicui/shimmer-button";
 import { Cpu, Calendar, ShieldCheck, Sparkles, BookOpen, ArrowRight, CheckCircle2 } from "lucide-react";
@@ -40,37 +39,33 @@ export function HeroSection() {
       />
 
       <div className="container mx-auto px-4 sm:px-6 relative z-10 text-center max-w-5xl">
-        {/* Magic UI Institutional Partner Marquee */}
-        <div className="mb-8 sm:mb-12 max-w-3xl mx-auto">
-          <div className="relative overflow-hidden rounded-2xl bg-white/80 backdrop-blur-md p-3 sm:p-4 border border-slate-200/90 shadow-2xs">
-            <div className="flex items-center justify-between px-3 pb-2 border-b border-slate-100">
-              <span className="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-sky-500 animate-pulse" />
+        {/* Institutional Partner Showcase (Stable, High-Contrast & Clearly Visible) */}
+        <div className="mb-8 sm:mb-12 max-w-4xl mx-auto">
+          <div className="rounded-2xl bg-white p-3.5 sm:p-5 border border-slate-200/90 shadow-xs">
+            <div className="flex items-center justify-between px-2 pb-3 mb-3 border-b border-slate-100">
+              <span className="text-[10px] sm:text-xs font-bold text-slate-600 uppercase tracking-widest flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full bg-sky-500" />
                 Joint Flagship Initiative • Academic & Industry Patrons
               </span>
-              <span className="text-[10px] sm:text-xs font-mono font-medium text-slate-400">
-                IEEE Bangalore
+              <span className="text-[10px] sm:text-xs font-semibold text-sky-700 bg-sky-50 px-2.5 py-0.5 rounded-full border border-sky-100/80">
+                IEEE Bangalore Section
               </span>
             </div>
 
-            <div className="relative w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)] pt-2">
-              <Marquee pauseOnHover className="[--duration:25s] [--gap:3rem]">
-                {partners.map((partner, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center gap-3 grayscale hover:grayscale-0 transition-all opacity-80 hover:opacity-100 shrink-0 cursor-default"
-                  >
-                    <img
-                      src={partner.logo}
-                      alt={partner.name}
-                      className="h-7 sm:h-8 w-auto object-contain"
-                    />
-                    <span className="text-xs font-semibold text-slate-700 hidden sm:inline">
-                      {partner.name}
-                    </span>
-                  </div>
-                ))}
-              </Marquee>
+            <div className="grid grid-cols-2 md:grid-cols-4 items-center justify-items-center gap-3 sm:gap-6 py-2">
+              {partners.map((partner, index) => (
+                <div
+                  key={index}
+                  className="w-full h-14 sm:h-16 px-4 py-2 flex items-center justify-center rounded-xl bg-white hover:bg-slate-50/80 border border-slate-100 hover:border-slate-200 transition-all shadow-2xs group"
+                  title={partner.name}
+                >
+                  <img
+                    src={partner.logo}
+                    alt={partner.name}
+                    className="max-h-9 sm:max-h-10 max-w-[140px] sm:max-w-[170px] w-auto object-contain transition-transform duration-200 group-hover:scale-105"
+                  />
+                </div>
+              ))}
             </div>
           </div>
         </div>
