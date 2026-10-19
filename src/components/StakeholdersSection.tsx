@@ -158,10 +158,27 @@ function StakeholderCard({ person, isCompact = true }: { person: Stakeholder; is
 
         {/* Person details */}
         <div className="mb-2">
-          <Badge variant="secondary" className="bg-sky-50 text-sky-700 border border-sky-100 font-semibold text-xs mb-1.5">
-            {person.role}
-          </Badge>
-          <h4 className="text-lg font-bold text-slate-900 group-hover:text-sky-600 transition-colors">
+          <div className="flex flex-wrap items-center gap-1.5 mb-2">
+            {person.role.includes("•") ? (
+              person.role.split("•").map((part, idx) => (
+                <span
+                  key={idx}
+                  className={`inline-flex items-center rounded-md px-2 py-0.5 text-[11px] font-semibold tracking-tight ${
+                    idx === 0
+                      ? "bg-sky-50 text-sky-700 border border-sky-200/80"
+                      : "bg-teal-50 text-teal-700 border border-teal-200/80"
+                  }`}
+                >
+                  {part.trim()}
+                </span>
+              ))
+            ) : (
+              <span className="inline-flex items-center rounded-md px-2 py-0.5 text-[11px] font-semibold bg-sky-50 text-sky-700 border border-sky-200/80">
+                {person.role}
+              </span>
+            )}
+          </div>
+          <h4 className="text-lg font-bold text-slate-900 group-hover:text-sky-600 transition-colors leading-snug">
             {person.name}
           </h4>
           <p className="text-xs text-slate-500 font-medium mb-3 line-clamp-1">
