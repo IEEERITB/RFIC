@@ -141,33 +141,33 @@ export function EmailCenterView({ participants, onOpenSendEmail }: EmailCenterVi
           </div>
         </div>
 
-        {/* Resend Webhook / Environment Status Card */}
+        {/* Email Engine Status Card */}
         <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 flex flex-col justify-between shadow-md">
           <div className="space-y-3">
             <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-              <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Resend Integration</span>
+              <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Mail Delivery Engine</span>
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
             </div>
 
             <div className="space-y-2 text-xs">
               <div className="flex justify-between text-slate-400">
                 <span>Sender Identity:</span>
-                <span className="text-slate-200 font-mono text-[11px]">onboarding@resend.dev</span>
+                <span className="text-sky-300 font-mono text-[11px] font-semibold">ieeesc@msrit.edu</span>
+              </div>
+              <div className="flex justify-between text-slate-400">
+                <span>Provider:</span>
+                <span className="text-slate-200 font-medium">Google Workspace / SMTP</span>
               </div>
               <div className="flex justify-between text-slate-400">
                 <span>Template Engine:</span>
                 <span className="text-teal-400 font-semibold">React Email Components</span>
               </div>
-              <div className="flex justify-between text-slate-400">
-                <span>Delivery Webhook:</span>
-                <span className="text-sky-400 font-mono text-[11px]">/api/webhooks/resend</span>
-              </div>
             </div>
           </div>
 
           <div className="pt-4 border-t border-slate-800">
-            <p className="text-[11px] text-slate-500 leading-snug">
-              Webhooks automatically capture delivery confirmations and bounces in PostgreSQL.
+            <p className="text-[11px] text-slate-400 leading-snug">
+              Official institutional sender for IEEE Sensors Council RITB.
             </p>
           </div>
         </div>
