@@ -2,8 +2,8 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(req: NextRequest) {
-  // Only apply basic auth to the /admin routes
-  if (req.nextUrl.pathname.startsWith('/admin')) {
+  // Apply basic auth to /admin and /api/admin routes
+  if (req.nextUrl.pathname.startsWith('/admin') || req.nextUrl.pathname.startsWith('/api/admin')) {
     const basicAuth = req.headers.get('authorization');
     
     if (basicAuth) {
@@ -52,5 +52,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*'],
+  matcher: ['/admin/:path*', '/api/admin/:path*'],
 };

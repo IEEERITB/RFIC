@@ -1,225 +1,364 @@
-import { prisma } from "@/lib/prisma";
-import Link from "next/link";
-import { format } from "date-fns";
-import { Users, ShieldCheck, GraduationCap, Briefcase, ArrowLeft, Download, Mail, ExternalLink } from "lucide-react";
+"use client";
 
-export const dynamic = "force-dynamic";
+import React, { useState, useEffect, useCallback } from "react";
+import { AdminSidebar, AdminTab } from "@/components/admin/AdminSidebar";
+import { AdminHeader } from "@/components/admin/AdminHeader";
+import { OverviewView } from "@/components/admin/OverviewView";
+import { RegistrationsView } from "@/components/admin/RegistrationsView";
+import { EmailCenterView } from "@/components/admin/EmailCenterView";
+import { AnalyticsView } from "@/components/admin/AnalyticsView";
+import { AuditLogView } from "@/components/admin/AuditLogView";
+import { CandidateModal, Participant } from "@/components/admin/CandidateModal";
+import { EmailPreviewModal } from "@/components/admin/EmailPreviewModal";
+import { useToast } from "@/hooks/use-toast";
 
-export default async function AdminDashboard() {
-  const participants = await prisma.participant.findMany({
-    orderBy: { registrationDate: "desc" },
-  });
+export default function AdminPage() {
+  const { toast } = useToast();
 
-  const totalCount = participants.length;
-  const ieeeMemberCount = participants.filter((p) => p.ieeeMember).length;
-  const studentCount = participants.filter(
-    (p) => p.category?.toLowerCase().includes("student")
-  ).length;
-  const proCount = participants.filter(
-    (p) =>
-      p.category?.toLowerCase().includes("industry") ||
-      p.category?.toLowerCase().includes("faculty") ||
-      p.category?.toLowerCase().includes("research")
-  ).length;
+  // Navigation State
+  const [activeTab, setActiveTab] = useState<AdminTab>("overview");
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const ieeePercentage = totalCount > 0 ? Math.round((ieeeMemberCount / totalCount) * 100) : 0;
+  // Data States
+  const [stats, setStats] = useState<any>(null);
+  const [participants, setParticipants] = useState<Participant[]>([]);
+  const [totalParticipants, setTotalParticipants] = useState(0);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(25);
+  const [totalPages, setTotalPages] = useState(1);
+
+  // Filters State
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("ALL");
+  const [experienceLevel, setExperienceLevel] = useState("ALL");
+  const [ieeeMember, setIeeeMember] = useState("ALL");
+  const [emailStatus, setEmailStatus] = useState("ALL");
+
+  // Loading States
+  const [isLoadingStats, setIsLoadingStats] = useState(true);
+  const [isLoadingParticipants, setIsLoadingParticipants] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  // Modals State
+  const [activeCandidate, setActiveCandidate] = useState<Participant | null>(null);
+  const [candidateModalOpen, setCandidateModalOpen] = useState(false);
+  const [emailModalOpen, setEmailModalOpen] = useState(false);
+  const [emailRecipients, setEmailRecipients] = useState<Participant[]>([]);
+
+  // Fetch Dashboard Stats
+  const fetchStats = useCallback(async () => {
+    setIsLoadingStats(true);
+    try {
+      const res = await fetch("/api/admin/stats");
+      const data = await res.json();
+      if (data.success) {
+        setStats(data.stats);
+      } else {
+        throw new Error(data.error);
+      }
+    } catch (err: any) {
+      console.error("Failed to load admin stats:", err);
+    } finally {
+      setIsLoadingStats(false);
+    }
+  }, []);
+
+  // Fetch Participants with Active Filters
+  const fetchParticipants = useCallback(async () => {
+    setIsLoadingParticipants(true);
+    try {
+      const query = new URLSearchParams({
+        page: String(page),
+        pageSize: String(pageSize),
+        search: search.trim(),
+        category,
+        experienceLevel,
+        ieeeMember,
+        emailStatus,
+      });
+
+      const res = await fetch(`/api/admin/participants?${query.toString()}`);
+      const data = await res.json();
+      if (data.success) {
+        setParticipants(data.data || []);
+        setTotalParticipants(data.pagination?.total || 0);
+        setTotalPages(data.pagination?.totalPages || 1);
+      } else {
+        throw new Error(data.error);
+      }
+    } catch (err: any) {
+      console.error("Failed to load participants:", err);
+    } finally {
+      setIsLoadingParticipants(false);
+    }
+  }, [page, pageSize, search, category, experienceLevel, ieeeMember, emailStatus]);
+
+  // Initial Load & Updates
+  useEffect(() => {
+    fetchStats();
+  }, [fetchStats]);
+
+  useEffect(() => {
+    fetchParticipants();
+  }, [fetchParticipants]);
+
+  // Refresh All Data
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    await Promise.all([fetchStats(), fetchParticipants()]);
+    setIsRefreshing(false);
+    toast({
+      title: "Ledger Synchronized",
+      description: "Fetched latest records directly from PostgreSQL database.",
+      className: "bg-slate-900 text-white border-slate-800",
+    });
+  };
+
+  // CSV Export Action
+  const handleExportCsv = async () => {
+    try {
+      const query = new URLSearchParams({
+        category,
+        experienceLevel,
+        ieeeMember,
+        emailStatus,
+      });
+      window.location.href = `/api/admin/export?${query.toString()}`;
+      toast({
+        title: "Export Initiated",
+        description: "Downloading filtered registration ledger as CSV.",
+        className: "bg-emerald-600 text-white border-none",
+      });
+    } catch (err) {
+      toast({
+        title: "Export Failed",
+        description: "Could not generate CSV file.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  // Modal Handlers
+  const handleOpenCandidateModal = (candidate: Participant) => {
+    setActiveCandidate(candidate);
+    setCandidateModalOpen(true);
+  };
+
+  const handleOpenEmailModal = (candidates: Participant[]) => {
+    if (candidates.length === 0) return;
+    setEmailRecipients(candidates);
+    setEmailModalOpen(true);
+  };
+
+  // Email Dispatch Execution
+  const handleSendEmail = async ({
+    subject,
+    customMessage,
+  }: {
+    subject: string;
+    customMessage?: string;
+  }) => {
+    try {
+      const isBulk = emailRecipients.length > 1;
+      const payload = isBulk
+        ? {
+            participantIds: emailRecipients.map((c) => c.id),
+            subject,
+            customMessage,
+          }
+        : {
+            participantId: emailRecipients[0].id,
+            subject,
+            customMessage,
+          };
+
+      const res = await fetch("/api/admin/email/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await res.json();
+
+      if (!res.ok || !result.success) {
+        throw new Error(result.error || "Failed to dispatch email");
+      }
+
+      toast({
+        title: isBulk ? "Bulk Dispatch Finished" : "Confirmation Email Dispatched!",
+        description: isBulk
+          ? `Processed ${result.summary?.sent} sent out of ${result.summary?.total}.`
+          : `Sent to ${emailRecipients[0].email} via Resend.`,
+        className: "bg-emerald-600 text-white border-none",
+      });
+
+      // Refresh data to reflect updated emailStatus
+      fetchParticipants();
+      fetchStats();
+    } catch (err: any) {
+      toast({
+        title: "Email Dispatch Error",
+        description: err.message,
+        variant: "destructive",
+      });
+      throw err;
+    }
+  };
+
+  // Update Status
+  const handleUpdateStatus = async (id: string, status: string) => {
+    try {
+      const res = await fetch("/api/admin/participants", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, status }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        toast({
+          title: "Status Updated",
+          description: `Participant marked as ${status}.`,
+          className: "bg-slate-900 text-white border-slate-800",
+        });
+        fetchParticipants();
+        fetchStats();
+      }
+    } catch (err: any) {
+      toast({
+        title: "Update Failed",
+        description: err.message,
+        variant: "destructive",
+      });
+    }
+  };
+
+  // Delete Candidate
+  const handleDeleteCandidate = async (id: string, name: string) => {
+    try {
+      const res = await fetch(`/api/admin/participants?id=${id}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (data.success) {
+        toast({
+          title: "Record Deleted",
+          description: `Removed ${name} from registry.`,
+          className: "bg-slate-900 text-white border-slate-800",
+        });
+        fetchParticipants();
+        fetchStats();
+      } else {
+        throw new Error(data.error);
+      }
+    } catch (err: any) {
+      toast({
+        title: "Delete Failed",
+        description: err.message,
+        variant: "destructive",
+      });
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 p-4 sm:p-8 font-sans selection:bg-sky-500 selection:text-white">
-      <div className="max-w-7xl mx-auto space-y-8">
-        {/* Navigation Header */}
-        <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-800 pb-6">
-          <div className="space-y-1">
-            <div className="flex items-center gap-3">
-              <Link
-                href="/"
-                className="inline-flex items-center gap-1.5 text-xs font-semibold text-sky-400 hover:text-sky-300 transition-colors bg-sky-950/60 border border-sky-800/80 px-3 py-1.5 rounded-lg"
-              >
-                <ArrowLeft size={14} />
-                <span>Return to Live Portal</span>
-              </Link>
-              <span className="text-xs text-slate-500">•</span>
-              <span className="text-xs text-emerald-400 font-mono font-semibold flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span>Live Database Sync</span>
-              </span>
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight pt-2">
-              IEEE RF IC Masterclass Administration
-            </h1>
-            <p className="text-slate-400 text-xs sm:text-sm">
-              Live registration registry, IEEE membership verification, and candidate profile management.
-            </p>
-          </div>
-        </header>
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex font-sans selection:bg-sky-500 selection:text-white">
+      {/* Collapsible Sidebar */}
+      <AdminSidebar
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+        collapsed={sidebarCollapsed}
+        onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
+        totalParticipants={totalParticipants}
+        mobileOpen={mobileMenuOpen}
+        onMobileClose={() => setMobileMenuOpen(false)}
+      />
 
-        {/* Executive KPI Summary Cards */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="bg-slate-900/90 border border-slate-800 p-5 rounded-2xl shadow-sm flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-sky-500/10 text-sky-400 flex items-center justify-center shrink-0 border border-sky-500/20">
-              <Users size={22} />
-            </div>
-            <div>
-              <div className="text-xs font-bold uppercase tracking-wider text-slate-400">Total Registered</div>
-              <div className="text-2xl font-black text-white">{totalCount}</div>
-            </div>
-          </div>
+      {/* Main Content Area */}
+      <div
+        className={`flex-1 flex flex-col min-w-0 transition-all duration-300 ${
+          sidebarCollapsed ? "lg:ml-20" : "lg:ml-64"
+        }`}
+      >
+        {/* Top Header */}
+        <AdminHeader
+          activeTab={activeTab}
+          onMobileMenuOpen={() => setMobileMenuOpen(true)}
+          onRefresh={handleRefresh}
+          isRefreshing={isRefreshing}
+          onExportCsv={handleExportCsv}
+        />
 
-          <div className="bg-slate-900/90 border border-slate-800 p-5 rounded-2xl shadow-sm flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-500/20">
-              <ShieldCheck size={22} />
-            </div>
-            <div>
-              <div className="text-xs font-bold uppercase tracking-wider text-slate-400">IEEE Members</div>
-              <div className="text-2xl font-black text-emerald-400">
-                {ieeeMemberCount} <span className="text-xs font-normal text-slate-400">({ieeePercentage}%)</span>
-              </div>
-            </div>
-          </div>
+        {/* Tab View Render */}
+        <main className="flex-1 p-4 sm:p-8 max-w-7xl w-full mx-auto space-y-8">
+          {activeTab === "overview" && (
+            <OverviewView
+              stats={stats}
+              participants={participants}
+              onSelectCandidate={handleOpenCandidateModal}
+              onNavigateTab={(tab) => setActiveTab(tab)}
+            />
+          )}
 
-          <div className="bg-slate-900/90 border border-slate-800 p-5 rounded-2xl shadow-sm flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center shrink-0 border border-indigo-500/20">
-              <GraduationCap size={22} />
-            </div>
-            <div>
-              <div className="text-xs font-bold uppercase tracking-wider text-slate-400">Students</div>
-              <div className="text-2xl font-black text-indigo-400">{studentCount}</div>
-            </div>
-          </div>
+          {activeTab === "registrations" && (
+            <RegistrationsView
+              participants={participants}
+              total={totalParticipants}
+              page={page}
+              pageSize={pageSize}
+              totalPages={totalPages}
+              search={search}
+              category={category}
+              experienceLevel={experienceLevel}
+              ieeeMember={ieeeMember}
+              emailStatus={emailStatus}
+              isLoading={isLoadingParticipants}
+              onSearchChange={setSearch}
+              onFilterChange={(newFilters) => {
+                if (newFilters.category !== undefined) setCategory(newFilters.category);
+                if (newFilters.experienceLevel !== undefined) setExperienceLevel(newFilters.experienceLevel);
+                if (newFilters.ieeeMember !== undefined) setIeeeMember(newFilters.ieeeMember);
+                if (newFilters.emailStatus !== undefined) setEmailStatus(newFilters.emailStatus);
+                if (newFilters.page !== undefined) setPage(newFilters.page);
+                if (newFilters.pageSize !== undefined) setPageSize(newFilters.pageSize);
+              }}
+              onRefresh={fetchParticipants}
+              onExportCsv={handleExportCsv}
+              onSelectCandidate={handleOpenCandidateModal}
+              onOpenSendEmail={handleOpenEmailModal}
+              onDeleteCandidate={handleDeleteCandidate}
+            />
+          )}
 
-          <div className="bg-slate-900/90 border border-slate-800 p-5 rounded-2xl shadow-sm flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center shrink-0 border border-amber-500/20">
-              <Briefcase size={22} />
-            </div>
-            <div>
-              <div className="text-xs font-bold uppercase tracking-wider text-slate-400">Industry & Faculty</div>
-              <div className="text-2xl font-black text-amber-400">{proCount}</div>
-            </div>
-          </div>
-        </div>
+          {activeTab === "email" && (
+            <EmailCenterView
+              participants={participants}
+              onOpenSendEmail={handleOpenEmailModal}
+            />
+          )}
 
-        {/* Candidate Registry Table */}
-        <div className="bg-slate-900/90 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl">
-          <div className="px-6 py-4 border-b border-slate-800 flex justify-between items-center bg-slate-900">
-            <h2 className="text-sm font-bold uppercase tracking-wider text-slate-300">
-              Registered Candidate Ledger ({participants.length})
-            </h2>
-            <span className="text-xs text-slate-500">
-              PostgreSQL / Neon DB Production Store
-            </span>
-          </div>
+          {activeTab === "analytics" && <AnalyticsView stats={stats} />}
 
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs sm:text-sm whitespace-nowrap">
-              <thead className="bg-slate-950/80 text-slate-400 border-b border-slate-800 text-xs uppercase tracking-wider font-semibold">
-                <tr>
-                  <th className="px-6 py-3.5">Candidate Name</th>
-                  <th className="px-6 py-3.5">Contact Details</th>
-                  <th className="px-6 py-3.5">Profiles</th>
-                  <th className="px-6 py-3.5">Institution / Org</th>
-                  <th className="px-6 py-3.5">Category</th>
-                  <th className="px-6 py-3.5">Experience</th>
-                  <th className="px-6 py-3.5">IEEE Status</th>
-                  <th className="px-6 py-3.5">Registration Time</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-800/70 text-slate-300">
-                {participants.length === 0 ? (
-                  <tr>
-                    <td colSpan={8} className="px-6 py-16 text-center text-slate-500">
-                      No candidates have registered yet. Records will populate in real time.
-                    </td>
-                  </tr>
-                ) : (
-                  participants.map((p: any) => (
-                    <tr key={p.id} className="hover:bg-slate-800/40 transition-colors">
-                      <td className="px-6 py-4 font-bold text-white">{p.fullName}</td>
-                      <td className="px-6 py-4">
-                        <a
-                          href={`mailto:${p.email}`}
-                          className="text-sky-400 hover:text-sky-300 flex items-center gap-1 hover:underline"
-                        >
-                          <Mail size={12} />
-                          <span>{p.email}</span>
-                        </a>
-                        {p.phone && (
-                          <span className="text-[11px] text-slate-400 font-mono block mt-0.5">
-                            {p.phone}
-                          </span>
-                        )}
-                      </td>
-                      <td className="px-6 py-4 text-xs">
-                        <div className="flex items-center gap-2">
-                          {p.linkedinUrl ? (
-                            <a
-                              href={p.linkedinUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-sky-400 hover:underline flex items-center gap-1"
-                            >
-                              <span>LinkedIn</span>
-                              <ExternalLink size={10} />
-                            </a>
-                          ) : (
-                            <span className="text-slate-600">—</span>
-                          )}
-                          {p.githubHandle && (
-                            <a
-                              href={
-                                p.githubHandle.startsWith("http")
-                                  ? p.githubHandle
-                                  : `https://github.com/${p.githubHandle}`
-                              }
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-teal-400 hover:underline flex items-center gap-1 font-mono"
-                            >
-                              <span>GH</span>
-                              <ExternalLink size={10} />
-                            </a>
-                          )}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 text-slate-300 font-medium">{p.institutionOrCompany}</td>
-                      <td className="px-6 py-4">
-                        <span className="bg-slate-800 text-slate-300 px-2.5 py-1 rounded-md text-[11px] font-semibold border border-slate-700">
-                          {p.category}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4">
-                        <span
-                          className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold border ${
-                            p.experienceLevel?.includes("Beginner")
-                              ? "bg-sky-950 text-sky-400 border-sky-800"
-                              : p.experienceLevel?.includes("Intermediate")
-                              ? "bg-teal-950 text-teal-400 border-teal-800"
-                              : "bg-purple-950 text-purple-400 border-purple-800"
-                          }`}
-                        >
-                          {p.experienceLevel}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4">
-                        {p.ieeeMember ? (
-                          <span className="text-emerald-400 font-bold flex items-center gap-1">
-                            <ShieldCheck size={14} />
-                            <span>Yes {p.ieeeMembershipId ? `(#${p.ieeeMembershipId})` : ""}</span>
-                          </span>
-                        ) : (
-                          <span className="text-slate-500">No</span>
-                        )}
-                      </td>
-                      <td className="px-6 py-4 text-slate-400 font-mono text-xs">
-                        {format(new Date(p.registrationDate), "MMM d, yyyy HH:mm")}
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
+          {activeTab === "settings" && <AuditLogView />}
+        </main>
       </div>
+
+      {/* Candidate Profile Dossier Modal */}
+      <CandidateModal
+        candidate={activeCandidate}
+        isOpen={candidateModalOpen}
+        onClose={() => setCandidateModalOpen(false)}
+        onSendEmail={(candidate) => handleOpenEmailModal([candidate])}
+        onDelete={handleDeleteCandidate}
+        onUpdateStatus={handleUpdateStatus}
+      />
+
+      {/* Email Preview & Customization Modal */}
+      <EmailPreviewModal
+        isOpen={emailModalOpen}
+        onClose={() => setEmailModalOpen(false)}
+        recipients={emailRecipients}
+        onConfirmSend={handleSendEmail}
+      />
     </div>
   );
 }

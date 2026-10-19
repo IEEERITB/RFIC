@@ -8,9 +8,9 @@ datasource db {
 }
 
 model Participant {
-  id                   String   @id @default(uuid())
+  id                   String      @id @default(uuid())
   fullName             String
-  email                String   @unique
+  email                String      @unique
   phone                String?
   category             String
   institutionOrCompany String
@@ -19,6 +19,48 @@ model Participant {
   githubHandle         String?
   linkedinUrl          String?
   experienceLevel      String
-  registrationDate     DateTime @default(now())
-  status               String   @default("CONFIRMED")
+  registrationDate     DateTime    @default(now())
+  status               String      @default("CONFIRMED")
+  emailStatus          String      @default("PENDING") // PENDING, SENT, DELIVERED, FAILED, BOUNCED
+  emailSentAt          DateTime?
+  emailLogs            EmailLog[]
+
+  @@index([registrationDate])
+  @@index([category])
+  @@index([ieeeMember])
+  @@index([emailStatus])
 }
+
+model EmailLog {
+  id             String       @id @default(uuid())
+  participantId  String?
+  participant    Participant? @relation(fields: [participantId], references: [id], onDelete: SetNull)
+  recipientEmail String
+  recipientName  String?
+  subject        String
+  type           String       @default("CONFIRMATION") // CONFIRMATION, ANNOUNCEMENT, CUSTOM
+  status         String       @default("PENDING")      // PENDING, SENT, DELIVERED, FAILED, BOUNCED
+  resendId       String?
+  error          String?
+  sentAt         DateTime     @default(now())
+  deliveredAt    DateTime?
+  metadata       String?
+
+  @@index([recipientEmail])
+  @@index([resendId])
+  @@index([status])
+  @@index([sentAt])
+}
+
+model AdminAuditLog {
+  id        String   @id @default(uuid())
+  action    String   // EXPORT_CSV, SEND_EMAIL, BULK_EMAIL, UPDATE_PARTICIPANT, DELETE_PARTICIPANT
+  adminUser String   @default("admin")
+  details   String?
+  ipAddress String?
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([action])
+}
+

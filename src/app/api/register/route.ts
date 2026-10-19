@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { registrationSchema } from "@/lib/validations";
-// import { sendRegistrationEmail } from "@/lib/email";
+import { sendRegistrationEmail } from "@/lib/email";
 
 export async function POST(request: Request) {
   try {
@@ -26,10 +26,29 @@ export async function POST(request: Request) {
       data: dbData,
     });
 
-    // Temporarily disabled automated emails as requested
-    // await sendRegistrationEmail(participant.email, participant.fullName);
+    // Send confirmation email asynchronously (isolated from database persistence)
+    let emailSent = false;
+    try {
+      const emailResult = await sendRegistrationEmail({
+        participantId: participant.id,
+        email: participant.email,
+        fullName: participant.fullName,
+        category: participant.category,
+        institution: participant.institutionOrCompany,
+      });
+      emailSent = emailResult.success;
+    } catch (emailErr) {
+      console.warn("Automated email dispatch encountered an error:", emailErr);
+    }
 
-    return NextResponse.json({ success: true, data: participant }, { status: 201 });
+    return NextResponse.json(
+      {
+        success: true,
+        data: participant,
+        emailSent,
+      },
+      { status: 201 }
+    );
   } catch (error: any) {
     console.error("Registration error:", error);
     if (error.name === "ZodError") {

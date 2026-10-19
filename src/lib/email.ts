@@ -1,60 +1,199 @@
 import { Resend } from "resend";
+import { prisma } from "@/lib/prisma";
+import { RegistrationConfirmationEmail } from "@/emails/RegistrationConfirmationEmail";
 
 const resend = new Resend(process.env.RESEND_API_KEY || "mock_key");
 
-export async function sendRegistrationEmail(email: string, fullName: string) {
-  const htmlContent = `
-    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden;">
-      <div style="background-color: #0B0F19; padding: 30px; text-align: center; border-bottom: 4px solid #10B981;">
-        <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: bold;">IEEE RF IC Series</h1>
-      </div>
-      <div style="padding: 30px; background-color: #ffffff;">
-        <h2 style="color: #111827; font-size: 20px; margin-top: 0;">Welcome, ${fullName}!</h2>
-        <p style="color: #4b5563; line-height: 1.6; font-size: 16px;">
-          Your registration for the <strong>IEEE Bangalore Section Flagship Micro-Specialization Track on RF IC Design for 5G/6G</strong> is officially confirmed.
-        </p>
-        <p style="color: #4b5563; line-height: 1.6; font-size: 16px;">
-          We are thrilled to have you join this 8-module masterclass. You will learn directly from industry experts in FOSS EDA pipelines and open-source MPW shuttle tape-outs.
-        </p>
-        <div style="background-color: #f3f4f6; padding: 20px; border-radius: 6px; margin: 25px 0;">
-          <h3 style="margin-top: 0; color: #111827; font-size: 16px;">Next Steps:</h3>
-          <ul style="color: #4b5563; line-height: 1.6; font-size: 14px; margin-bottom: 0;">
-            <li>Mark your calendar for the weekend sessions starting October 24 at 7:30 PM IST.</li>
-            <li>Ensure you have a reliable internet connection and a laptop ready for the interactive lab components.</li>
-            <li>We will email you the meeting links 48 hours before the first session.</li>
-          </ul>
-        </div>
-        <p style="color: #4b5563; line-height: 1.6; font-size: 16px;">
-          If you have any questions, feel free to reply to this email.
-        </p>
-        <p style="color: #4b5563; line-height: 1.6; font-size: 16px; margin-bottom: 0;">
-          Best regards,<br>
-          <strong>IEEE Sensors Council & Bangalore Section Organizing Team</strong>
-        </p>
-      </div>
-      <div style="background-color: #f9fafb; padding: 20px; text-align: center; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 12px;">
-        This is an automated confirmation email. Please do not forward this registration link to others.
-      </div>
-    </div>
-  `;
+export interface SendEmailOptions {
+  participantId?: string;
+  email: string;
+  fullName: string;
+  category?: string;
+  institution?: string;
+  subject?: string;
+  customMessage?: string;
+  type?: "CONFIRMATION" | "ANNOUNCEMENT" | "CUSTOM";
+}
 
-  if (process.env.RESEND_API_KEY) {
+export async function sendRegistrationEmail({
+  participantId,
+  email,
+  fullName,
+  category = "Candidate",
+  institution = "Academic / Research Institution",
+  subject = "Registration Confirmed - IEEE RF IC Design Masterclass 5G/6G",
+  customMessage,
+  type = "CONFIRMATION",
+}: SendEmailOptions): Promise<{ success: boolean; resendId?: string; error?: string }> {
+  // If no RESEND_API_KEY or key is dummy, record as mock sent
+  if (!process.env.RESEND_API_KEY || process.env.RESEND_API_KEY === "mock_key") {
+    console.log(`[MOCK EMAIL DISPATCH] To: ${email} | Subject: ${subject}`);
+    const mockResendId = `mock_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+
     try {
-      await resend.emails.send({
-        from: "IEEE RF IC Web <onboarding@resend.dev>",
-        to: email,
-        subject: "Registration Confirmed - IEEE RF IC Design Series",
-        html: htmlContent,
+      await prisma.emailLog.create({
+        data: {
+          participantId: participantId || null,
+          recipientEmail: email,
+          recipientName: fullName,
+          subject,
+          type,
+          status: "SENT",
+          resendId: mockResendId,
+          metadata: JSON.stringify({ mode: "mock", simulated: true }),
+        },
       });
-      console.log(`Email sent to ${email} via Resend`);
-    } catch (error) {
-      console.error("Failed to send email via Resend:", error);
+
+      if (participantId) {
+        await prisma.participant.update({
+          where: { id: participantId },
+          data: {
+            emailStatus: "SENT",
+            emailSentAt: new Date(),
+          },
+        });
+      }
+    } catch (dbErr) {
+      console.warn("Could not log mock email dispatch:", dbErr);
     }
-  } else {
-    console.log("--- MOCK EMAIL DISPATCH ---");
-    console.log(`To: ${email}`);
-    console.log(`Subject: Registration Confirmed - IEEE RF IC Design Series`);
-    console.log(`Content: ${htmlContent}`);
-    console.log("---------------------------");
+
+    return { success: true, resendId: mockResendId };
   }
+
+  try {
+    const { data, error } = await resend.emails.send({
+      from: "IEEE RF IC Series <onboarding@resend.dev>",
+      to: [email],
+      subject,
+      react: RegistrationConfirmationEmail({
+        fullName,
+        category,
+        institution,
+        customMessage,
+      }),
+    });
+
+    if (error) {
+      console.error(`Resend API error for ${email}:`, error);
+
+      await prisma.emailLog.create({
+        data: {
+          participantId: participantId || null,
+          recipientEmail: email,
+          recipientName: fullName,
+          subject,
+          type,
+          status: "FAILED",
+          error: error.message || JSON.stringify(error),
+        },
+      });
+
+      if (participantId) {
+        await prisma.participant.update({
+          where: { id: participantId },
+          data: {
+            emailStatus: "FAILED",
+          },
+        });
+      }
+
+      return { success: false, error: error.message };
+    }
+
+    const resendId = data?.id || `resend_${Date.now()}`;
+
+    await prisma.emailLog.create({
+      data: {
+        participantId: participantId || null,
+        recipientEmail: email,
+        recipientName: fullName,
+        subject,
+        type,
+        status: "SENT",
+        resendId,
+      },
+    });
+
+    if (participantId) {
+      await prisma.participant.update({
+        where: { id: participantId },
+        data: {
+          emailStatus: "SENT",
+          emailSentAt: new Date(),
+        },
+      });
+    }
+
+    return { success: true, resendId };
+  } catch (err: any) {
+    console.error(`Unexpected email dispatch error for ${email}:`, err);
+
+    try {
+      await prisma.emailLog.create({
+        data: {
+          participantId: participantId || null,
+          recipientEmail: email,
+          recipientName: fullName,
+          subject,
+          type,
+          status: "FAILED",
+          error: err.message || "Unknown email delivery failure",
+        },
+      });
+
+      if (participantId) {
+        await prisma.participant.update({
+          where: { id: participantId },
+          data: {
+            emailStatus: "FAILED",
+          },
+        });
+      }
+    } catch (logErr) {
+      console.warn("Failed to log error state in database:", logErr);
+    }
+
+    return { success: false, error: err.message || "Email dispatch failed" };
+  }
+}
+
+export async function sendBulkEmails(
+  candidates: Array<{
+    id: string;
+    email: string;
+    fullName: string;
+    category?: string;
+    institutionOrCompany?: string;
+  }>,
+  subject: string,
+  customMessage?: string
+): Promise<{ total: number; sent: number; failed: number; errors: Array<{ email: string; error: string }> }> {
+  let sent = 0;
+  let failed = 0;
+  const errors: Array<{ email: string; error: string }> = [];
+
+  for (const c of candidates) {
+    const result = await sendRegistrationEmail({
+      participantId: c.id,
+      email: c.email,
+      fullName: c.fullName,
+      category: c.category,
+      institution: c.institutionOrCompany,
+      subject,
+      customMessage,
+      type: "ANNOUNCEMENT",
+    });
+
+    if (result.success) {
+      sent++;
+    } else {
+      failed++;
+      errors.push({ email: c.email, error: result.error || "Failed" });
+    }
+
+    // Small delay between sends to respect rate limits (e.g. 150ms)
+    await new Promise((resolve) => setTimeout(resolve, 150));
+  }
+
+  return { total: candidates.length, sent, failed, errors };
 }
