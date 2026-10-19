@@ -8,10 +8,26 @@ import { Cpu, Calendar, ShieldCheck, Sparkles, BookOpen, ArrowRight, CheckCircle
 
 export function HeroSection() {
   const partners = [
-    { name: "IEEE", logo: "/logos/ieee.svg" },
-    { name: "IEEE Bangalore Section", logo: "/logos/ieee-bangalore.png" },
-    { name: "IEEE Sensors Council", logo: "/logos/ieee-sensors-council.png" },
-    { name: "IEEE openSilicon", logo: "/logos/ieee-opensilicon.png" },
+    {
+      name: "IEEE - Advancing Technology for Humanity",
+      logo: "/logos/ieee.svg",
+      imageClass: "h-11 sm:h-13 md:h-14 w-auto max-w-[135px] sm:max-w-[160px]",
+    },
+    {
+      name: "IEEE Bangalore Section",
+      logo: "/logos/ieee-bangalore.png",
+      imageClass: "h-11 sm:h-12 md:h-13 w-auto max-w-[155px] sm:max-w-[185px]",
+    },
+    {
+      name: "IEEE Sensors Council",
+      logo: "/logos/ieee-sensors-council.png",
+      imageClass: "h-10 sm:h-12 md:h-13 w-auto max-w-[160px] sm:max-w-[190px]",
+    },
+    {
+      name: "IEEE openSilicon",
+      logo: "/logos/ieee-opensilicon.png",
+      imageClass: "h-11 sm:h-12 md:h-13 w-auto max-w-[160px] sm:max-w-[190px]",
+    },
   ];
 
   return (
@@ -39,30 +55,30 @@ export function HeroSection() {
       />
 
       <div className="container mx-auto px-4 sm:px-6 relative z-10 text-center max-w-5xl">
-        {/* Institutional Partner Showcase (Stable, High-Contrast & Clearly Visible) */}
-        <div className="mb-8 sm:mb-12 max-w-4xl mx-auto">
-          <div className="rounded-2xl bg-white p-3.5 sm:p-5 border border-slate-200/90 shadow-xs">
-            <div className="flex items-center justify-between px-2 pb-3 mb-3 border-b border-slate-100">
+        {/* Institutional Partner Showcase (Balanced, Prominent & High-Contrast) */}
+        <div className="mb-10 sm:mb-12 max-w-4xl mx-auto">
+          <div className="rounded-2xl bg-slate-50/70 backdrop-blur-xs p-4 sm:p-5 border border-slate-200/90 shadow-xs">
+            <div className="flex items-center justify-between px-2 pb-3 mb-3 border-b border-slate-200/80">
               <span className="text-[10px] sm:text-xs font-bold text-slate-600 uppercase tracking-widest flex items-center gap-2">
                 <span className="h-2 w-2 rounded-full bg-sky-500" />
                 Joint Flagship Initiative • Academic & Industry Patrons
               </span>
-              <span className="text-[10px] sm:text-xs font-semibold text-sky-700 bg-sky-50 px-2.5 py-0.5 rounded-full border border-sky-100/80">
+              <span className="text-[10px] sm:text-xs font-semibold text-sky-700 bg-sky-50 px-2.5 py-0.5 rounded-full border border-sky-100">
                 IEEE Bangalore Section
               </span>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 items-center justify-items-center gap-3 sm:gap-6 py-2">
+            <div className="grid grid-cols-2 md:grid-cols-4 items-center justify-items-center gap-3 sm:gap-4 py-1">
               {partners.map((partner, index) => (
                 <div
                   key={index}
-                  className="w-full h-14 sm:h-16 px-4 py-2 flex items-center justify-center rounded-xl bg-white hover:bg-slate-50/80 border border-slate-100 hover:border-slate-200 transition-all shadow-2xs group"
+                  className="w-full h-20 sm:h-22 md:h-24 px-4 py-3 flex items-center justify-center rounded-xl bg-white border border-slate-200 hover:border-sky-300 hover:shadow-xs transition-all duration-200 group"
                   title={partner.name}
                 >
                   <img
                     src={partner.logo}
                     alt={partner.name}
-                    className="max-h-9 sm:max-h-10 max-w-[140px] sm:max-w-[170px] w-auto object-contain transition-transform duration-200 group-hover:scale-105"
+                    className={`${partner.imageClass} object-contain transition-transform duration-200 group-hover:scale-105`}
                   />
                 </div>
               ))}
