@@ -48,9 +48,9 @@ export function StakeholdersSection() {
             <Sparkles className="w-5 h-5 text-sky-600" />
             <h3 className="text-xl font-bold text-slate-800">Series Mentorship & Advisory</h3>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
             {leadership.map((person) => (
-              <StakeholderCard key={person.id} person={person} />
+              <StakeholderCard key={person.id} person={person} isCompact={true} />
             ))}
           </div>
         </div>
@@ -71,7 +71,7 @@ export function StakeholdersSection() {
   );
 }
 
-function StakeholderCard({ person, isCompact = false }: { person: Stakeholder; isCompact?: boolean }) {
+function StakeholderCard({ person, isCompact = true }: { person: Stakeholder; isCompact?: boolean }) {
   const [imgError, setImgError] = useState(false);
 
   // Initial letters for avatar fallback
@@ -165,7 +165,7 @@ function StakeholderCard({ person, isCompact = false }: { person: Stakeholder; i
         </div>
 
         {/* Bio */}
-        <p className={`text-slate-600 text-xs md:text-sm leading-relaxed flex-1 ${isCompact ? "line-clamp-5 hover:line-clamp-none transition-all" : ""}`}>
+        <p className={`text-slate-600 text-xs md:text-sm leading-relaxed flex-1 ${isCompact ? "line-clamp-5 group-hover:line-clamp-none hover:line-clamp-none transition-all duration-300" : ""}`}>
           {person.bio}
         </p>
 
