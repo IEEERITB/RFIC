@@ -33,7 +33,8 @@ export default async function AdminDashboard() {
               <thead className="bg-[#1F2937] text-gray-300 border-b border-[#374151]">
                 <tr>
                   <th className="px-6 py-4 font-semibold">Name</th>
-                  <th className="px-6 py-4 font-semibold">Email</th>
+                  <th className="px-6 py-4 font-semibold">Email & Phone</th>
+                  <th className="px-6 py-4 font-semibold">Profiles</th>
                   <th className="px-6 py-4 font-semibold">Institution / Company</th>
                   <th className="px-6 py-4 font-semibold">Category</th>
                   <th className="px-6 py-4 font-semibold">Experience</th>
@@ -44,16 +45,30 @@ export default async function AdminDashboard() {
               <tbody className="divide-y divide-[#1F2937]">
                 {participants.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="px-6 py-12 text-center text-gray-500">
+                    <td colSpan={8} className="px-6 py-12 text-center text-gray-500">
                       No candidates have registered yet.
                     </td>
                   </tr>
                 ) : (
-                  participants.map((p) => (
+                  participants.map((p: any) => (
                     <tr key={p.id} className="hover:bg-[#1F2937]/50 transition-colors">
                       <td className="px-6 py-4 font-medium text-white">{p.fullName}</td>
-                      <td className="px-6 py-4 text-cyan-400">
-                        <a href={`mailto:${p.email}`} className="hover:underline">{p.email}</a>
+                      <td className="px-6 py-4">
+                        <a href={`mailto:${p.email}`} className="text-cyan-400 hover:underline block">{p.email}</a>
+                        {p.phone && <span className="text-xs text-gray-400 font-mono block mt-0.5">{p.phone}</span>}
+                      </td>
+                      <td className="px-6 py-4 text-xs space-x-2">
+                        {p.linkedinUrl && (
+                          <a href={p.linkedinUrl} target="_blank" rel="noopener noreferrer" className="text-sky-400 hover:underline">
+                            LinkedIn
+                          </a>
+                        )}
+                        {p.githubHandle && (
+                          <a href={p.githubHandle.startsWith('http') ? p.githubHandle : `https://github.com/${p.githubHandle}`} target="_blank" rel="noopener noreferrer" className="text-slate-300 hover:underline">
+                            GitHub
+                          </a>
+                        )}
+                        {!p.linkedinUrl && !p.githubHandle && <span className="text-gray-600">—</span>}
                       </td>
                       <td className="px-6 py-4">{p.institutionOrCompany}</td>
                       <td className="px-6 py-4">

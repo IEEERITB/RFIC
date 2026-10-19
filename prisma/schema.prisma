@@ -17,6 +17,7 @@ model Participant {
   ieeeMember           Boolean
   ieeeMembershipId     String?
   githubHandle         String?
+  linkedinUrl          String?
   experienceLevel      String
   registrationDate     DateTime @default(now())
   status               String   @default("CONFIRMED")

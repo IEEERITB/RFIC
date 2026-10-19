@@ -39,6 +39,7 @@ export function RegistrationForm() {
       institutionOrCompany: "",
       ieeeMember: false,
       ieeeMembershipId: "",
+      linkedinUrl: "",
       githubHandle: "",
       experienceLevel: "",
       joinedWhatsapp: false,
@@ -152,7 +153,9 @@ export function RegistrationForm() {
                   name="fullName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-slate-900">Full Name</FormLabel>
+                      <FormLabel className="text-slate-900 font-medium">
+                        Full Name <span className="text-red-500">*</span>
+                      </FormLabel>
                       <FormControl>
                         <Input placeholder="Enter your full name" className="bg-white border-slate-300 text-slate-900 placeholder:text-slate-400 focus-visible:ring-sky-500" {...field} />
                       </FormControl>
@@ -165,7 +168,9 @@ export function RegistrationForm() {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-slate-900">Email Address</FormLabel>
+                      <FormLabel className="text-slate-900 font-medium">
+                        Email Address <span className="text-red-500">*</span>
+                      </FormLabel>
                       <FormControl>
                         <Input type="email" placeholder="Enter your official / student email address" className="bg-white border-slate-300 text-slate-900 placeholder:text-slate-400 focus-visible:ring-sky-500" {...field} />
                       </FormControl>
@@ -181,9 +186,11 @@ export function RegistrationForm() {
                   name="phone"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-slate-900">Phone (Optional)</FormLabel>
+                      <FormLabel className="text-slate-900 font-medium">
+                        Phone <span className="text-red-500">*</span>
+                      </FormLabel>
                       <FormControl>
-                        <Input type="tel" placeholder="+91 98765 43210" className="bg-white border-slate-300 text-slate-900 placeholder:text-slate-400 focus-visible:ring-sky-500" {...field} />
+                        <Input type="tel" placeholder="+91" className="bg-white border-slate-300 text-slate-900 placeholder:text-slate-400 focus-visible:ring-sky-500" {...field} />
                       </FormControl>
                       <FormMessage className="text-red-500" />
                     </FormItem>
@@ -195,7 +202,9 @@ export function RegistrationForm() {
                   name="category"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-slate-900">Participant Category</FormLabel>
+                      <FormLabel className="text-slate-900 font-medium">
+                        Participant Category <span className="text-red-500">*</span>
+                      </FormLabel>
                       <Select onValueChange={field.onChange} value={field.value || undefined}>
                         <FormControl>
                           <SelectTrigger className="bg-white border-slate-300 text-slate-900 placeholder:text-slate-400 focus-visible:ring-sky-500">
@@ -216,73 +225,31 @@ export function RegistrationForm() {
                 />
               </div>
 
-              <FormField
-                control={form.control}
-                name="institutionOrCompany"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-slate-900">Institution or Company Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="e.g. Ramaiah Institute of Technology / Intel / TI" className="bg-white border-slate-300 text-slate-900 placeholder:text-slate-400 focus-visible:ring-sky-500" {...field} />
-                    </FormControl>
-                    <FormMessage className="text-red-500" />
-                  </FormItem>
-                )}
-              />
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border-t border-slate-200 pt-6 mt-6">
-                 <FormField
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <FormField
                   control={form.control}
-                  name="ieeeMember"
+                  name="institutionOrCompany"
                   render={({ field }) => (
-                    <FormItem className="flex flex-row items-center justify-between rounded-lg border border-slate-200 bg-slate-50 p-4">
-                      <div className="space-y-0.5">
-                        <FormLabel className="text-base text-slate-900">
-                          IEEE Member
-                        </FormLabel>
-                        <FormDescription className="text-slate-500">
-                          Are you a current IEEE member?
-                        </FormDescription>
-                      </div>
+                    <FormItem>
+                      <FormLabel className="text-slate-900 font-medium">
+                        Institution or Company Name <span className="text-red-500">*</span>
+                      </FormLabel>
                       <FormControl>
-                        <input
-                          type="checkbox"
-                          checked={field.value}
-                          onChange={(e) => {
-                            field.onChange(e.target.checked);
-                            setIsIeeeMember(e.target.checked);
-                          }}
-                          className="w-5 h-5 accent-sky-600 bg-white border-slate-300 rounded"
-                        />
+                        <Input placeholder="e.g. Ramaiah Institute of Technology / Intel / TI" className="bg-white border-slate-300 text-slate-900 placeholder:text-slate-400 focus-visible:ring-sky-500" {...field} />
                       </FormControl>
+                      <FormMessage className="text-red-500" />
                     </FormItem>
                   )}
                 />
-                
-                {isIeeeMember && (
-                  <FormField
-                    control={form.control}
-                    name="ieeeMembershipId"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-slate-900">IEEE Membership ID</FormLabel>
-                        <FormControl>
-                          <Input type="text" inputMode="numeric" pattern="[0-9]*" placeholder="Enter your ID (numbers only)" className="bg-white border-slate-300 text-slate-900 placeholder:text-slate-400 focus-visible:ring-sky-500" {...field} />
-                        </FormControl>
-                        <FormMessage className="text-red-500" />
-                      </FormItem>
-                    )}
-                  />
-                )}
-              </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-                  <FormField
+                <FormField
                   control={form.control}
                   name="experienceLevel"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-slate-900">Experience Level</FormLabel>
+                      <FormLabel className="text-slate-900 font-medium">
+                        Experience Level <span className="text-red-500">*</span>
+                      </FormLabel>
                       <Select onValueChange={field.onChange} value={field.value || undefined}>
                         <FormControl>
                           <SelectTrigger className="bg-white border-slate-300 text-slate-900 placeholder:text-slate-400 focus-visible:ring-sky-500">
@@ -299,13 +266,29 @@ export function RegistrationForm() {
                     </FormItem>
                   )}
                 />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+                <FormField
+                  control={form.control}
+                  name="linkedinUrl"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-slate-900 font-medium">LinkedIn Profile</FormLabel>
+                      <FormControl>
+                        <Input placeholder="https://linkedin.com/in/username" className="bg-white border-slate-300 text-slate-900 placeholder:text-slate-400 focus-visible:ring-sky-500" {...field} />
+                      </FormControl>
+                      <FormMessage className="text-red-500" />
+                    </FormItem>
+                  )}
+                />
 
                 <FormField
                   control={form.control}
                   name="githubHandle"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-slate-900">GitHub Profile URL (For Capstone)</FormLabel>
+                      <FormLabel className="text-slate-900 font-medium">GitHub Profile</FormLabel>
                       <FormControl>
                         <Input placeholder="https://github.com/username" className="bg-white border-slate-300 text-slate-900 placeholder:text-slate-400 focus-visible:ring-sky-500" {...field} />
                       </FormControl>
@@ -315,7 +298,55 @@ export function RegistrationForm() {
                 />
               </div>
 
-              {/* Compulsory WhatsApp Community Group Section */}
+              <div className="border-t border-slate-200 pt-6 mt-4">
+                <FormField
+                  control={form.control}
+                  name="ieeeMember"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-center justify-between rounded-lg border border-slate-200 bg-slate-50 p-4">
+                      <div className="space-y-0.5">
+                        <FormLabel className="text-base text-slate-900 font-medium">
+                          IEEE Member
+                        </FormLabel>
+                        <FormDescription className="text-slate-500">
+                          Are you a current IEEE member?
+                        </FormDescription>
+                      </div>
+                      <FormControl>
+                        <input
+                          type="checkbox"
+                          checked={field.value}
+                          onChange={(e) => {
+                            field.onChange(e.target.checked);
+                            setIsIeeeMember(e.target.checked);
+                          }}
+                          className="w-5 h-5 accent-sky-600 bg-white border-slate-300 rounded cursor-pointer"
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                
+                {isIeeeMember && (
+                  <div className="mt-4">
+                    <FormField
+                      control={form.control}
+                      name="ieeeMembershipId"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-slate-900 font-medium">IEEE Membership ID</FormLabel>
+                          <FormControl>
+                            <Input type="text" inputMode="numeric" pattern="[0-9]*" placeholder="Enter your ID (numbers only)" className="bg-white border-slate-300 text-slate-900 placeholder:text-slate-400 focus-visible:ring-sky-500" {...field} />
+                          </FormControl>
+                          <FormMessage className="text-red-500" />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                )}
+              </div>
+
+              {/* WhatsApp Community Group Section */}
               <div className="rounded-xl border-2 border-emerald-500/40 bg-emerald-50/50 p-5 space-y-4 mt-6">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div className="flex items-start gap-3">
@@ -324,13 +355,12 @@ export function RegistrationForm() {
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <h4 className="font-bold text-slate-900 text-base">Official WhatsApp Community Group</h4>
-                        <span className="bg-red-100 text-red-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
-                          Compulsory
-                        </span>
+                        <h4 className="font-bold text-slate-900 text-base">
+                          Official WhatsApp Community Group <span className="text-red-500">*</span>
+                        </h4>
                       </div>
                       <p className="text-xs text-slate-600 mt-1">
-                        Joining is <strong>mandatory</strong> for all registered participants. Meeting links, lab toolchains, and student silicon tape-out updates will be posted here.
+                        Meeting links, lab toolchains, and student silicon tape-out updates will be posted here.
                       </p>
                     </div>
                   </div>
@@ -363,7 +393,7 @@ export function RegistrationForm() {
                           />
                         </FormControl>
                         <label htmlFor="joinedWhatsappCheckbox" className="text-xs sm:text-sm text-slate-800 font-medium cursor-pointer">
-                          I confirm that I have joined / will join the official WhatsApp Community Group (Mandatory) <span className="text-red-500 font-bold">*</span>
+                          I confirm that I have joined / will join the official WhatsApp Community Group <span className="text-red-500 font-bold">*</span>
                         </label>
                       </div>
                       <FormMessage className="text-red-600 text-xs font-semibold mt-1" />
