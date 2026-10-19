@@ -7,15 +7,26 @@ export function middleware(req: NextRequest) {
     const basicAuth = req.headers.get('authorization');
     
     if (basicAuth) {
-      const authValue = basicAuth.split(' ')[1];
-      // atob is available in Edge Runtime
-      const [user, pwd] = atob(authValue).split(':');
+      try {
+        const parts = basicAuth.split(' ');
+        if (parts.length === 2 && parts[0].toLowerCase() === 'basic') {
+          // atob is available in Edge Runtime
+          const decoded = atob(parts[1]);
+          const colonIndex = decoded.indexOf(':');
+          if (colonIndex !== -1) {
+            const user = decoded.substring(0, colonIndex);
+            const pwd = decoded.substring(colonIndex + 1);
 
-      const expectedUser = 'yug';
-      const expectedPwd = '12345678';
+            const expectedUser = process.env.ADMIN_USERNAME || 'yug';
+            const expectedPwd = process.env.ADMIN_PASSWORD || '12345678';
 
-      if (user === expectedUser && pwd === expectedPwd) {
-        return NextResponse.next();
+            if (user === expectedUser && pwd === expectedPwd) {
+              return NextResponse.next();
+            }
+          }
+        }
+      } catch {
+        // Malformed base64 or authorization header, continue to 401 challenge
       }
     }
 
