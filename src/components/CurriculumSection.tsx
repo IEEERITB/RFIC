@@ -9,7 +9,7 @@ import { AnimatedGroup } from "./react-bits/AnimatedGroup";
 
 export function CurriculumSection() {
   return (
-    <section className="py-20 bg-slate-50" id="curriculum">
+    <section className="py-20 bg-transparent transition-colors duration-500" id="curriculum" data-bgcolor="#e0f2fe" data-textcolor="#0369a1">
       <div className="container mx-auto px-4 max-w-4xl">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-slate-900 mb-4">8-Module Curriculum Blueprint</h2>

@@ -1,6 +1,6 @@
 export function ScheduleSection() {
   return (
-    <section className="py-20 bg-slate-50" id="schedule">
+    <section className="py-20 bg-transparent transition-colors duration-500" id="schedule" data-bgcolor="#f8fafc" data-textcolor="#0f172a">
       <div className="container mx-auto px-4 max-w-4xl text-center">
         <h2 className="text-3xl font-bold text-slate-900 mb-8">Program Schedule</h2>
         <p className="text-slate-600 mb-8">4 Weekends • Saturdays & Sundays • Starting October 24, 2026</p>

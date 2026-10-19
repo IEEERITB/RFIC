@@ -91,7 +91,7 @@ export function RegistrationForm() {
   }
 
   return (
-    <section className="py-20 bg-slate-50 border-t border-slate-200 relative" id="register">
+    <section className="py-20 bg-transparent border-t border-slate-200/50 relative transition-colors duration-500" id="register" data-bgcolor="#f0f9ff" data-textcolor="#0369a1">
       <div className="container mx-auto px-4 max-w-3xl">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-slate-900 mb-4">Secure Your Spot</h2>

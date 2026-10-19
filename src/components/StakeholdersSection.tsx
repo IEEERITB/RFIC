@@ -28,7 +28,7 @@ export function StakeholdersSection() {
   const organisers = stakeholders.filter((s) => s.category === "organiser");
 
   return (
-    <section className="py-24 bg-slate-50 relative overflow-hidden" id="stakeholders">
+    <section className="py-24 bg-transparent relative overflow-hidden transition-colors duration-500" id="stakeholders" data-bgcolor="#ffffff" data-textcolor="#0f172a">
       <div className="container mx-auto px-4 max-w-6xl relative z-10">
         <div className="text-center mb-16">
           <Badge variant="outline" className="mb-4 border-sky-300 text-sky-700 bg-sky-50 px-3 py-1 text-xs uppercase tracking-wider font-semibold">

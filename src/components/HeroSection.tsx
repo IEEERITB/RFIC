@@ -7,7 +7,7 @@ import { StarBorder } from "./react-bits/StarBorder";
 
 export function HeroSection() {
   return (
-    <section className="relative pt-32 pb-20 overflow-hidden min-h-[90vh] flex flex-col justify-center" id="overview">
+    <section className="relative pt-32 pb-20 overflow-hidden min-h-[90vh] flex flex-col justify-center bg-transparent" id="overview" data-bgcolor="#ffffff" data-textcolor="#0f172a">
       <Squares direction="diagonal" speed={0.5} squareSize={40} borderColor="#e2e8f0" hoverFillColor="#f1f5f9" />
 
       <div className="container mx-auto px-4 relative z-10 text-center max-w-5xl">

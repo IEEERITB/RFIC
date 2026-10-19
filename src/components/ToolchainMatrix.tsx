@@ -12,7 +12,7 @@ export function ToolchainMatrix() {
   ];
 
   return (
-    <section className="py-20 bg-slate-50" id="toolchain">
+    <section className="py-20 bg-transparent transition-colors duration-500" id="toolchain" data-bgcolor="#f1f5f9" data-textcolor="#0f172a">
       <div className="container mx-auto px-4 max-w-6xl">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-slate-900 mb-4">Proprietary vs. Open-Source Toolchain</h2>

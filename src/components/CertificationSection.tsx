@@ -3,7 +3,7 @@ import { CheckCircle2 } from "lucide-react";
 
 export function CertificationSection() {
   return (
-    <section className="py-20 bg-slate-50" id="certification">
+    <section className="py-20 bg-transparent transition-colors duration-500" id="certification" data-bgcolor="#ecfdf5" data-textcolor="#047857">
       <div className="container mx-auto px-4 max-w-5xl">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-slate-900 mb-4">Tiered Certification & Capstone</h2>

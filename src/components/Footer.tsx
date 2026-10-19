@@ -1,6 +1,6 @@
 export function Footer() {
   return (
-    <footer className="bg-slate-50 border-t border-slate-200 py-8 mt-12">
+    <footer className="bg-transparent border-t border-slate-200/50 py-12 mt-12 transition-colors duration-500" data-bgcolor="#0f172a" data-textcolor="#94a3b8">
       <div className="container mx-auto px-4 text-center text-slate-500 text-sm flex flex-col gap-4">
         <div className="flex flex-wrap justify-center gap-6 opacity-75 font-semibold text-slate-700">
           <span>IEEE</span>
