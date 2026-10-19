@@ -8,10 +8,8 @@ import { Cpu, Calendar, ShieldCheck, Sparkles, BookOpen, ArrowRight } from "luci
 export function HeroSection() {
   return (
     <section
-      className="relative pt-24 sm:pt-32 pb-16 sm:pb-24 overflow-hidden min-h-[92vh] flex flex-col justify-center bg-transparent"
+      className="relative pt-24 sm:pt-32 pb-16 sm:pb-24 overflow-hidden min-h-[92vh] flex flex-col justify-center bg-white"
       id="overview"
-      data-bgcolor="#ffffff"
-      data-textcolor="#0f172a"
     >
       <Squares
         direction="diagonal"

@@ -4,7 +4,7 @@ import { Iridescence } from './react-bits/Iridescence';
 
 export function ScrollExpandSection() {
   return (
-    <section className="relative w-full mb-16 md:mb-24 overflow-hidden shadow-sm" id="visual-showcase" data-bgcolor="#0b132b" data-textcolor="#f8fafc">
+    <section className="relative w-full mb-16 md:mb-24 overflow-hidden shadow-xs bg-slate-900" id="visual-showcase">
       <div className="relative w-full min-h-[60vh] md:min-h-[500px] flex flex-col items-center justify-center text-center p-8">
         <Iridescence className="opacity-100" speed={0.4} />
         

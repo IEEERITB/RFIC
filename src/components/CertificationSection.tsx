@@ -5,10 +5,8 @@ import { CheckCircle2, Award, Sparkles, Shield, Cpu } from "lucide-react";
 export function CertificationSection() {
   return (
     <section
-      className="py-20 sm:py-24 bg-transparent transition-colors duration-500"
+      className="py-20 sm:py-24 bg-emerald-50/30 border-b border-emerald-100/60"
       id="certification"
-      data-bgcolor="#ecfdf5"
-      data-textcolor="#047857"
     >
       <div className="container mx-auto px-4 sm:px-6 max-w-5xl">
         <div className="text-center mb-12 sm:mb-16">

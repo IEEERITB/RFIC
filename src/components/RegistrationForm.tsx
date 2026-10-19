@@ -104,10 +104,8 @@ export function RegistrationForm() {
 
   return (
     <section
-      className="py-20 sm:py-24 bg-transparent border-t border-slate-200/50 relative transition-colors duration-500"
+      className="py-20 sm:py-24 bg-gradient-to-b from-sky-50/60 to-white border-t border-slate-200/60 relative"
       id="register"
-      data-bgcolor="#f0f9ff"
-      data-textcolor="#0369a1"
     >
       <div className="container mx-auto px-4 sm:px-6 max-w-3xl">
         <div className="text-center mb-10 sm:mb-12">

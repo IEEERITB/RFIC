@@ -9,10 +9,8 @@ import { Calendar, Clock, Terminal, ChevronRight, CheckCircle, Sparkles } from "
 export function CurriculumSection() {
   return (
     <section
-      className="py-20 sm:py-24 bg-transparent transition-colors duration-500"
+      className="py-20 sm:py-24 bg-sky-50/40 border-b border-sky-100/60"
       id="curriculum"
-      data-bgcolor="#e0f2fe"
-      data-textcolor="#0369a1"
     >
       <div className="container mx-auto px-4 sm:px-6 max-w-4xl">
         <div className="text-center mb-12 sm:mb-16">

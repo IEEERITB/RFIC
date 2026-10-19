@@ -29,10 +29,8 @@ export function StakeholdersSection() {
 
   return (
     <section
-      className="py-20 sm:py-24 bg-transparent relative overflow-hidden transition-colors duration-500"
+      className="py-20 sm:py-24 bg-white relative overflow-hidden border-b border-slate-200/60"
       id="stakeholders"
-      data-bgcolor="#ffffff"
-      data-textcolor="#0f172a"
     >
       <div className="container mx-auto px-4 sm:px-6 max-w-6xl relative z-10">
         <div className="text-center mb-12 sm:mb-16">

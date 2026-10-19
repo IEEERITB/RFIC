@@ -50,10 +50,8 @@ export function ToolchainMatrix() {
 
   return (
     <section
-      className="py-20 sm:py-24 bg-transparent transition-colors duration-500"
+      className="py-20 sm:py-24 bg-slate-50 border-y border-slate-200/60"
       id="toolchain"
-      data-bgcolor="#f1f5f9"
-      data-textcolor="#0f172a"
     >
       <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
         <div className="text-center mb-12 sm:mb-16">

@@ -33,7 +33,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={`${inter.variable} ${jetbrains.variable} font-sans bg-white text-slate-900 antialiased select-none transition-colors duration-700`}>
+      <body className={`${inter.variable} ${jetbrains.variable} font-sans bg-white text-slate-900 antialiased`}>
         {children}
       </body>
     </html>

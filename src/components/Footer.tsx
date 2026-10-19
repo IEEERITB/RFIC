@@ -5,10 +5,8 @@ import { WHATSAPP_GROUP_URL } from "./RegistrationForm";
 export function Footer() {
   return (
     <footer
-      className="bg-slate-900 text-slate-400 border-t border-slate-800 py-16 transition-colors duration-500 relative"
+      className="bg-slate-900 text-slate-400 border-t border-slate-800 py-16 relative"
       id="footer"
-      data-bgcolor="#0f172a"
-      data-textcolor="#94a3b8"
     >
       <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-slate-800">
