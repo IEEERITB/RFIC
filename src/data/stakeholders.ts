@@ -50,7 +50,6 @@ export const stakeholders: Stakeholder[] = [
     bio: "Associate Professor in the Department of Electronics and Communication Engineering at Indian Institute of Technology Roorkee (IIT Roorkee). His specialized research domains encompass RF and Mixed-Signal IC design, high-frequency transceiver architectures, frequency synthesizers (PLLs), and analog/RF open-source EDA methodologies.",
     linkedInUrl: "https://www.linkedin.com/in/darshak-bhatt-b0576424",
     portfolioUrl: "https://iitr.ac.in/Departments/Electronics%20and%20Communication%20Engineering%20Department/People/Faculty/100822.html",
-    emails: ["darshak.bhatt@ece.iitr.ac.in"],
   },
   {
     id: "souhadra_shrivastava",
@@ -85,6 +84,7 @@ export const stakeholders: Stakeholder[] = [
     avatarUrl: "/stakeholders/priyanshu-trivedi.jpg",
     bio: "Final-year Electronics and Telecommunication Engineering undergraduate at M.S. Ramaiah Institute of Technology, Bengaluru, working across embedded hardware, digital IC verification, and edge AI. Engineering experience spans designing electromechanical avionics systems for Edhitha UAS, building accelerated computer vision pipelines on embedded accelerators, and deploying agentic workflows. As Chair of IEEE Sensors Council RIT-B and Founding Chair of IEEE TEMS RIT-B, spearheads large-scale student initiatives, bridging academic study with open-source EDA workflows and physical silicon fabrication via the IEEE Open Silicon initiative.",
     linkedInUrl: "https://www.linkedin.com/in/priyanshu-trivedi-4a8746293",
+    emails: ["trivedipriyanshu@ieee.org"],
   },
   {
     id: "yashitha_d",

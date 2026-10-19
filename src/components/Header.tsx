@@ -21,6 +21,7 @@ export function Header() {
           <Link href="#toolchain" className="hover:text-sky-600 transition-colors">Toolchain</Link>
           <Link href="#curriculum" className="hover:text-sky-600 transition-colors">Curriculum</Link>
           <Link href="#stakeholders" className="hover:text-sky-600 transition-colors">Stakeholders</Link>
+          <Link href="#certification" className="hover:text-sky-600 transition-colors">Certification</Link>
           <Link href="#schedule" className="hover:text-sky-600 transition-colors">Schedule</Link>
         </nav>
         <div>

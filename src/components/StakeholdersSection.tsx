@@ -199,22 +199,6 @@ function StakeholderCard({ person, isCompact = true }: { person: Stakeholder; is
         >
           {person.bio}
         </p>
-
-        {/* If emails exist, show them clearly as clickable badges */}
-        {person.emails && (
-          <div className="mt-4 pt-3 border-t border-slate-100 flex flex-wrap gap-1.5">
-            {person.emails.map((email) => (
-              <a
-                key={email}
-                href={`mailto:${email}`}
-                className="text-[11px] text-sky-700 hover:text-sky-800 bg-sky-50/80 hover:bg-sky-100 px-2 py-0.5 rounded border border-sky-200/60 font-mono transition-colors"
-                title={`Send email to ${email}`}
-              >
-                {email}
-              </a>
-            ))}
-          </div>
-        )}
       </CardContent>
     </Card>
   );
