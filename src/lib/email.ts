@@ -22,8 +22,8 @@ export interface SendEmailOptions {
  * Creates a nodemailer SMTP transporter if SMTP configuration is present
  */
 export function getSmtpTransporter() {
-  const user = process.env.SMTP_USER;
-  const pass = process.env.SMTP_PASS;
+  const user = process.env.SMTP_USER || "rfic.ieeescritb@gmail.com";
+  const pass = process.env.SMTP_PASS || "nhwhvhnnuvfwnwwz";
   if (!user || !pass) return null;
 
   // Clean pass: if user pasted an App Password with spaces (e.g. "abcd efgh ijkl mnop"), strip spaces
@@ -40,12 +40,29 @@ export function getSmtpTransporter() {
   });
 }
 
-export async function verifySmtpConnection(): Promise<{ success: boolean; message: string; requiresAppPassword?: boolean }> {
+export async function verifySmtpConnection(): Promise<{
+  success: boolean;
+  message: string;
+  configured: boolean;
+  user?: string;
+  requiresAppPassword?: boolean;
+}> {
+  const user = process.env.SMTP_USER || "rfic.ieeescritb@gmail.com";
+  const pass = process.env.SMTP_PASS || "nhwhvhnnuvfwnwwz";
+  if (!user || !pass) {
+    return {
+      success: false,
+      configured: false,
+      message: "SMTP is not configured. Missing SMTP_USER or SMTP_PASS in environment variables.",
+    };
+  }
+
   const transporter = getSmtpTransporter();
   if (!transporter) {
     return {
       success: false,
-      message: "SMTP is not configured. Missing SMTP_USER or SMTP_PASS in environment variables.",
+      configured: false,
+      message: "SMTP transporter could not be initialized.",
     };
   }
 
@@ -53,7 +70,9 @@ export async function verifySmtpConnection(): Promise<{ success: boolean; messag
     await transporter.verify();
     return {
       success: true,
-      message: `SMTP connection successfully verified for ${process.env.SMTP_USER}! Ready to dispatch automated emails.`,
+      configured: true,
+      user: user.trim(),
+      message: `SMTP connection successfully verified for ${user.trim()}! Ready to dispatch automated emails.`,
     };
   } catch (err: any) {
     const rawMsg = err.message || "Unknown error";
@@ -67,16 +86,20 @@ export async function verifySmtpConnection(): Promise<{ success: boolean; messag
     if (isAppPassRequired) {
       return {
         success: false,
+        configured: true,
+        user: user.trim(),
         requiresAppPassword: true,
         message:
           "Google 2-Step Verification is active on " +
-          (process.env.SMTP_USER || "this account") +
-          ". Google requires a 16-character App Password (https://myaccount.google.com/apppasswords) instead of the standard account password. Please generate an App Password and set SMTP_PASS in .env.",
+          user.trim() +
+          ". Google requires a 16-character App Password (https://myaccount.google.com/apppasswords) instead of the standard account password. Set SMTP_PASS in .env.",
       };
     }
 
     return {
       success: false,
+      configured: true,
+      user: user.trim(),
       message: rawMsg,
     };
   }
@@ -107,9 +130,10 @@ export async function sendRegistrationEmail({
 
     // 2. Path A: Dispatch via SMTP (rfic.ieeescritb@gmail.com) if configured
     if (smtpTransporter) {
+      const activeUser = process.env.SMTP_USER || "rfic.ieeescritb@gmail.com";
       const fromAddress =
         process.env.EMAIL_FROM ||
-        `"IEEE RF IC Design Series" <${process.env.SMTP_USER}>`;
+        `"IEEE RF IC Design Series" <${activeUser}>`;
 
       try {
         const info = await smtpTransporter.sendMail({
@@ -196,7 +220,15 @@ export async function sendRegistrationEmail({
       });
 
       if (error) {
-        console.error(`Resend API error for ${email}:`, error);
+        let errMessage = error.message || JSON.stringify(error);
+        if (
+          errMessage.includes("testing emails to your own email address") ||
+          errMessage.includes("verify a domain")
+        ) {
+          errMessage =
+            "Hosting environment missing SMTP configuration. Resend fallback blocked dispatch because domain is unverified. Automated Gmail SMTP (rfic.ieeescritb@gmail.com) is recommended.";
+        }
+        console.error(`Resend API error for ${email}:`, errMessage);
 
         await prisma.emailLog.create({
           data: {
@@ -206,7 +238,7 @@ export async function sendRegistrationEmail({
             subject,
             type,
             status: "FAILED",
-            error: error.message || JSON.stringify(error),
+            error: errMessage,
           },
         });
 

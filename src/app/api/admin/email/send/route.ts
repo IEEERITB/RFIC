@@ -7,24 +7,32 @@ export const dynamic = "force-dynamic";
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { participantId, participantIds, subject, customMessage } = body;
+    const { participantId, participantIds, email, fullName, subject, customMessage } = body;
 
-    // Single participant dispatch
-    if (participantId) {
-      const candidate = await prisma.participant.findUnique({
-        where: { id: participantId },
-      });
+    // Single participant dispatch (supports either participantId or direct email/name for retry)
+    if (participantId || (email && fullName)) {
+      let candidate = null;
+      if (participantId) {
+        candidate = await prisma.participant.findUnique({
+          where: { id: participantId },
+        });
+      }
 
-      if (!candidate) {
-        return NextResponse.json({ error: "Participant not found" }, { status: 404 });
+      const targetEmail = candidate?.email || email;
+      const targetName = candidate?.fullName || fullName;
+      const targetCategory = candidate?.category || "Candidate";
+      const targetInstitution = candidate?.institutionOrCompany || "Academic / Research Institution";
+
+      if (!targetEmail) {
+        return NextResponse.json({ error: "Participant or recipient email not found" }, { status: 404 });
       }
 
       const result = await sendRegistrationEmail({
-        participantId: candidate.id,
-        email: candidate.email,
-        fullName: candidate.fullName,
-        category: candidate.category,
-        institution: candidate.institutionOrCompany,
+        participantId: candidate?.id,
+        email: targetEmail,
+        fullName: targetName,
+        category: targetCategory,
+        institution: targetInstitution,
         subject: subject || "Registration Confirmed - IEEE RF IC Design Masterclass 5G/6G",
         customMessage,
         type: "CONFIRMATION",
@@ -34,7 +42,7 @@ export async function POST(request: Request) {
         data: {
           action: "SEND_INDIVIDUAL_EMAIL",
           adminUser: "admin",
-          details: `Dispatched confirmation email to ${candidate.email} (${candidate.fullName}). Outcome: ${result.success ? "SUCCESS" : "FAILED"}`,
+          details: `Dispatched confirmation email to ${targetEmail} (${targetName}). Outcome: ${result.success ? "SUCCESS" : "FAILED"}`,
         },
       });
 
@@ -47,7 +55,7 @@ export async function POST(request: Request) {
 
       return NextResponse.json({
         success: true,
-        message: `Confirmation email dispatched to ${candidate.email}`,
+        message: `Confirmation email dispatched to ${targetEmail}`,
         resendId: result.resendId,
       });
     }

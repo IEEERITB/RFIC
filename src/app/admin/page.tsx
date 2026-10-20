@@ -189,7 +189,7 @@ export default function AdminPage() {
         title: isBulk ? "Bulk Dispatch Finished" : "Confirmation Email Dispatched!",
         description: isBulk
           ? `Processed ${result.summary?.sent} sent out of ${result.summary?.total}.`
-          : `Sent to ${emailRecipients[0].email} via Resend.`,
+          : `Sent to ${emailRecipients[0].email} via SMTP.`,
         className: "bg-emerald-600 text-white border-none",
       });
 

@@ -16,9 +16,12 @@ import {
   Loader2,
   Sparkles,
   ShieldAlert,
+  Copy,
+  Check,
 } from "lucide-react";
 import { format } from "date-fns";
 import { Participant } from "./CandidateModal";
+import { useToast } from "@/hooks/use-toast";
 
 interface EmailLog {
   id: string;
@@ -45,6 +48,7 @@ interface EmailCenterViewProps {
 }
 
 export function EmailCenterView({ participants, onOpenSendEmail }: EmailCenterViewProps) {
+  const { toast } = useToast();
   const [logs, setLogs] = useState<EmailLog[]>([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
@@ -53,15 +57,17 @@ export function EmailCenterView({ participants, onOpenSendEmail }: EmailCenterVi
   const [isLoading, setIsLoading] = useState(false);
   const [retryingId, setRetryingId] = useState<string | null>(null);
   const [testingConnection, setTestingConnection] = useState(false);
+  const [copiedEnv, setCopiedEnv] = useState(false);
   const [testResult, setTestResult] = useState<{
     success: boolean;
     message: string;
+    configured?: boolean;
+    user?: string;
     requiresAppPassword?: boolean;
   } | null>(null);
 
-  const handleTestConnection = async () => {
+  const handleTestConnection = useCallback(async () => {
     setTestingConnection(true);
-    setTestResult(null);
     try {
       const res = await fetch("/api/admin/email/test-connection");
       const data = await res.json();
@@ -74,7 +80,7 @@ export function EmailCenterView({ participants, onOpenSendEmail }: EmailCenterVi
     } finally {
       setTestingConnection(false);
     }
-  };
+  }, []);
 
   const fetchLogs = useCallback(async () => {
     setIsLoading(true);
@@ -96,7 +102,8 @@ export function EmailCenterView({ participants, onOpenSendEmail }: EmailCenterVi
 
   useEffect(() => {
     fetchLogs();
-  }, [fetchLogs]);
+    handleTestConnection();
+  }, [fetchLogs, handleTestConnection]);
 
   const handleRetry = async (log: EmailLog) => {
     setRetryingId(log.id);
@@ -106,18 +113,48 @@ export function EmailCenterView({ participants, onOpenSendEmail }: EmailCenterVi
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           participantId: log.participant?.id,
+          email: log.recipientEmail,
+          fullName: log.recipientName || "Candidate",
           subject: log.subject,
         }),
       });
       const result = await res.json();
-      if (result.success) {
+      if (res.ok && result.success) {
+        toast({
+          title: "Email Delivered",
+          description: `Dispatched to ${log.recipientEmail}`,
+          className: "bg-emerald-600 text-white border-none",
+        });
         fetchLogs();
+      } else {
+        toast({
+          title: "Dispatch Failed",
+          description: result.error || "Failed to deliver email",
+          variant: "destructive",
+        });
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error("Retry failed:", err);
+      toast({
+        title: "Retry Error",
+        description: err.message || "Network error while retrying email dispatch",
+        variant: "destructive",
+      });
     } finally {
       setRetryingId(null);
     }
+  };
+
+  const copyVercelConfig = () => {
+    const config = `SMTP_HOST=smtp.gmail.com\nSMTP_PORT=465\nSMTP_SECURE=true\nSMTP_USER=rfic.ieeescritb@gmail.com\nSMTP_PASS=nhwhvhnnuvfwnwwz\nEMAIL_FROM="IEEE RF IC Design Series" <rfic.ieeescritb@gmail.com>`;
+    navigator.clipboard.writeText(config);
+    setCopiedEnv(true);
+    setTimeout(() => setCopiedEnv(false), 3000);
+    toast({
+      title: "Config Copied to Clipboard",
+      description: "Paste these environment variables into your Vercel Project Settings.",
+      className: "bg-sky-600 text-white border-none",
+    });
   };
 
   const pendingEmailCandidates = participants.filter(
@@ -137,7 +174,7 @@ export function EmailCenterView({ participants, onOpenSendEmail }: EmailCenterVi
               Masterclass Communication Center
             </h3>
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-xl">
-              Send branded registration confirmations, weekend lecture links, and official MPW tape-out notifications directly to registered candidates via the Resend API.
+              Send branded registration confirmations, weekend lecture links, and official MPW tape-out notifications directly to registered candidates via Google SMTP.
             </p>
           </div>
 
@@ -169,16 +206,30 @@ export function EmailCenterView({ participants, onOpenSendEmail }: EmailCenterVi
           <div className="space-y-3">
             <div className="flex items-center justify-between pb-3 border-b border-slate-800">
               <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Mail Delivery Engine</span>
-              <span className="flex items-center gap-1.5 text-[11px] font-semibold text-emerald-400">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                SMTP Active
-              </span>
+              {testResult?.success ? (
+                <span className="flex items-center gap-1.5 text-[11px] font-semibold text-emerald-400">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  SMTP Connected
+                </span>
+              ) : testResult?.configured === false ? (
+                <span className="flex items-center gap-1.5 text-[11px] font-semibold text-amber-400">
+                  <span className="w-2 h-2 rounded-full bg-amber-400" />
+                  Env Missing (Vercel)
+                </span>
+              ) : (
+                <span className="flex items-center gap-1.5 text-[11px] font-semibold text-sky-400">
+                  <span className="w-2 h-2 rounded-full bg-sky-400 animate-pulse" />
+                  Google SMTP (Active)
+                </span>
+              )}
             </div>
 
             <div className="space-y-2 text-xs">
               <div className="flex justify-between text-slate-400">
                 <span>Sender Identity:</span>
-                <span className="text-sky-300 font-mono text-[11px] font-semibold">rfic.ieeescritb@gmail.com</span>
+                <span className="text-sky-300 font-mono text-[11px] font-semibold">
+                  {testResult?.user || "rfic.ieeescritb@gmail.com"}
+                </span>
               </div>
               <div className="flex justify-between text-slate-400">
                 <span>Host / Port:</span>
@@ -248,6 +299,27 @@ export function EmailCenterView({ participants, onOpenSendEmail }: EmailCenterVi
                     <ExternalLink size={10} />
                   </a>
                 )}
+                {testResult.configured === false && (
+                  <div className="mt-2.5 pt-2 border-t border-rose-900/40 flex items-center justify-between">
+                    <button
+                      type="button"
+                      onClick={copyVercelConfig}
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border border-amber-500/40 text-[11px] font-semibold transition-all"
+                    >
+                      {copiedEnv ? <Check size={11} className="text-emerald-400" /> : <Copy size={11} />}
+                      <span>{copiedEnv ? "Copied!" : "Copy Vercel Env Vars"}</span>
+                    </button>
+                    <a
+                      href="https://vercel.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-[11px] font-semibold text-sky-400 hover:underline"
+                    >
+                      <span>Vercel Dashboard</span>
+                      <ExternalLink size={10} />
+                    </a>
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -299,7 +371,7 @@ export function EmailCenterView({ participants, onOpenSendEmail }: EmailCenterVi
                 <th className="px-5 py-3.5">Recipient</th>
                 <th className="px-5 py-3.5">Subject & Campaign</th>
                 <th className="px-5 py-3.5">Status</th>
-                <th className="px-5 py-3.5">Resend Message ID</th>
+                <th className="px-5 py-3.5">Provider Message ID</th>
                 <th className="px-5 py-3.5">Dispatched</th>
                 <th className="px-5 py-3.5 text-right">Retry / Details</th>
               </tr>

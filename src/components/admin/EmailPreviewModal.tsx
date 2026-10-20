@@ -208,7 +208,7 @@ export function EmailPreviewModal({
         <div className="px-6 py-4 border-t border-slate-800 bg-slate-900/90 flex justify-between items-center">
           <div className="text-xs text-slate-400 flex items-center gap-1.5">
             <CheckCircle2 size={14} className="text-emerald-400" />
-            <span>Ready to dispatch via Resend API</span>
+            <span>Ready to dispatch via Google SMTP (rfic.ieeescritb@gmail.com)</span>
           </div>
 
           <div className="flex items-center gap-3">
