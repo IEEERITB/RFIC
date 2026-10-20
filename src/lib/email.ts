@@ -21,20 +21,65 @@ export interface SendEmailOptions {
 /**
  * Creates a nodemailer SMTP transporter if SMTP configuration is present
  */
-function getSmtpTransporter() {
+export function getSmtpTransporter() {
   const user = process.env.SMTP_USER;
   const pass = process.env.SMTP_PASS;
   if (!user || !pass) return null;
+
+  // Clean pass: if user pasted an App Password with spaces (e.g. "abcd efgh ijkl mnop"), strip spaces
+  const cleanPass = pass.replace(/\s+/g, "");
 
   return nodemailer.createTransport({
     host: process.env.SMTP_HOST || "smtp.gmail.com",
     port: Number(process.env.SMTP_PORT || 465),
     secure: process.env.SMTP_SECURE !== "false",
     auth: {
-      user,
-      pass,
+      user: user.trim(),
+      pass: cleanPass,
     },
   });
+}
+
+export async function verifySmtpConnection(): Promise<{ success: boolean; message: string; requiresAppPassword?: boolean }> {
+  const transporter = getSmtpTransporter();
+  if (!transporter) {
+    return {
+      success: false,
+      message: "SMTP is not configured. Missing SMTP_USER or SMTP_PASS in environment variables.",
+    };
+  }
+
+  try {
+    await transporter.verify();
+    return {
+      success: true,
+      message: `SMTP connection successfully verified for ${process.env.SMTP_USER}! Ready to dispatch automated emails.`,
+    };
+  } catch (err: any) {
+    const rawMsg = err.message || "Unknown error";
+    const isAppPassRequired =
+      rawMsg.includes("534-5.7.9") ||
+      rawMsg.includes("Application-specific password required") ||
+      rawMsg.includes("InvalidSecondFactor") ||
+      rawMsg.includes("535-5.7.8") ||
+      rawMsg.includes("BadCredentials");
+
+    if (isAppPassRequired) {
+      return {
+        success: false,
+        requiresAppPassword: true,
+        message:
+          "Google 2-Step Verification is active on " +
+          (process.env.SMTP_USER || "this account") +
+          ". Google requires a 16-character App Password (https://myaccount.google.com/apppasswords) instead of the standard account password. Please generate an App Password and set SMTP_PASS in .env.",
+      };
+    }
+
+    return {
+      success: false,
+      message: rawMsg,
+    };
+  }
 }
 
 export async function sendRegistrationEmail({
@@ -60,11 +105,11 @@ export async function sendRegistrationEmail({
 
     const smtpTransporter = getSmtpTransporter();
 
-    // 2. Path A: Dispatch via Institutional SMTP (ieeesc@msrit.edu) if configured
+    // 2. Path A: Dispatch via SMTP (rfic.ieeescritb@gmail.com) if configured
     if (smtpTransporter) {
       const fromAddress =
         process.env.EMAIL_FROM ||
-        `"IEEE Sensors Council RIT" <${process.env.SMTP_USER}>`;
+        `"IEEE RF IC Design Series" <${process.env.SMTP_USER}>`;
 
       try {
         const info = await smtpTransporter.sendMail({
@@ -102,9 +147,17 @@ export async function sendRegistrationEmail({
         return { success: true, resendId: providerId };
       } catch (smtpErr: any) {
         let errMessage = smtpErr.message || "SMTP dispatch error";
-        if (errMessage.includes("BadCredentials") || errMessage.includes("535-5.7.8")) {
+        if (
+          errMessage.includes("BadCredentials") ||
+          errMessage.includes("535-5.7.8") ||
+          errMessage.includes("534-5.7.9") ||
+          errMessage.includes("Application-specific password required") ||
+          errMessage.includes("InvalidSecondFactor")
+        ) {
           errMessage =
-            "Google Workspace SMTP authentication failed: Google requires a 16-character App Password (https://myaccount.google.com/apppasswords) rather than the standard account password.";
+            "Google SMTP authentication failed: Since 2-Step Verification is active on " +
+            (process.env.SMTP_USER || "this account") +
+            ", Google requires a 16-character App Password (generate at https://myaccount.google.com/apppasswords) rather than the standard account password. Set SMTP_PASS in .env to the generated 16-character App Password.";
         }
 
         console.error(`SMTP delivery failed for ${email}:`, errMessage);

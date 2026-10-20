@@ -5,11 +5,13 @@ import { useRef, useState, ReactNode } from 'react';
 export function SpotlightCard({
   children,
   className = '',
-  spotlightColor = 'rgba(2, 132, 199, 0.08)' // Light cobalt blue spotlight
+  spotlightColor = 'rgba(2, 132, 199, 0.08)', // Light cobalt blue spotlight
+  onClick,
 }: {
   children: ReactNode;
   className?: string;
   spotlightColor?: string;
+  onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
 }) {
   const divRef = useRef<HTMLDivElement>(null);
   const [isFocused, setIsFocused] = useState(false);
@@ -46,6 +48,7 @@ export function SpotlightCard({
   return (
     <div
       ref={divRef}
+      onClick={onClick}
       onMouseMove={handleMouseMove}
       onFocus={handleFocus}
       onBlur={handleBlur}

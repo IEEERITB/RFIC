@@ -52,6 +52,29 @@ export function EmailCenterView({ participants, onOpenSendEmail }: EmailCenterVi
   const [statusFilter, setStatusFilter] = useState("ALL");
   const [isLoading, setIsLoading] = useState(false);
   const [retryingId, setRetryingId] = useState<string | null>(null);
+  const [testingConnection, setTestingConnection] = useState(false);
+  const [testResult, setTestResult] = useState<{
+    success: boolean;
+    message: string;
+    requiresAppPassword?: boolean;
+  } | null>(null);
+
+  const handleTestConnection = async () => {
+    setTestingConnection(true);
+    setTestResult(null);
+    try {
+      const res = await fetch("/api/admin/email/test-connection");
+      const data = await res.json();
+      setTestResult(data);
+    } catch (err: any) {
+      setTestResult({
+        success: false,
+        message: err.message || "Failed to reach test endpoint",
+      });
+    } finally {
+      setTestingConnection(false);
+    }
+  };
 
   const fetchLogs = useCallback(async () => {
     setIsLoading(true);
@@ -142,21 +165,24 @@ export function EmailCenterView({ participants, onOpenSendEmail }: EmailCenterVi
         </div>
 
         {/* Email Engine Status Card */}
-        <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 flex flex-col justify-between shadow-md">
+        <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 flex flex-col justify-between shadow-md space-y-4">
           <div className="space-y-3">
             <div className="flex items-center justify-between pb-3 border-b border-slate-800">
               <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Mail Delivery Engine</span>
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="flex items-center gap-1.5 text-[11px] font-semibold text-emerald-400">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                SMTP Active
+              </span>
             </div>
 
             <div className="space-y-2 text-xs">
               <div className="flex justify-between text-slate-400">
                 <span>Sender Identity:</span>
-                <span className="text-sky-300 font-mono text-[11px] font-semibold">ieeesc@msrit.edu</span>
+                <span className="text-sky-300 font-mono text-[11px] font-semibold">rfic.ieeescritb@gmail.com</span>
               </div>
               <div className="flex justify-between text-slate-400">
-                <span>Provider:</span>
-                <span className="text-slate-200 font-medium">Google Workspace / SMTP</span>
+                <span>Host / Port:</span>
+                <span className="text-slate-200 font-medium font-mono text-[11px]">smtp.gmail.com:465 (SSL)</span>
               </div>
               <div className="flex justify-between text-slate-400">
                 <span>Template Engine:</span>
@@ -165,10 +191,65 @@ export function EmailCenterView({ participants, onOpenSendEmail }: EmailCenterVi
             </div>
           </div>
 
-          <div className="pt-4 border-t border-slate-800">
-            <p className="text-[11px] text-slate-400 leading-snug">
-              Official institutional sender for IEEE Sensors Council RITB.
-            </p>
+          {/* Test Connection Button & Result */}
+          <div className="space-y-2 pt-3 border-t border-slate-800">
+            <button
+              type="button"
+              onClick={handleTestConnection}
+              disabled={testingConnection}
+              className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-sky-400 hover:text-sky-300 border border-slate-700 transition-all disabled:opacity-50"
+            >
+              {testingConnection ? (
+                <>
+                  <Loader2 size={13} className="animate-spin text-sky-400" />
+                  <span>Verifying SMTP Auth...</span>
+                </>
+              ) : (
+                <>
+                  <Sparkles size={13} />
+                  <span>Test SMTP Connection</span>
+                </>
+              )}
+            </button>
+
+            {testResult && (
+              <div
+                className={`p-3 rounded-xl text-xs leading-relaxed border ${
+                  testResult.success
+                    ? "bg-emerald-950/60 border-emerald-800/80 text-emerald-300"
+                    : testResult.requiresAppPassword
+                    ? "bg-amber-950/60 border-amber-800/80 text-amber-200"
+                    : "bg-rose-950/60 border-rose-800/80 text-rose-200"
+                }`}
+              >
+                <div className="font-bold flex items-center gap-1.5 mb-1">
+                  {testResult.success ? (
+                    <CheckCircle2 size={14} className="text-emerald-400 shrink-0" />
+                  ) : (
+                    <AlertCircle size={14} className="text-amber-400 shrink-0" />
+                  )}
+                  <span>
+                    {testResult.success
+                      ? "SMTP Verified Successfully!"
+                      : testResult.requiresAppPassword
+                      ? "Google 2FA App Password Required"
+                      : "SMTP Connection Issue"}
+                  </span>
+                </div>
+                <p className="text-[11px] opacity-90">{testResult.message}</p>
+                {testResult.requiresAppPassword && (
+                  <a
+                    href="https://myaccount.google.com/apppasswords"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 mt-2 text-[11px] font-bold text-sky-400 hover:underline"
+                  >
+                    <span>Generate App Password (Google Account)</span>
+                    <ExternalLink size={10} />
+                  </a>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>

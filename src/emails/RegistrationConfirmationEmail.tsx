@@ -111,6 +111,10 @@ export const RegistrationConfirmationEmail = ({
             {/* Support / Contact */}
             <Text style={supportText}>
               Need technical assistance or coordination help? Reach out to the organizing secretariat at{" "}
+              <Link href="mailto:rfic.ieeescritb@gmail.com" style={linkStyle}>
+                rfic.ieeescritb@gmail.com
+              </Link>{" "}
+              or{" "}
               <Link href="mailto:trivedipriyanshu@ieee.org" style={linkStyle}>
                 trivedipriyanshu@ieee.org
               </Link>{" "}

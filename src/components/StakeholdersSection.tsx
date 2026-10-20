@@ -3,9 +3,9 @@
 import { Badge } from "@/components/ui/badge";
 import { SpotlightCard } from "./react-bits/SpotlightCard";
 import { stakeholders, Stakeholder } from "@/data/stakeholders";
-import { Globe, Mail, Sparkles, Users } from "lucide-react";
+import { Globe, Mail, Sparkles, Users, X, ExternalLink } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function LinkedinIcon({ className }: { className?: string }) {
   return (
@@ -24,6 +24,7 @@ function GithubIcon({ className }: { className?: string }) {
 }
 
 export function StakeholdersSection() {
+  const [selectedPerson, setSelectedPerson] = useState<Stakeholder | null>(null);
   const leadership = stakeholders.filter((s) => s.category !== "organiser");
   const organisers = stakeholders.filter((s) => s.category === "organiser");
 
@@ -58,7 +59,11 @@ export function StakeholdersSection() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5 sm:gap-6">
             {leadership.map((person) => (
-              <StakeholderCard key={person.id} person={person} isCompact={true} />
+              <StakeholderCard
+                key={person.id}
+                person={person}
+                onSelect={() => setSelectedPerson(person)}
+              />
             ))}
           </div>
         </div>
@@ -73,24 +78,32 @@ export function StakeholdersSection() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
             {organisers.map((person) => (
-              <StakeholderCard key={person.id} person={person} isCompact={true} />
+              <StakeholderCard
+                key={person.id}
+                person={person}
+                onSelect={() => setSelectedPerson(person)}
+              />
             ))}
           </div>
         </div>
       </div>
+
+      {/* Stakeholder Details Modal */}
+      {selectedPerson && (
+        <StakeholderModal person={selectedPerson} onClose={() => setSelectedPerson(null)} />
+      )}
     </section>
   );
 }
 
 function StakeholderCard({
   person,
-  isCompact = true,
+  onSelect,
 }: {
   person: Stakeholder;
-  isCompact?: boolean;
+  onSelect: () => void;
 }) {
   const [imgError, setImgError] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
 
   // Initial letters for avatar fallback
   const initials = person.name
@@ -106,6 +119,7 @@ function StakeholderCard({
     <SpotlightCard
       spotlightColor="rgba(2, 132, 199, 0.12)"
       className="bg-white/95 backdrop-blur-xs border-slate-200/90 shadow-2xs hover:shadow-lg hover:border-sky-300 transition-all duration-300 flex flex-col h-full rounded-2xl overflow-hidden group cursor-pointer"
+      onClick={onSelect}
     >
       <div className="p-5 sm:p-6 flex flex-col flex-1">
         <div className="flex items-start justify-between gap-3 mb-4">
@@ -126,7 +140,7 @@ function StakeholderCard({
           </div>
 
           {/* Social Links as Icons Only */}
-          <div className="flex items-center gap-1.5 pt-1">
+          <div className="flex items-center gap-1.5 pt-1" onClick={(e) => e.stopPropagation()}>
             {person.linkedInUrl && (
               <Link
                 href={person.linkedInUrl}
@@ -203,27 +217,181 @@ function StakeholderCard({
         </div>
 
         {/* Bio */}
-        <p
-          style={
-            isCompact && !isHovered
-              ? {
-                  display: "-webkit-box",
-                  WebkitLineClamp: 5,
-                  WebkitBoxOrient: "vertical",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                }
-              : undefined
-          }
-          className={`text-slate-600 text-xs sm:text-sm leading-relaxed flex-1 ${
-            isCompact
-              ? "stakeholder-bio-clamped line-clamp-5 group-hover:line-clamp-none hover:line-clamp-none"
-              : ""
-          }`}
-        >
+        <p className="text-slate-600 text-xs sm:text-sm leading-relaxed flex-1 line-clamp-4">
           {person.bio}
         </p>
+
+        {person.bio.length > 150 && (
+          <div className="pt-2">
+            <span className="text-[11px] font-bold text-sky-600 group-hover:text-sky-700 inline-flex items-center gap-1">
+              Read Full Bio →
+            </span>
+          </div>
+        )}
       </div>
     </SpotlightCard>
+  );
+}
+
+function StakeholderModal({
+  person,
+  onClose,
+}: {
+  person: Stakeholder;
+  onClose: () => void;
+}) {
+  const [imgError, setImgError] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onClose]);
+
+  const initials = person.name
+    .replace(/^Dr\.\s+/, "")
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .slice(0, 2);
+
+  const mailtoHref = person.emails ? `mailto:${person.emails.join(",")}` : undefined;
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-slate-950/70 backdrop-blur-sm animate-in fade-in duration-200"
+      onClick={onClose}
+    >
+      <div
+        className="bg-white rounded-3xl border border-slate-200 shadow-2xl max-w-xl w-full max-h-[90vh] overflow-hidden flex flex-col animate-in zoom-in-95 duration-200"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Modal Header */}
+        <div className="p-6 border-b border-slate-100 flex items-start justify-between gap-4 bg-gradient-to-r from-sky-50/50 via-white to-white">
+          <div className="flex items-center gap-4">
+            <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden bg-slate-100 border-2 border-sky-200 shrink-0 shadow-sm">
+              {person.avatarUrl && !imgError ? (
+                <img
+                  src={person.avatarUrl}
+                  alt={person.name}
+                  className="w-full h-full object-cover object-center"
+                  onError={() => setImgError(true)}
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center font-bold text-xl text-sky-700 bg-sky-100">
+                  {initials}
+                </div>
+              )}
+            </div>
+
+            <div>
+              <div className="flex flex-wrap items-center gap-1.5 mb-1.5">
+                {person.role.includes("•") ? (
+                  person.role.split("•").map((part, idx) => (
+                    <span
+                      key={idx}
+                      className={`inline-flex items-center rounded-md px-2 py-0.5 text-[10px] sm:text-[11px] font-semibold ${
+                        idx === 0
+                          ? "bg-sky-50 text-sky-700 border border-sky-200"
+                          : "bg-teal-50 text-teal-700 border border-teal-200"
+                      }`}
+                    >
+                      {part.trim()}
+                    </span>
+                  ))
+                ) : (
+                  <span className="inline-flex items-center rounded-md px-2 py-0.5 text-[10px] sm:text-[11px] font-semibold bg-sky-50 text-sky-700 border border-sky-200">
+                    {person.role}
+                  </span>
+                )}
+              </div>
+              <h3 className="text-xl font-black text-slate-900 leading-tight">
+                {person.name}
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-600 font-medium mt-0.5">
+                {person.organization}
+              </p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={onClose}
+            className="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+            aria-label="Close modal"
+          >
+            <X size={20} />
+          </button>
+        </div>
+
+        {/* Modal Body: Full Bio */}
+        <div className="p-6 sm:p-8 overflow-y-auto space-y-4 max-h-[60vh]">
+          <h4 className="text-xs font-bold uppercase tracking-wider text-sky-700">
+            Biography & Background
+          </h4>
+          <div className="text-slate-700 text-sm sm:text-base leading-relaxed whitespace-pre-line space-y-3 font-normal">
+            {person.bio}
+          </div>
+        </div>
+
+        {/* Modal Footer: Links & Close */}
+        <div className="p-4 sm:p-5 border-t border-slate-100 bg-slate-50 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            {person.linkedInUrl && (
+              <a
+                href={person.linkedInUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-white border border-slate-200 text-slate-700 hover:text-[#0A66C2] hover:border-[#0A66C2]/40 transition-colors shadow-2xs"
+              >
+                <LinkedinIcon className="w-3.5 h-3.5" />
+                <span>LinkedIn</span>
+              </a>
+            )}
+            {person.githubUrl && (
+              <a
+                href={person.githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-white border border-slate-200 text-slate-700 hover:text-slate-900 hover:border-slate-400 transition-colors shadow-2xs"
+              >
+                <GithubIcon className="w-3.5 h-3.5" />
+                <span>GitHub</span>
+              </a>
+            )}
+            {person.portfolioUrl && (
+              <a
+                href={person.portfolioUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-white border border-slate-200 text-slate-700 hover:text-emerald-600 hover:border-emerald-500/40 transition-colors shadow-2xs"
+              >
+                <Globe size={13} />
+                <span>Website</span>
+              </a>
+            )}
+            {mailtoHref && (
+              <a
+                href={mailtoHref}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-white border border-slate-200 text-slate-700 hover:text-amber-600 hover:border-amber-500/40 transition-colors shadow-2xs"
+              >
+                <Mail size={13} />
+                <span>Email</span>
+              </a>
+            )}
+          </div>
+
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-4 py-2 rounded-xl text-xs font-bold bg-slate-900 hover:bg-slate-800 text-white transition-colors"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
