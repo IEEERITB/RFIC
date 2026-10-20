@@ -28,17 +28,17 @@ export const RegistrationConfirmationEmail = ({
 }: RegistrationConfirmationEmailProps) => {
   const whatsappUrl = "https://chat.whatsapp.com/H8zM8URfnS98mMCONT2E2L";
   const calendarUrl =
-    "https://calendar.google.com/calendar/render?action=TEMPLATE&text=IEEE+RF+IC+Design+Micro-Specialization&details=4+Weekends+%E2%80%A2+Saturdays+%26+Sundays+%E2%80%A2+From+7%3A30+PM+IST&dates=20261024T140000Z/20261024T160000Z&recur=RRULE:FREQ=WEEKLY;BYDAY=SA,SU;COUNT=8";
+    "https://calendar.google.com/calendar/render?action=TEMPLATE&text=IEEE+RF+IC+Design+Masterclass&dates=20261024T140000Z/20261024T160000Z&details=Masterclass+Weekend+Sessions+Saturdays+and+Sundays+7:30+PM+IST";
 
   return (
     <Html>
       <Head />
-      <Preview>Registration Confirmed: IEEE RF IC Design Micro-Specialization for 5G/6G</Preview>
+      <Preview>Registration Confirmed: IEEE RF IC Design Masterclass</Preview>
       <Body style={main}>
         <Container style={container}>
           {/* Header Brand */}
           <Section style={header}>
-            <Text style={headerBadge}>IEEE BANGALORE SECTION & IEEE SENSORS COUNCIL RIT-B</Text>
+            <Text style={headerBadge}>IEEE SENSORS COUNCIL RIT-B</Text>
             <Heading style={headerTitle}>IEEE RF IC Design Masterclass</Heading>
             <Text style={headerSub}>5G/6G Physical Silicon Tape-Out Track</Text>
           </Section>
@@ -50,7 +50,7 @@ export const RegistrationConfirmationEmail = ({
             </Heading>
 
             <Text style={paragraph}>
-              Your seat for the <strong>IEEE Bangalore Section Flagship Micro-Specialization Track on RF IC Design for 5G/6G on Open-Source Silicon</strong> has been successfully confirmed.
+              Your seat for the <strong>IEEE RF IC Design Masterclass on Open-Source Silicon</strong> has been successfully confirmed.
             </Text>
 
             {customMessage && (
@@ -62,19 +62,19 @@ export const RegistrationConfirmationEmail = ({
 
             {/* Profile Summary Card */}
             <Section style={infoCard}>
-              <Text style={cardTitle}>Confirmed Candidate Dossier</Text>
+              <Text style={cardTitle}>Confirmed Candidate Details</Text>
               <Text style={cardItem}><strong>Name:</strong> {fullName}</Text>
               <Text style={cardItem}><strong>Category:</strong> {category}</Text>
               <Text style={cardItem}><strong>Affiliation:</strong> {institution}</Text>
               <Text style={cardItem}><strong>Track:</strong> Open-Source EDA & 130nm MPW Tape-Out</Text>
             </Section>
 
-            {/* Compulsory WhatsApp Step */}
+            {/* Official WhatsApp Step */}
             <Section style={actionCard}>
-              <Text style={actionCardBadge}>COMPULSORY ACTION</Text>
+              <Text style={actionCardBadge}>ACTION REQUIRED</Text>
               <Heading as="h3" style={actionCardTitle}>Join the Official WhatsApp Community</Heading>
               <Text style={actionCardText}>
-                All live lecture Zoom links, EDA virtual machine credentials, design files, and physical silicon <strong>tape-out announcements</strong> are shared exclusively through this group.
+                Live lecture Zoom links, virtual machine credentials, design files, and physical silicon tape-out updates will be shared through this group.
               </Text>
               <Section style={{ textAlign: "center" as const, marginTop: "16px" }}>
                 <Button style={btnPrimary} href={whatsappUrl}>
@@ -110,15 +110,11 @@ export const RegistrationConfirmationEmail = ({
 
             {/* Support / Contact */}
             <Text style={supportText}>
-              Need technical assistance or coordination help? Reach out to the organizing secretariat at{" "}
+              Need assistance? Contact the organizing committee at{" "}
               <Link href="mailto:rfic.ieeescritb@gmail.com" style={linkStyle}>
                 rfic.ieeescritb@gmail.com
               </Link>{" "}
-              or{" "}
-              <Link href="mailto:trivedipriyanshu@ieee.org" style={linkStyle}>
-                trivedipriyanshu@ieee.org
-              </Link>{" "}
-              or visit the portal at{" "}
+              or visit{" "}
               <Link href="https://ieee-rfic.ritb.in" style={linkStyle}>
                 ieee-rfic.ritb.in
               </Link>.
@@ -126,18 +122,17 @@ export const RegistrationConfirmationEmail = ({
 
             <Text style={signoff}>
               Warm regards,<br />
-              <strong>IEEE Sensors Council Student Chapter RIT-B</strong><br />
-              <strong>IEEE Bangalore Section Flagship Initiative</strong>
+              <strong>IEEE Sensors Council RIT-B</strong>
             </Text>
           </Section>
 
           {/* Footer */}
           <Section style={footer}>
             <Text style={footerText}>
-              © 2026 IEEE Sensors Council RIT-B & IEEE Bangalore Section. Jointly organized for the Open Silicon Initiative.
+              © 2026 IEEE Sensors Council RIT-B. All rights reserved.
             </Text>
             <Text style={footerSub}>
-              This is an automated administrative notification. Your details are securely registered under the IEEE RF IC series registry.
+              This is an official registration confirmation for the IEEE RF IC Design Masterclass.
             </Text>
           </Section>
         </Container>
@@ -150,7 +145,7 @@ export default RegistrationConfirmationEmail;
 
 /* Email Client Inline Styles */
 const main = {
-  backgroundColor: "#0B0F19",
+  backgroundColor: "#f4f6f8",
   fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
   padding: "30px 10px",
   margin: "0",
@@ -158,18 +153,18 @@ const main = {
 
 const container = {
   backgroundColor: "#ffffff",
-  borderRadius: "16px",
+  borderRadius: "12px",
   overflow: "hidden" as const,
   maxWidth: "580px",
   margin: "0 auto",
-  boxShadow: "0 10px 25px rgba(0, 0, 0, 0.3)",
+  border: "1px solid #e2e8f0",
 };
 
 const header = {
   backgroundColor: "#0a192f",
-  padding: "32px 24px",
+  padding: "28px 24px",
   textAlign: "center" as const,
-  borderBottom: "4px solid #0284c7",
+  borderBottom: "3px solid #0284c7",
 };
 
 const headerBadge = {

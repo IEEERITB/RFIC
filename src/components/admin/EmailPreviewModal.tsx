@@ -17,7 +17,7 @@ export function EmailPreviewModal({
   onConfirmSend,
 }: EmailPreviewModalProps) {
   const [subject, setSubject] = useState(
-    "Registration Confirmed - IEEE RF IC Design Masterclass 5G/6G"
+    "Registration Confirmed: IEEE RF IC Design Masterclass"
   );
   const [customMessage, setCustomMessage] = useState("");
   const [isSending, setIsSending] = useState(false);

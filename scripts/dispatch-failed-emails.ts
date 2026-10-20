@@ -28,7 +28,7 @@ async function main() {
         fullName: p.fullName,
         category: p.category || "Candidate",
         institution: p.institutionOrCompany || "Academic / Research Institution",
-        subject: "Registration Confirmed - IEEE RF IC Design Masterclass 5G/6G",
+        subject: "Registration Confirmed: IEEE RF IC Design Masterclass",
         type: "CONFIRMATION",
       });
 

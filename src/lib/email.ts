@@ -111,20 +111,23 @@ export async function sendRegistrationEmail({
   fullName,
   category = "Candidate",
   institution = "Academic / Research Institution",
-  subject = "Registration Confirmed - IEEE RF IC Design Masterclass 5G/6G",
+  subject = "Registration Confirmed: IEEE RF IC Design Masterclass",
   customMessage,
   type = "CONFIRMATION",
 }: SendEmailOptions): Promise<{ success: boolean; resendId?: string; error?: string }> {
   try {
-    // 1. Render the branded React Email template to an HTML string
-    const htmlContent = await render(
-      React.createElement(RegistrationConfirmationEmail, {
-        fullName,
-        category,
-        institution,
-        customMessage,
-      })
-    );
+    // 1. Render both branded HTML and Plain Text versions for optimal deliverability (avoids MIME_HTML_ONLY spam penalty)
+    const emailElement = React.createElement(RegistrationConfirmationEmail, {
+      fullName,
+      category,
+      institution,
+      customMessage,
+    });
+
+    const [htmlContent, textContent] = await Promise.all([
+      render(emailElement),
+      render(emailElement, { plainText: true }),
+    ]);
 
     const smtpTransporter = getSmtpTransporter();
 
@@ -133,17 +136,26 @@ export async function sendRegistrationEmail({
       const activeUser = process.env.SMTP_USER || "rfic.ieeescritb@gmail.com";
       const fromAddress =
         process.env.EMAIL_FROM ||
-        `"IEEE RF IC Design Series" <${activeUser}>`;
+        `"IEEE Sensors Council RIT-B" <${activeUser}>`;
 
       try {
+        const providerId = `smtp_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+
         const info = await smtpTransporter.sendMail({
           from: fromAddress,
           to: email,
+          replyTo: `"IEEE Sensors Council RIT-B" <${activeUser}>`,
           subject,
+          text: textContent,
           html: htmlContent,
+          headers: {
+            "X-Entity-Ref-ID": providerId,
+            "X-Mailer": "IEEE Sensors Council Portal",
+            "X-Auto-Response-Suppress": "OOF, AutoReply",
+          },
         });
 
-        const providerId = info.messageId || `smtp_${Date.now()}`;
+        const finalId = info.messageId || providerId;
 
         await prisma.emailLog.create({
           data: {
@@ -153,7 +165,7 @@ export async function sendRegistrationEmail({
             subject,
             type,
             status: "SENT",
-            resendId: providerId,
+            resendId: finalId,
             metadata: JSON.stringify({ provider: "smtp", from: fromAddress, envelope: info.envelope }),
           },
         });
@@ -168,7 +180,7 @@ export async function sendRegistrationEmail({
           });
         }
 
-        return { success: true, resendId: providerId };
+        return { success: true, resendId: finalId };
       } catch (smtpErr: any) {
         let errMessage = smtpErr.message || "SMTP dispatch error";
         if (
@@ -211,11 +223,12 @@ export async function sendRegistrationEmail({
 
     // 3. Path B: Dispatch via Resend API
     if (process.env.RESEND_API_KEY && process.env.RESEND_API_KEY !== "mock_key") {
-      const senderFrom = process.env.EMAIL_FROM || "IEEE RF IC Series <onboarding@resend.dev>";
+      const senderFrom = process.env.EMAIL_FROM || "IEEE Sensors Council RIT-B <onboarding@resend.dev>";
       const { data, error } = await resend.emails.send({
         from: senderFrom,
         to: [email],
         subject,
+        text: textContent,
         html: htmlContent,
       });
 

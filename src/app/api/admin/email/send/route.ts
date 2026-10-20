@@ -33,7 +33,7 @@ export async function POST(request: Request) {
         fullName: targetName,
         category: targetCategory,
         institution: targetInstitution,
-        subject: subject || "Registration Confirmed - IEEE RF IC Design Masterclass 5G/6G",
+        subject: subject || "Registration Confirmed: IEEE RF IC Design Masterclass",
         customMessage,
         type: "CONFIRMATION",
       });

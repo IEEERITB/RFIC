@@ -146,7 +146,7 @@ export function EmailCenterView({ participants, onOpenSendEmail }: EmailCenterVi
   };
 
   const copyVercelConfig = () => {
-    const config = `SMTP_HOST=smtp.gmail.com\nSMTP_PORT=465\nSMTP_SECURE=true\nSMTP_USER=rfic.ieeescritb@gmail.com\nSMTP_PASS=nhwhvhnnuvfwnwwz\nEMAIL_FROM="IEEE RF IC Design Series" <rfic.ieeescritb@gmail.com>`;
+    const config = `SMTP_HOST=smtp.gmail.com\nSMTP_PORT=465\nSMTP_SECURE=true\nSMTP_USER=rfic.ieeescritb@gmail.com\nSMTP_PASS=nhwhvhnnuvfwnwwz\nEMAIL_FROM="IEEE Sensors Council RIT-B" <rfic.ieeescritb@gmail.com>`;
     navigator.clipboard.writeText(config);
     setCopiedEnv(true);
     setTimeout(() => setCopiedEnv(false), 3000);
