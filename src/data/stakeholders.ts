@@ -40,18 +40,6 @@ export const advisoryStakeholders: Stakeholder[] = [
     githubUrl: "https://github.com/Eyantra698Sumanto",
   },
   {
-    id: "dr_darshak_bhatt",
-    name: "Dr. Darshak Bhatt",
-    role: "Technical Mentor • Module 1.2 & 5 Lead",
-    category: "mentor",
-    categoryLabel: "Technical Mentor",
-    organization: "Associate Professor, Dept. of ECE, IIT Roorkee",
-    avatarUrl: "/stakeholders/darshak-bhatt.jpg",
-    bio: "Associate Professor in the Department of Electronics and Communication Engineering at Indian Institute of Technology Roorkee (IIT Roorkee). His specialized research domains encompass RF and Mixed-Signal IC design, high-frequency transceiver architectures, frequency synthesizers (PLLs), and analog/RF open-source EDA methodologies.",
-    linkedInUrl: "https://www.linkedin.com/in/darshak-bhatt-b0576424",
-    portfolioUrl: "https://iitr.ac.in/Departments/Electronics%20and%20Communication%20Engineering%20Department/People/Faculty/100822.html",
-  },
-  {
     id: "souhadra_shrivastava",
     name: "Souhadra Shrivastava",
     role: "Course Curator",
