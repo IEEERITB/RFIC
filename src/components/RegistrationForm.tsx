@@ -339,7 +339,7 @@ export function RegistrationForm() {
                         </FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="e.g. Ramaiah Institute of Technology / Intel / TI"
+                            placeholder="e.g. Ramaiah Institute of Technology / Qualcomm / TI"
                             className="bg-white border-slate-200 text-slate-900 placeholder:text-slate-400 focus-visible:ring-2 focus-visible:ring-sky-500 rounded-xl"
                             {...field}
                           />

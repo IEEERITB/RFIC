@@ -127,6 +127,6 @@ export const modules: Module[] = [
     fossTooling: ["Open-Silicon Tape-Out Flow"],
     date: "Nov 15, 2026",
     time: "From 7:30 PM IST",
-    speakerIds: ["dr_gs_javed", "krzysztof_herman"]
+    speakerIds: ["krzysztof_herman"]
   }
 ];

@@ -59,45 +59,12 @@ export const advisoryStakeholders: Stakeholder[] = [
     categoryLabel: "Faculty Advisor",
     organization: "Associate Professor, Dept. of ETE, Ramaiah Institute of Technology (MSRIT)",
     avatarUrl: "/stakeholders/dr-ramya-hr.jpg",
-    bio: "Associate Professor in the Department of Electronics and Telecommunication Engineering at M.S. Ramaiah Institute of Technology with 21 years of experience. Her research interests span neural networks, fuzzy logic, machine learning, and Verilog design. She has published extensively in Scopus-indexed journals and conferences, with focus on medical image fusion, machine learning applications in healthcare, and signal processing. Dr. Ramya has established industry collaborations with Intel-Altera, Texas Instruments India, and Starcom Information Technology Limited to develop specialized labs and courses. She holds a design patent for \"Multiband Antenna Tuning Device for 5G Networks\" (Patent No. 450853-001).",
+    bio: "Associate Professor in the Department of Electronics and Telecommunication Engineering at M.S. Ramaiah Institute of Technology with 21 years of experience. Her research interests span neural networks, fuzzy logic, machine learning, and Verilog design. She has published extensively in Scopus-indexed journals and conferences, with focus on medical image fusion, machine learning applications in healthcare, and signal processing. Dr. Ramya has established industry collaborations with Altera, Texas Instruments India, and Starcom Information Technology Limited to develop specialized labs and courses. She holds a design patent for \"Multiband Antenna Tuning Device for 5G Networks\" (Patent No. 450853-001).",
     portfolioUrl: "https://www.msrit.edu/department/faculty-detail.html?dept=te&ID=8",
   },
 ];
 
 export const resourcePersons: Stakeholder[] = [
-  {
-    id: "dr_gs_javed",
-    name: "Dr. G S Javed",
-    role: "Resource Person • Analog IC Architect",
-    category: "resource",
-    categoryLabel: "Resource Person",
-    organization: "VLSI Coach, JSG Labs • CIO, King Consultants • Ex-Intel Foundry",
-    avatarUrl: "/stakeholders/dr-gs-javed.jpeg",
-    bio: `Dr G S Javed is an Architect and Analog IC design manager with 17+ years of experience in design of Analog Mixed Signal (AMS) and SerDes IP Circuits. Currently, he is VLSI Coach and Semiconductor Consultant at JSG Labs and Chief Innovation Officer (CIO) at King Consultants Education.
-
-He received his M.S. and Ph.D. from the Indian Institute of Science (IISc), Bangalore. He worked on low power integrated instrumentation circuits for sensing applications. In 2015, he founded King Consultants Education (http://tiny.cc/KingConsultants) to work on Design Thinking and Experiential Learning. He also is an advisor/guide for PhD aspirants.
-
-⚜️ From 2023 - 2026, he was the Analog IP Design Manager in the Advanced Design division at Intel Foundry.
-
-⚜️ From 2020 - 2023, he was the Technical Lead - Analog for the High Bandwidth Memory (HBM) and DDR PHY team in Intel.
-
-⚜️ From 2016 - 2020, he led the team on High Speed Circuits, setup and managed the R&D team and managed a team of 10+ designers at Terminus Circuits Pvt Ltd.
-
-⚜️ From 2012 - 2016, he was a Senior Research Fellow at IISc working on integrated sensor interfaces. He has over 35 peer reviewed journals and IEEE conference publications to his credit.
-
-He is an active IEEE volunteer of 17 years. He is a Senior Member of the IEEE (2016) and was inducted into the IEEE Eta Kappa Nu (HKN) - the Honour society of IEEE in 2017 for Academic Excellence. He has served as the Chairperson of IEEE Technology Engineering and Management Society (TEMS) Bangalore Chapter in 2023. He is associated as a Member of the EXECOM of IEEE CASS, SSCS, Sensors Council, SIGHT, Consultant Network and RFID council in Bangalore. He was the Educational activities Chair/Co-Chair in the IEEE Bangalore Section execom from 2017 - 2019. He is the 2025-2026 Chairperson, IEEE Consultant Network Affinity Group (CNAG) Bangalore Chapter.
-
-He is also an active speaker and motivator on Analog Mixed Signal Circuit Design, High Speed SerDes Design, Design Thinking, Entrepreneurship, Research Methodologies and Technical Writing. He has delivered 200+ invited talks on his topics of interest.
-
-Dr G S Javed
-Founder, King Consultants Education
-Chief Mentor and VLSI Coach, JSG Labs
-
-Chair, 2026 IEEE CNAG Bangalore Chapter
-Chair, 2023 IEEE TEMS Bangalore Chapter`,
-    linkedInUrl: "https://in.linkedin.com/in/javed-g-s-phd-612491a",
-    portfolioUrl: "http://tiny.cc/KingConsultants",
-  },
   {
     id: "sumanto_kar_resource",
     name: "Sumanto Kar",
@@ -175,6 +142,6 @@ export const organisingCommittee: Stakeholder[] = [
 
 export const stakeholders: Stakeholder[] = [
   ...advisoryStakeholders,
-  resourcePersons[0], // Dr. G S Javed
+  ...resourcePersons,
   ...organisingCommittee,
 ];

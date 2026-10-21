@@ -32,7 +32,7 @@ export function ScheduleSection() {
       dates: "Nov 14 - Nov 15, 2026",
       title: "Tape-Out Pipeline & Sign-off",
       modules: "Module 7 (DRC/LVS) & Module 8 (MPW Submission)",
-      lead: "Krzysztof Herman (IHP), Dr. GS Javed (Intel), Rene Scholz",
+      lead: "Krzysztof Herman (IHP) & Rene Scholz",
       status: "Session 7 & 8",
     },
   ];
