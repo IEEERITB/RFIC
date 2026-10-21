@@ -45,9 +45,11 @@ export const speakers: Speaker[] = [
   {
     id: "dr_gs_javed",
     name: "Dr. GS Javed",
-    roleTitle: "Module 8 MPW & Industry Lead",
-    organization: "Intel Corp. / IEEE CNAG",
-    bio: "Leading expert in silicon validation, test pipelines, and career advancement in RF IC.",
+    roleTitle: "Module 8 MPW & Industry Lead • Analog IC Architect",
+    organization: "JSG Labs / Ex-Intel Foundry / IEEE CNAG",
+    avatarUrl: "/stakeholders/dr-gs-javed.jpeg",
+    bio: "Architect and Analog IC design manager with 17+ years of experience in AMS & SerDes IP Circuits. Former Analog IP Design Manager at Intel Foundry and 2025-2026 Chair, IEEE CNAG Bangalore Chapter.",
+    linkedInUrl: "https://in.linkedin.com/in/javed-g-s-phd-612491a",
   },
   {
     id: "krzysztof_herman",

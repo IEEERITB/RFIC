@@ -2,7 +2,7 @@ export interface Stakeholder {
   id: string;
   name: string;
   role: string;
-  category: "guide" | "curator" | "advisor" | "mentor" | "organiser";
+  category: "guide" | "curator" | "advisor" | "mentor" | "organiser" | "resource";
   categoryLabel: string;
   organization: string;
   avatarUrl?: string;
@@ -13,7 +13,7 @@ export interface Stakeholder {
   emails?: string[];
 }
 
-export const stakeholders: Stakeholder[] = [
+export const advisoryStakeholders: Stakeholder[] = [
   {
     id: "vinayak_pachkawade",
     name: "Dr. Vinayak Pachkawade",
@@ -74,6 +74,70 @@ export const stakeholders: Stakeholder[] = [
     bio: "Associate Professor in the Department of Electronics and Telecommunication Engineering at M.S. Ramaiah Institute of Technology with 21 years of experience. Her research interests span neural networks, fuzzy logic, machine learning, and Verilog design. She has published extensively in Scopus-indexed journals and conferences, with focus on medical image fusion, machine learning applications in healthcare, and signal processing. Dr. Ramya has established industry collaborations with Intel-Altera, Texas Instruments India, and Starcom Information Technology Limited to develop specialized labs and courses. She holds a design patent for \"Multiband Antenna Tuning Device for 5G Networks\" (Patent No. 450853-001).",
     portfolioUrl: "https://www.msrit.edu/department/faculty-detail.html?dept=te&ID=8",
   },
+];
+
+export const resourcePersons: Stakeholder[] = [
+  {
+    id: "dr_gs_javed",
+    name: "Dr. G S Javed",
+    role: "Resource Person • Analog IC Architect",
+    category: "resource",
+    categoryLabel: "Resource Person",
+    organization: "VLSI Coach, JSG Labs • CIO, King Consultants • Ex-Intel Foundry",
+    avatarUrl: "/stakeholders/dr-gs-javed.jpeg",
+    bio: `Dr G S Javed is an Architect and Analog IC design manager with 17+ years of experience in design of Analog Mixed Signal (AMS) and SerDes IP Circuits. Currently, he is VLSI Coach and Semiconductor Consultant at JSG Labs and Chief Innovation Officer (CIO) at King Consultants Education.
+
+He received his M.S. and Ph.D. from the Indian Institute of Science (IISc), Bangalore. He worked on low power integrated instrumentation circuits for sensing applications. In 2015, he founded King Consultants Education (http://tiny.cc/KingConsultants) to work on Design Thinking and Experiential Learning. He also is an advisor/guide for PhD aspirants.
+
+⚜️ From 2023 - 2026, he was the Analog IP Design Manager in the Advanced Design division at Intel Foundry.
+
+⚜️ From 2020 - 2023, he was the Technical Lead - Analog for the High Bandwidth Memory (HBM) and DDR PHY team in Intel.
+
+⚜️ From 2016 - 2020, he led the team on High Speed Circuits, setup and managed the R&D team and managed a team of 10+ designers at Terminus Circuits Pvt Ltd.
+
+⚜️ From 2012 - 2016, he was a Senior Research Fellow at IISc working on integrated sensor interfaces. He has over 35 peer reviewed journals and IEEE conference publications to his credit.
+
+He is an active IEEE volunteer of 17 years. He is a Senior Member of the IEEE (2016) and was inducted into the IEEE Eta Kappa Nu (HKN) - the Honour society of IEEE in 2017 for Academic Excellence. He has served as the Chairperson of IEEE Technology Engineering and Management Society (TEMS) Bangalore Chapter in 2023. He is associated as a Member of the EXECOM of IEEE CASS, SSCS, Sensors Council, SIGHT, Consultant Network and RFID council in Bangalore. He was the Educational activities Chair/Co-Chair in the IEEE Bangalore Section execom from 2017 - 2019. He is the 2025-2026 Chairperson, IEEE Consultant Network Affinity Group (CNAG) Bangalore Chapter.
+
+He is also an active speaker and motivator on Analog Mixed Signal Circuit Design, High Speed SerDes Design, Design Thinking, Entrepreneurship, Research Methodologies and Technical Writing. He has delivered 200+ invited talks on his topics of interest.
+
+Dr G S Javed
+Founder, King Consultants Education
+Chief Mentor and VLSI Coach, JSG Labs
+
+Chair, 2026 IEEE CNAG Bangalore Chapter
+Chair, 2023 IEEE TEMS Bangalore Chapter`,
+    linkedInUrl: "https://in.linkedin.com/in/javed-g-s-phd-612491a",
+    portfolioUrl: "http://tiny.cc/KingConsultants",
+  },
+  {
+    id: "sumanto_kar_resource",
+    name: "Sumanto Kar",
+    role: "Resource Person • Open-Source EDA",
+    category: "resource",
+    categoryLabel: "Resource Person",
+    organization: "Project Research Engineer, FOSSEE, IIT Bombay • Open-Source EDA",
+    avatarUrl: "/stakeholders/sumanto-kar.jpg",
+    bio: "Sumanto Kar completed his M.Tech in Industrial Engineering & Operations Research from IIT Bombay and B.E. in Electronics Engineering from Mumbai University. His interests lie in contributing to open-source EDA tools. He is actively involved with the FOSSEE project, contributing to the development, integration, documentation, and outreach of eSim, an open-source EDA platform used across universities in India. His work focuses on strengthening open technical ecosystems, enabling reproducible engineering workflows, and bridging the gap between academic research and community-driven software development.",
+    linkedInUrl: "https://www.linkedin.com/in/sumanto-kar-0424391a9",
+    portfolioUrl: "https://homepages.iitb.ac.in/~sumantokar/",
+    githubUrl: "https://github.com/Eyantra698Sumanto",
+  },
+  {
+    id: "dr_darshak_bhatt_resource",
+    name: "Dr. Darshak Bhatt",
+    role: "Resource Person • RF & Mixed-Signal IC",
+    category: "resource",
+    categoryLabel: "Resource Person",
+    organization: "Associate Professor, Dept. of ECE, IIT Roorkee",
+    avatarUrl: "/stakeholders/darshak-bhatt.jpg",
+    bio: "Associate Professor in the Department of Electronics and Communication Engineering at Indian Institute of Technology Roorkee (IIT Roorkee). His specialized research domains encompass RF and Mixed-Signal IC design, high-frequency transceiver architectures, frequency synthesizers (PLLs), and analog/RF open-source EDA methodologies.",
+    linkedInUrl: "https://www.linkedin.com/in/darshak-bhatt-b0576424",
+    portfolioUrl: "https://iitr.ac.in/Departments/Electronics%20and%20Communication%20Engineering%20Department/People/Faculty/100822.html",
+  },
+];
+
+export const organisingCommittee: Stakeholder[] = [
   {
     id: "priyanshu_trivedi",
     name: "Priyanshu Trivedi",
@@ -119,4 +183,10 @@ export const stakeholders: Stakeholder[] = [
     bio: "Full-Stack Developer and Engineering Student leading the web platform architecture, digital infrastructure, and registration systems for the IEEE RF IC Design Series.",
     linkedInUrl: "https://www.linkedin.com/in/yug-bhimani-628407337",
   },
+];
+
+export const stakeholders: Stakeholder[] = [
+  ...advisoryStakeholders,
+  resourcePersons[0], // Dr. G S Javed
+  ...organisingCommittee,
 ];

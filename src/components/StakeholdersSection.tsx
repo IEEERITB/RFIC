@@ -2,8 +2,13 @@
 
 import { Badge } from "@/components/ui/badge";
 import { SpotlightCard } from "./react-bits/SpotlightCard";
-import { stakeholders, Stakeholder } from "@/data/stakeholders";
-import { Globe, Mail, Sparkles, Users, X, ExternalLink } from "lucide-react";
+import {
+  advisoryStakeholders,
+  resourcePersons,
+  organisingCommittee,
+  Stakeholder,
+} from "@/data/stakeholders";
+import { Globe, Mail, Sparkles, Users, BookOpen, X, ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 
@@ -25,8 +30,6 @@ function GithubIcon({ className }: { className?: string }) {
 
 export function StakeholdersSection() {
   const [selectedPerson, setSelectedPerson] = useState<Stakeholder | null>(null);
-  const leadership = stakeholders.filter((s) => s.category !== "organiser");
-  const organisers = stakeholders.filter((s) => s.category === "organiser");
 
   return (
     <section
@@ -49,7 +52,7 @@ export function StakeholdersSection() {
           </p>
         </div>
 
-        {/* Section 1: Advisory & Curation */}
+        {/* Section 1: Advisory & Mentorship */}
         <div className="mb-14 sm:mb-16">
           <div className="flex items-center gap-2 mb-6 sm:mb-8 border-b border-slate-200 pb-3">
             <Sparkles className="w-5 h-5 text-sky-600 shrink-0" />
@@ -58,9 +61,9 @@ export function StakeholdersSection() {
             </h3>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5 sm:gap-6">
-            {leadership.map((person) => (
+            {advisoryStakeholders.map((person) => (
               <StakeholderCard
-                key={person.id}
+                key={`advisory-${person.id}`}
                 person={person}
                 onSelect={() => setSelectedPerson(person)}
               />
@@ -68,7 +71,26 @@ export function StakeholdersSection() {
           </div>
         </div>
 
-        {/* Section 2: Organizing Committee */}
+        {/* Section 2: Resource Persons of the Series */}
+        <div className="mb-14 sm:mb-16" id="resource-persons">
+          <div className="flex items-center gap-2 mb-6 sm:mb-8 border-b border-slate-200 pb-3">
+            <BookOpen className="w-5 h-5 text-sky-600 shrink-0" />
+            <h3 className="text-lg sm:text-xl font-bold text-slate-800">
+              Resource Persons of the Series
+            </h3>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+            {resourcePersons.map((person) => (
+              <StakeholderCard
+                key={`resource-${person.id}`}
+                person={person}
+                onSelect={() => setSelectedPerson(person)}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Section 3: Organizing Committee */}
         <div>
           <div className="flex items-center gap-2 mb-6 sm:mb-8 border-b border-slate-200 pb-3">
             <Users className="w-5 h-5 text-sky-600 shrink-0" />
@@ -77,9 +99,9 @@ export function StakeholdersSection() {
             </h3>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
-            {organisers.map((person) => (
+            {organisingCommittee.map((person) => (
               <StakeholderCard
-                key={person.id}
+                key={`organiser-${person.id}`}
                 person={person}
                 onSelect={() => setSelectedPerson(person)}
               />
