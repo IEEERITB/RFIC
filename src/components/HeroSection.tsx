@@ -15,11 +15,6 @@ export function HeroSection() {
       imageClass: "max-h-9 sm:max-h-11 md:max-h-12 max-w-[85%] w-auto",
     },
     {
-      name: "IEEE Bangalore Section",
-      logo: "/logos/ieee-bangalore.png",
-      imageClass: "max-h-9 sm:max-h-11 md:max-h-11 max-w-[88%] w-auto",
-    },
-    {
       name: "IEEE Sensors Council",
       logo: "/logos/ieee-sensors-council.png",
       imageClass: "max-h-8 sm:max-h-10 md:max-h-11 max-w-[90%] w-auto",
@@ -84,7 +79,7 @@ export function HeroSection() {
               </span>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 items-center justify-items-center gap-3 sm:gap-4 py-1">
+            <div className="grid grid-cols-1 sm:grid-cols-3 items-center justify-items-center gap-3 sm:gap-4 py-1">
               {partners.map((partner, index) => (
                 <div
                   key={index}
