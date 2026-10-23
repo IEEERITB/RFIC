@@ -245,14 +245,13 @@ export function CustomEmailStudio({ onEmailDispatched }: CustomEmailStudioProps)
       const res = await fetch(`/api/admin/email/recipients?${params.toString()}`);
       const data = await res.json();
       if (data.success) {
-        setRecipients(data.data || []);
+        const list: ParticipantRecipient[] = data.data || [];
+        setRecipients(list);
         if (data.counts) {
           setSegmentCounts(data.counts);
         }
-        // If in custom mode, keep selection; otherwise, select all in list
-        if (audience !== "CUSTOM") {
-          setSelectedIds(new Set((data.data || []).map((r: ParticipantRecipient) => r.id)));
-        }
+        // Auto-select all candidates in the loaded audience
+        setSelectedIds(new Set(list.map((r: ParticipantRecipient) => r.id)));
       }
     } catch (err) {
       console.error("Failed to fetch recipients:", err);
@@ -297,13 +296,25 @@ export function CustomEmailStudio({ onEmailDispatched }: CustomEmailStudioProps)
     setBodyContent((prev) => `${prev} ${tag} `);
   };
 
-  // Filtered target list
+  // Client-side search within candidate recipients ledger
+  const [candidateSearchFilter, setCandidateSearchFilter] = useState("");
+
+  // Displayed candidate list filtered by local search
+  const displayedRecipients = useMemo(() => {
+    if (!candidateSearchFilter.trim()) return recipients;
+    const term = candidateSearchFilter.toLowerCase().trim();
+    return recipients.filter(
+      (r) =>
+        r.fullName.toLowerCase().includes(term) ||
+        r.email.toLowerCase().includes(term) ||
+        (r.institutionOrCompany && r.institutionOrCompany.toLowerCase().includes(term))
+    );
+  }, [recipients, candidateSearchFilter]);
+
+  // Targeted recipients for dispatch: all selected candidate IDs in current audience
   const targetedRecipients = useMemo(() => {
-    if (audience === "CUSTOM") {
-      return recipients.filter((r) => selectedIds.has(r.id));
-    }
-    return recipients;
-  }, [audience, recipients, selectedIds]);
+    return recipients.filter((r) => selectedIds.has(r.id));
+  }, [recipients, selectedIds]);
 
   // Toggle recipient selection
   const handleToggleRecipient = (id: string) => {
@@ -549,7 +560,7 @@ export function CustomEmailStudio({ onEmailDispatched }: CustomEmailStudioProps)
             className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold bg-sky-600 hover:bg-sky-500 text-white shadow-lg shadow-sky-600/25 transition-all hover:scale-105 active:scale-95 disabled:opacity-50"
           >
             <Send size={14} />
-            <span>Send to {targetedRecipients.length} Participants</span>
+            <span>Send to All ({targetedRecipients.length} Candidates)</span>
           </button>
         </div>
       </div>
@@ -983,38 +994,218 @@ export function CustomEmailStudio({ onEmailDispatched }: CustomEmailStudioProps)
             )}
           </div>
 
-          {/* Pre-flight Test Send Toolbar */}
-          <div className="p-4 rounded-2xl bg-slate-950/80 border border-slate-800 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-            <div className="flex-1">
-              <span className="block text-[10px] font-bold text-sky-400 uppercase tracking-widest">
-                Pre-Flight Inspection
-              </span>
-              <span className="text-xs text-slate-400">
-                Send a sample copy to yourself before blasting:
-              </span>
+          {/* Target Recipients Email Ledger & Send To All Section */}
+          <div className="p-5 rounded-3xl bg-slate-950/90 border border-sky-800/60 shadow-2xl space-y-4">
+            {/* Header: Title, Audience Switcher & Action buttons */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-800">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-bold text-sky-400 uppercase tracking-widest bg-sky-950 border border-sky-800 px-2.5 py-0.5 rounded-full inline-flex items-center gap-1.5">
+                    <Users size={12} />
+                    <span>Recipients ({targetedRecipients.length} Selected)</span>
+                  </span>
+                  <span className="text-xs text-slate-400">
+                    of {recipients.length} in this group
+                  </span>
+                </div>
+                <h4 className="text-sm font-bold text-white mt-1">
+                  Candidates & Email Addresses
+                </h4>
+              </div>
+
+              {/* Quick Select All / Deselect All */}
+              <div className="flex items-center gap-2 text-xs">
+                <button
+                  type="button"
+                  onClick={handleSelectAll}
+                  className="px-3 py-1.5 rounded-xl bg-sky-950 hover:bg-sky-900 text-sky-300 border border-sky-800 font-semibold transition-colors"
+                >
+                  Select All ({recipients.length})
+                </button>
+                <button
+                  type="button"
+                  onClick={handleDeselectAll}
+                  className="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 border border-slate-800 font-semibold transition-colors"
+                >
+                  Clear Selection
+                </button>
+              </div>
             </div>
 
-            <div className="flex items-center gap-2">
-              <input
-                type="email"
-                value={testEmail}
-                onChange={(e) => setTestEmail(e.target.value)}
-                placeholder="admin@gmail.com"
-                className="bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white font-mono w-48 sm:w-56 focus:outline-none focus:ring-1 focus:ring-sky-500"
-              />
+            {/* Quick Audience Switcher Pills */}
+            <div className="flex flex-wrap items-center gap-2 text-xs">
+              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Group:</span>
               <button
                 type="button"
-                onClick={handleSendTestEmail}
-                disabled={isSendingTest}
-                className="px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-sky-400 border border-slate-700 transition-all disabled:opacity-50 whitespace-nowrap flex items-center gap-1.5"
+                onClick={() => setAudience("ALL")}
+                className={`px-3 py-1 rounded-xl font-bold text-xs transition-all ${
+                  audience === "ALL"
+                    ? "bg-sky-600 text-white shadow-sm"
+                    : "bg-slate-900 text-slate-400 hover:text-white border border-slate-800"
+                }`}
               >
-                {isSendingTest ? (
-                  <Loader2 size={13} className="animate-spin" />
-                ) : (
-                  <Send size={13} />
-                )}
-                <span>Send Test</span>
+                All Registered ({segmentCounts.all})
               </button>
+              <button
+                type="button"
+                onClick={() => setAudience("NEW")}
+                className={`px-3 py-1 rounded-xl font-bold text-xs transition-all ${
+                  audience === "NEW"
+                    ? "bg-amber-600 text-white shadow-sm"
+                    : "bg-slate-900 text-slate-400 hover:text-white border border-slate-800"
+                }`}
+              >
+                New / Unsent ({segmentCounts.unsent})
+              </button>
+              <button
+                type="button"
+                onClick={() => setAudience("CONFIRMED")}
+                className={`px-3 py-1 rounded-xl font-bold text-xs transition-all ${
+                  audience === "CONFIRMED"
+                    ? "bg-emerald-600 text-white shadow-sm"
+                    : "bg-slate-900 text-slate-400 hover:text-white border border-slate-800"
+                }`}
+              >
+                Confirmed ({segmentCounts.confirmed})
+              </button>
+            </div>
+
+            {/* Search Filter for Candidates List */}
+            <div className="relative">
+              <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
+              <input
+                type="text"
+                value={candidateSearchFilter}
+                onChange={(e) => setCandidateSearchFilter(e.target.value)}
+                placeholder="Search candidates by name, email, or institution..."
+                className="w-full bg-slate-900 border border-slate-800 rounded-xl pl-9 pr-8 py-2 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:ring-1 focus:ring-sky-500"
+              />
+              {candidateSearchFilter && (
+                <button
+                  type="button"
+                  onClick={() => setCandidateSearchFilter("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400 hover:text-white"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
+
+            {/* Scrollable List of Every Candidate's Email ID */}
+            <div className="max-h-64 overflow-y-auto rounded-2xl border border-slate-800 bg-slate-900/80 divide-y divide-slate-800/80">
+              {isLoadingRecipients ? (
+                <div className="p-8 text-center text-slate-400 text-xs flex flex-col items-center justify-center gap-2">
+                  <Loader2 size={18} className="animate-spin text-sky-400" />
+                  <span>Loading candidates from database...</span>
+                </div>
+              ) : displayedRecipients.length === 0 ? (
+                <div className="p-8 text-center text-slate-500 text-xs">
+                  No candidates match the search filter.
+                </div>
+              ) : (
+                displayedRecipients.map((c, index) => {
+                  const isSelected = selectedIds.has(c.id);
+                  return (
+                    <div
+                      key={c.id}
+                      onClick={() => handleToggleRecipient(c.id)}
+                      className={`p-2.5 px-3.5 flex items-center justify-between text-xs cursor-pointer transition-colors ${
+                        isSelected
+                          ? "bg-sky-950/40 hover:bg-sky-950/60"
+                          : "opacity-50 hover:opacity-100 hover:bg-slate-800/40"
+                      }`}
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        {/* Checkbox */}
+                        <div
+                          className={`w-4 h-4 rounded-md border flex items-center justify-center transition-colors shrink-0 ${
+                            isSelected
+                              ? "bg-sky-600 border-sky-400 text-white"
+                              : "border-slate-700 bg-slate-900"
+                          }`}
+                        >
+                          {isSelected && <Check size={11} strokeWidth={3} />}
+                        </div>
+
+                        {/* Candidate Index + Name + Email ID */}
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-2">
+                            <span className="text-[10px] font-mono text-slate-500">#{index + 1}</span>
+                            <span className="font-bold text-white truncate">{c.fullName}</span>
+                            {c.emailStatus === "PENDING" && (
+                              <span className="text-[9px] font-semibold text-amber-400 bg-amber-950/80 border border-amber-800 px-1.5 py-0.2 rounded">
+                                New
+                              </span>
+                            )}
+                          </div>
+                          <div className="font-mono text-sky-400 font-semibold text-[11px] truncate mt-0.5">
+                            {c.email}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Institution & Category */}
+                      <div className="text-right hidden sm:block shrink-0 ml-3">
+                        <div className="text-[11px] text-slate-300 max-w-[180px] truncate">
+                          {c.institutionOrCompany}
+                        </div>
+                        <div className="text-[10px] text-slate-500">
+                          {c.category}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+            </div>
+
+            {/* SEND TO ALL MAIN ACTION BUTTON */}
+            <div className="pt-2 space-y-3">
+              <button
+                type="button"
+                onClick={() => setConfirmModalOpen(true)}
+                disabled={isDispatching || targetedRecipients.length === 0}
+                className="w-full py-4 px-6 rounded-2xl font-black text-sm text-white bg-gradient-to-r from-sky-600 via-sky-500 to-teal-500 hover:from-sky-500 hover:to-teal-400 shadow-xl shadow-sky-600/30 transition-all hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2.5"
+              >
+                {isDispatching ? (
+                  <>
+                    <Loader2 size={18} className="animate-spin" />
+                    <span>Broadcasting Emails ({dispatchProgress?.sent || 0} / {targetedRecipients.length})...</span>
+                  </>
+                ) : (
+                  <>
+                    <Send size={18} />
+                    <span>
+                      🚀 Send Email to All Selected Candidates ({targetedRecipients.length})
+                    </span>
+                  </>
+                )}
+              </button>
+
+              {/* Optional Test Send Footer */}
+              <div className="pt-3 border-t border-slate-800/80 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 text-xs">
+                <span className="text-slate-400 text-[11px]">
+                  Want to inspect in your own inbox first?
+                </span>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="email"
+                    value={testEmail}
+                    onChange={(e) => setTestEmail(e.target.value)}
+                    placeholder="admin@gmail.com"
+                    className="bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white font-mono w-44 sm:w-52 focus:outline-none focus:ring-1 focus:ring-sky-500"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleSendTestEmail}
+                    disabled={isSendingTest}
+                    className="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-sky-400 border border-slate-700 transition-all disabled:opacity-50 whitespace-nowrap flex items-center gap-1.5"
+                  >
+                    {isSendingTest ? <Loader2 size={12} className="animate-spin" /> : <Send size={12} />}
+                    <span>Test Send</span>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
