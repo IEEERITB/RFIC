@@ -15,6 +15,11 @@ export function HeroSection() {
       imageClass: "max-h-9 sm:max-h-11 md:max-h-12 max-w-[85%] w-auto",
     },
     {
+      name: "IEEE Bangalore Section",
+      logo: "/logos/ieee-bangalore.png",
+      imageClass: "max-h-9 sm:max-h-11 md:max-h-11 max-w-[88%] w-auto",
+    },
+    {
       name: "IEEE Sensors Council",
       logo: "/logos/ieee-sensors-council.png",
       imageClass: "max-h-8 sm:max-h-10 md:max-h-11 max-w-[90%] w-auto",
@@ -72,14 +77,17 @@ export function HeroSection() {
         {/* Institutional Partner Showcase (Balanced, Prominent & High-Contrast) */}
         <div className="mb-10 sm:mb-12 max-w-4xl mx-auto">
           <div className="rounded-2xl bg-slate-50/70 backdrop-blur-xs p-4 sm:p-5 border border-slate-200/90 shadow-xs">
-            <div className="flex items-center justify-center sm:justify-start px-2 pb-3 mb-3 border-b border-slate-200/80">
+            <div className="flex items-center justify-between px-2 pb-3 mb-3 border-b border-slate-200/80">
               <span className="text-[10px] sm:text-xs font-bold text-slate-600 uppercase tracking-widest flex items-center gap-2">
                 <span className="h-2 w-2 rounded-full bg-sky-500" />
                 Joint Flagship Initiative • Academic & Industry Patrons
               </span>
+              <span className="text-[10px] sm:text-xs font-semibold text-sky-700 bg-sky-50 px-2.5 py-0.5 rounded-full border border-sky-100">
+                IEEE Bangalore Section
+              </span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 items-center justify-items-center gap-3 sm:gap-4 py-1">
+            <div className="grid grid-cols-2 md:grid-cols-4 items-center justify-items-center gap-3 sm:gap-4 py-1">
               {partners.map((partner, index) => (
                 <div
                   key={index}

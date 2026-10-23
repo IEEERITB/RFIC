@@ -73,7 +73,7 @@ export function ScrollExpandSection() {
             className="md:col-span-2 bg-gradient-to-br from-white via-emerald-50/20 to-white"
             Icon={Award}
             badge="Verifiable Badge"
-            description="Earn institutional recognition endorsed by IEEE Sensors Council RIT-B & IEEE openSilicon. Outstanding designs qualify for the Flagship Silicon Capstone Tape-Out Distinction."
+            description="Earn institutional recognition endorsed by IEEE Sensors Council RIT-B & IEEE Bangalore Section. Outstanding designs qualify for the Flagship Silicon Capstone Tape-Out Distinction."
             cta="Review Certification Tracks"
             href="#certification"
             background={

@@ -43,6 +43,15 @@ export const speakers: Speaker[] = [
     bio: "Specialist in 3D Electromagnetic solving and parasitic extraction for physical verification.",
   },
   {
+    id: "dr_gs_javed",
+    name: "Dr. GS Javed",
+    roleTitle: "Module 8 MPW & Industry Lead • Analog IC Architect",
+    organization: "JSG Labs / IEEE CNAG",
+    avatarUrl: "/stakeholders/dr-gs-javed.jpeg",
+    bio: "Architect and Analog IC design manager with 17+ years of experience in AMS & SerDes IP Circuits. 2025-2026 Chair, IEEE CNAG Bangalore Chapter, and Chief Mentor at JSG Labs.",
+    linkedInUrl: "https://in.linkedin.com/in/javed-g-s-phd-612491a",
+  },
+  {
     id: "krzysztof_herman",
     name: "Krzysztof Herman",
     roleTitle: "Module 8 MPW Tape-Out Submission Pipeline",

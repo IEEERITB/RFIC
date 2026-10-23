@@ -118,8 +118,10 @@ export function Footer() {
 
         {/* Footer Bottom Affiliations */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 text-center sm:text-left">
-          <p>© {new Date().getFullYear()} IEEE Sensors Council RIT-B. Jointly organized for the Open Silicon Initiative.</p>
+          <p>© {new Date().getFullYear()} IEEE Sensors Council RIT-B & IEEE Bangalore Section. Jointly organized for the Open Silicon Initiative.</p>
           <div className="flex flex-wrap items-center justify-center gap-4 text-slate-400 font-medium">
+            <span>IEEE Bangalore Section</span>
+            <span>•</span>
             <span>IEEE Sensors Council</span>
             <span>•</span>
             <span>IEEE openSilicon</span>

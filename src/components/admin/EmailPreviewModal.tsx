@@ -152,7 +152,7 @@ export function EmailPreviewModal({
             <div className="border border-slate-800 rounded-2xl bg-white text-slate-900 p-6 shadow-inner space-y-4 max-w-xl mx-auto font-sans">
               <div className="bg-[#0a192f] p-4 text-center rounded-xl text-white border-b-4 border-sky-600">
                 <div className="text-[10px] font-bold text-sky-400 tracking-widest uppercase">
-                  IEEE SENSORS COUNCIL RIT-B
+                  IEEE BANGALORE SECTION & IEEE SENSORS COUNCIL RIT-B
                 </div>
                 <h4 className="text-lg font-black text-white mt-1">IEEE RF IC Design Masterclass</h4>
                 <div className="text-xs text-slate-300">5G/6G Physical Silicon Tape-Out Track</div>
@@ -163,7 +163,7 @@ export function EmailPreviewModal({
                   Welcome, {sampleCandidate.fullName}!
                 </h5>
                 <p className="text-xs text-slate-700 leading-relaxed">
-                  Your seat for the <strong>Flagship Micro-Specialization Track on RF IC Design for 5G/6G on Open-Source Silicon</strong> has been successfully confirmed.
+                  Your seat for the <strong>IEEE Bangalore Section Flagship Micro-Specialization Track on RF IC Design for 5G/6G on Open-Source Silicon</strong> has been successfully confirmed.
                 </p>
 
                 {customMessage && (
