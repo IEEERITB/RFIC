@@ -152,25 +152,27 @@ export default function AdminPage() {
   };
 
   // Email Dispatch Execution
-  const handleSendEmail = async ({
-    subject,
-    customMessage,
-  }: {
+  const handleSendEmail = async (params: {
     subject: string;
     customMessage?: string;
+    templateType?: "CONFIRMATION" | "CUSTOM_BROADCAST";
+    headline?: string;
+    badgeText?: string;
+    bodyContent?: string;
+    ctaText?: string;
+    ctaUrl?: string;
+    additionalNote?: string;
   }) => {
     try {
       const isBulk = emailRecipients.length > 1;
       const payload = isBulk
         ? {
             participantIds: emailRecipients.map((c) => c.id),
-            subject,
-            customMessage,
+            ...params,
           }
         : {
             participantId: emailRecipients[0].id,
-            subject,
-            customMessage,
+            ...params,
           };
 
       const res = await fetch("/api/admin/email/send", {

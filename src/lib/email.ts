@@ -4,6 +4,7 @@ import { Resend } from "resend";
 import { render } from "@react-email/render";
 import { prisma } from "@/lib/prisma";
 import { RegistrationConfirmationEmail } from "@/emails/RegistrationConfirmationEmail";
+import { CustomBroadcastEmail } from "@/emails/CustomBroadcastEmail";
 
 const resend = new Resend(process.env.RESEND_API_KEY || "mock_key");
 
@@ -390,3 +391,229 @@ export async function sendBulkEmails(
 
   return { total: candidates.length, sent, failed, errors };
 }
+
+export interface SendCustomBroadcastEmailOptions {
+  participantId?: string;
+  email: string;
+  fullName: string;
+  category?: string;
+  institution?: string;
+  subject: string;
+  headline?: string;
+  badgeText?: string;
+  bodyContent: string;
+  ctaText?: string;
+  ctaUrl?: string;
+  additionalNote?: string;
+}
+
+export async function sendCustomBroadcastEmail({
+  participantId,
+  email,
+  fullName,
+  category = "Candidate",
+  institution = "Academic / Research Institution",
+  subject,
+  headline,
+  badgeText,
+  bodyContent,
+  ctaText,
+  ctaUrl,
+  additionalNote,
+}: SendCustomBroadcastEmailOptions): Promise<{ success: boolean; resendId?: string; error?: string }> {
+  try {
+    // Personalize variables in bodyContent: {{name}} -> fullName, {{category}} -> category, etc.
+    const personalizedBody = bodyContent
+      .replace(/\{\{\s*name\s*\}\}/gi, fullName)
+      .replace(/\{\{\s*email\s*\}\}/gi, email)
+      .replace(/\{\{\s*category\s*\}\}/gi, category)
+      .replace(/\{\{\s*institution\s*\}\}/gi, institution);
+
+    const personalizedHeadline = (headline || "Important Masterclass Update")
+      .replace(/\{\{\s*name\s*\}\}/gi, fullName);
+
+    const emailElement = React.createElement(CustomBroadcastEmail, {
+      fullName,
+      category,
+      institution,
+      subject,
+      headline: personalizedHeadline,
+      badgeText: badgeText || "OFFICIAL UPDATE",
+      bodyContent: personalizedBody,
+      ctaText: ctaText?.trim() || undefined,
+      ctaUrl: ctaUrl?.trim() || undefined,
+      additionalNote: additionalNote?.trim() || undefined,
+    });
+
+    const [htmlContent, textContent] = await Promise.all([
+      render(emailElement),
+      render(emailElement, { plainText: true }),
+    ]);
+
+    const smtpTransporter = getSmtpTransporter();
+
+    if (smtpTransporter) {
+      const activeUser = process.env.SMTP_USER || "rfic.ieeescritb@gmail.com";
+      const fromAddress =
+        process.env.EMAIL_FROM ||
+        `"IEEE Sensors Council RIT-B" <${activeUser}>`;
+
+      try {
+        const providerId = `smtp_custom_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+
+        const info = await smtpTransporter.sendMail({
+          from: fromAddress,
+          to: email,
+          replyTo: `"IEEE Sensors Council RIT-B" <${activeUser}>`,
+          subject,
+          text: textContent,
+          html: htmlContent,
+          headers: {
+            "X-Entity-Ref-ID": providerId,
+            "X-Mailer": "IEEE Sensors Council Portal Broadcast",
+            "X-Auto-Response-Suppress": "OOF, AutoReply",
+          },
+        });
+
+        const finalId = info.messageId || providerId;
+
+        await prisma.emailLog.create({
+          data: {
+            participantId: participantId || null,
+            recipientEmail: email,
+            recipientName: fullName,
+            subject,
+            type: "ANNOUNCEMENT",
+            status: "DELIVERED",
+            resendId: finalId,
+            metadata: JSON.stringify({
+              provider: "smtp",
+              host: process.env.SMTP_HOST || "smtp.gmail.com",
+              headline,
+              hasCta: Boolean(ctaText && ctaUrl),
+            }),
+          },
+        });
+
+        if (participantId) {
+          await prisma.participant.update({
+            where: { id: participantId },
+            data: {
+              emailStatus: "DELIVERED",
+              emailSentAt: new Date(),
+            },
+          });
+        }
+
+        return { success: true, resendId: finalId };
+      } catch (smtpErr: any) {
+        console.warn(`[SMTP Custom Broadcast Failed] ${email}:`, smtpErr.message);
+        throw smtpErr;
+      }
+    }
+
+    // Mock fallback for local testing without SMTP
+    const mockId = `mock_custom_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+    await prisma.emailLog.create({
+      data: {
+        participantId: participantId || null,
+        recipientEmail: email,
+        recipientName: fullName,
+        subject,
+        type: "ANNOUNCEMENT",
+        status: "SENT",
+        resendId: mockId,
+        metadata: JSON.stringify({ mode: "mock", simulated: true }),
+      },
+    });
+
+    if (participantId) {
+      await prisma.participant.update({
+        where: { id: participantId },
+        data: {
+          emailStatus: "SENT",
+          emailSentAt: new Date(),
+        },
+      });
+    }
+
+    return { success: true, resendId: mockId };
+  } catch (err: any) {
+    console.error(`Unexpected custom broadcast dispatch error for ${email}:`, err);
+    try {
+      await prisma.emailLog.create({
+        data: {
+          participantId: participantId || null,
+          recipientEmail: email,
+          recipientName: fullName,
+          subject,
+          type: "ANNOUNCEMENT",
+          status: "FAILED",
+          error: err.message || "Custom broadcast delivery failure",
+        },
+      });
+      if (participantId) {
+        await prisma.participant.update({
+          where: { id: participantId },
+          data: { emailStatus: "FAILED" },
+        });
+      }
+    } catch (logErr) {
+      console.warn("Failed to log error state in database:", logErr);
+    }
+    return { success: false, error: err.message || "Custom broadcast dispatch failed" };
+  }
+}
+
+export async function sendBulkCustomBroadcastEmails(
+  candidates: Array<{
+    id?: string;
+    email: string;
+    fullName: string;
+    category?: string;
+    institutionOrCompany?: string;
+  }>,
+  payload: {
+    subject: string;
+    headline?: string;
+    badgeText?: string;
+    bodyContent: string;
+    ctaText?: string;
+    ctaUrl?: string;
+    additionalNote?: string;
+  }
+): Promise<{ total: number; sent: number; failed: number; errors: Array<{ email: string; error: string }> }> {
+  let sent = 0;
+  let failed = 0;
+  const errors: Array<{ email: string; error: string }> = [];
+
+  for (const c of candidates) {
+    const result = await sendCustomBroadcastEmail({
+      participantId: c.id,
+      email: c.email,
+      fullName: c.fullName,
+      category: c.category,
+      institution: c.institutionOrCompany,
+      subject: payload.subject,
+      headline: payload.headline,
+      badgeText: payload.badgeText,
+      bodyContent: payload.bodyContent,
+      ctaText: payload.ctaText,
+      ctaUrl: payload.ctaUrl,
+      additionalNote: payload.additionalNote,
+    });
+
+    if (result.success) {
+      sent++;
+    } else {
+      failed++;
+      errors.push({ email: c.email, error: result.error || "Failed" });
+    }
+
+    // Delay between sends to respect rate limits
+    await new Promise((resolve) => setTimeout(resolve, 200));
+  }
+
+  return { total: candidates.length, sent, failed, errors };
+}
+
