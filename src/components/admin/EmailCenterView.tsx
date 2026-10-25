@@ -115,6 +115,7 @@ export function EmailCenterView({ participants, onOpenSendEmail }: EmailCenterVi
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          templateType: log.type === "ANNOUNCEMENT" ? "CUSTOM_BROADCAST" : "CONFIRMATION",
           participantId: log.participant?.id,
           email: log.recipientEmail,
           fullName: log.recipientName || "Candidate",
@@ -149,7 +150,7 @@ export function EmailCenterView({ participants, onOpenSendEmail }: EmailCenterVi
   };
 
   const copyVercelConfig = () => {
-    const config = `SMTP_HOST=smtp.gmail.com\nSMTP_PORT=465\nSMTP_SECURE=true\nSMTP_USER=rfic.ieeescritb@gmail.com\nSMTP_PASS=nhwhvhnnuvfwnwwz\nEMAIL_FROM="IEEE Sensors Council RIT-B" <rfic.ieeescritb@gmail.com>`;
+    const config = `SMTP_HOST=smtp.gmail.com\nSMTP_PORT=465\nSMTP_SECURE=true\nSMTP_USER=trivedipriyanshu@ieee.org\nSMTP_PASS=qjpcoljcvpzkajmg\nEMAIL_FROM="IEEE Sensors Council RIT-B" <trivedipriyanshu@ieee.org>`;
     navigator.clipboard.writeText(config);
     setCopiedEnv(true);
     setTimeout(() => setCopiedEnv(false), 3000);

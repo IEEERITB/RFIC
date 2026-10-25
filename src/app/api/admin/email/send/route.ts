@@ -195,7 +195,10 @@ export async function POST(request: Request) {
       return NextResponse.json({
         success: true,
         summary: bulkResult,
-        message: `Processed ${bulkResult.total} emails (${bulkResult.sent} sent, ${bulkResult.failed} failed)`,
+        abortedReason: bulkResult.abortedReason,
+        message: bulkResult.abortedReason
+          ? `Dispatch stopped early: ${bulkResult.abortedReason} (${bulkResult.sent} sent, ${bulkResult.failed} failed)`
+          : `Processed ${bulkResult.total} emails (${bulkResult.sent} sent, ${bulkResult.failed} failed)`,
       });
     }
 
@@ -224,7 +227,10 @@ export async function POST(request: Request) {
     return NextResponse.json({
       success: true,
       summary: bulkResult,
-      message: `Processed ${bulkResult.total} emails (${bulkResult.sent} sent, ${bulkResult.failed} failed)`,
+      abortedReason: bulkResult.abortedReason,
+      message: bulkResult.abortedReason
+        ? `Dispatch stopped early: ${bulkResult.abortedReason} (${bulkResult.sent} sent, ${bulkResult.failed} failed)`
+        : `Processed ${bulkResult.total} emails (${bulkResult.sent} sent, ${bulkResult.failed} failed)`,
     });
   } catch (error: any) {
     console.error("Admin email dispatch route error:", error);

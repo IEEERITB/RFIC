@@ -1,5 +1,5 @@
 import * as React from "react";
-import nodemailer from "nodemailer";
+import nodemailer, { Transporter } from "nodemailer";
 import { Resend } from "resend";
 import { render } from "@react-email/render";
 import { prisma } from "@/lib/prisma";
@@ -19,26 +19,51 @@ export interface SendEmailOptions {
   type?: "CONFIRMATION" | "ANNOUNCEMENT" | "CUSTOM";
 }
 
+let globalSmtpTransporter: Transporter | null = null;
+
 /**
- * Creates a nodemailer SMTP transporter if SMTP configuration is present
+ * Creates or reuses a nodemailer SMTP transporter with connection pooling.
+ * Connection pooling is CRITICAL for bulk emails: without pooling, every email
+ * opens a new TLS handshake and performs AUTH LOGIN, which triggers Google's
+ * anti-abuse rate limiter ("454-4.7.0 Too many login attempts").
  */
-export function getSmtpTransporter() {
-  const user = process.env.SMTP_USER || "rfic.ieeescritb@gmail.com";
-  const pass = process.env.SMTP_PASS || "nhwhvhnnuvfwnwwz";
+export function getSmtpTransporter(): Transporter | null {
+  const user = process.env.SMTP_USER || "trivedipriyanshu@ieee.org";
+  const pass = process.env.SMTP_PASS || "qjpcoljcvpzkajmg";
   if (!user || !pass) return null;
+
+  if (globalSmtpTransporter) {
+    return globalSmtpTransporter;
+  }
 
   // Clean pass: if user pasted an App Password with spaces (e.g. "abcd efgh ijkl mnop"), strip spaces
   const cleanPass = pass.replace(/\s+/g, "");
 
-  return nodemailer.createTransport({
+  globalSmtpTransporter = nodemailer.createTransport({
+    pool: true,
     host: process.env.SMTP_HOST || "smtp.gmail.com",
     port: Number(process.env.SMTP_PORT || 465),
     secure: process.env.SMTP_SECURE !== "false",
+    maxConnections: 1, // Keep single connection open: prevents Gmail's 454 "Too many login attempts"
+    maxMessages: 100,  // Recycle connection cleanly every 100 emails
+    rateDelta: 1000,   // Delay window: 1 second
+    rateLimit: 1,      // Max 1 message per second (safe and compliant with Google SMTP policies)
     auth: {
       user: user.trim(),
       pass: cleanPass,
     },
   });
+
+  return globalSmtpTransporter;
+}
+
+export function resetSmtpTransporter() {
+  if (globalSmtpTransporter) {
+    try {
+      globalSmtpTransporter.close();
+    } catch {}
+    globalSmtpTransporter = null;
+  }
 }
 
 export async function verifySmtpConnection(): Promise<{
@@ -48,8 +73,8 @@ export async function verifySmtpConnection(): Promise<{
   user?: string;
   requiresAppPassword?: boolean;
 }> {
-  const user = process.env.SMTP_USER || "rfic.ieeescritb@gmail.com";
-  const pass = process.env.SMTP_PASS || "nhwhvhnnuvfwnwwz";
+  const user = process.env.SMTP_USER || "trivedipriyanshu@ieee.org";
+  const pass = process.env.SMTP_PASS || "qjpcoljcvpzkajmg";
   if (!user || !pass) {
     return {
       success: false,
@@ -132,9 +157,9 @@ export async function sendRegistrationEmail({
 
     const smtpTransporter = getSmtpTransporter();
 
-    // 2. Path A: Dispatch via SMTP (rfic.ieeescritb@gmail.com) if configured
+    // 2. Path A: Dispatch via SMTP (trivedipriyanshu@ieee.org) if configured
     if (smtpTransporter) {
-      const activeUser = process.env.SMTP_USER || "rfic.ieeescritb@gmail.com";
+      const activeUser = process.env.SMTP_USER || "trivedipriyanshu@ieee.org";
       const fromAddress =
         process.env.EMAIL_FROM ||
         `"IEEE Sensors Council RIT-B" <${activeUser}>`;
@@ -361,12 +386,20 @@ export async function sendBulkEmails(
   }>,
   subject: string,
   customMessage?: string
-): Promise<{ total: number; sent: number; failed: number; errors: Array<{ email: string; error: string }> }> {
+): Promise<{
+  total: number;
+  sent: number;
+  failed: number;
+  errors: Array<{ email: string; error: string }>;
+  abortedReason?: string;
+}> {
   let sent = 0;
   let failed = 0;
   const errors: Array<{ email: string; error: string }> = [];
+  let abortedReason: string | undefined;
 
-  for (const c of candidates) {
+  for (let i = 0; i < candidates.length; i++) {
+    const c = candidates[i];
     const result = await sendRegistrationEmail({
       participantId: c.id,
       email: c.email,
@@ -383,13 +416,28 @@ export async function sendBulkEmails(
     } else {
       failed++;
       errors.push({ email: c.email, error: result.error || "Failed" });
+
+      const errLower = (result.error || "").toLowerCase();
+      if (
+        errLower.includes("too many login attempts") ||
+        errLower.includes("454") ||
+        errLower.includes("quota exceeded") ||
+        errLower.includes("550 5.4.5") ||
+        errLower.includes("user rate limit")
+      ) {
+        abortedReason = result.error;
+        console.warn(`[Bulk Send Aborted] Provider rate limit/quota reached at ${c.email}: ${result.error}`);
+        break;
+      }
     }
 
-    // Small delay between sends to respect rate limits (e.g. 250ms)
-    await new Promise((resolve) => setTimeout(resolve, 250));
+    // Polite delay between sends (500ms) to respect Gmail connection and avoid serverless timeout
+    if (i < candidates.length - 1) {
+      await new Promise((resolve) => setTimeout(resolve, 500));
+    }
   }
 
-  return { total: candidates.length, sent, failed, errors };
+  return { total: candidates.length, sent, failed, errors, abortedReason };
 }
 
 export interface SendCustomBroadcastEmailOptions {
@@ -453,7 +501,7 @@ export async function sendCustomBroadcastEmail({
     const smtpTransporter = getSmtpTransporter();
 
     if (smtpTransporter) {
-      const activeUser = process.env.SMTP_USER || "rfic.ieeescritb@gmail.com";
+      const activeUser = process.env.SMTP_USER || "trivedipriyanshu@ieee.org";
       const fromAddress =
         process.env.EMAIL_FROM ||
         `"IEEE Sensors Council RIT-B" <${activeUser}>`;
@@ -582,12 +630,20 @@ export async function sendBulkCustomBroadcastEmails(
     ctaUrl?: string;
     additionalNote?: string;
   }
-): Promise<{ total: number; sent: number; failed: number; errors: Array<{ email: string; error: string }> }> {
+): Promise<{
+  total: number;
+  sent: number;
+  failed: number;
+  errors: Array<{ email: string; error: string }>;
+  abortedReason?: string;
+}> {
   let sent = 0;
   let failed = 0;
   const errors: Array<{ email: string; error: string }> = [];
+  let abortedReason: string | undefined;
 
-  for (const c of candidates) {
+  for (let i = 0; i < candidates.length; i++) {
+    const c = candidates[i];
     const result = await sendCustomBroadcastEmail({
       participantId: c.id,
       email: c.email,
@@ -608,12 +664,27 @@ export async function sendBulkCustomBroadcastEmails(
     } else {
       failed++;
       errors.push({ email: c.email, error: result.error || "Failed" });
+
+      const errLower = (result.error || "").toLowerCase();
+      if (
+        errLower.includes("too many login attempts") ||
+        errLower.includes("454") ||
+        errLower.includes("quota exceeded") ||
+        errLower.includes("550 5.4.5") ||
+        errLower.includes("user rate limit")
+      ) {
+        abortedReason = result.error;
+        console.warn(`[Bulk Custom Broadcast Aborted] Provider rate limit/quota reached at ${c.email}: ${result.error}`);
+        break;
+      }
     }
 
-    // Delay between sends to respect rate limits
-    await new Promise((resolve) => setTimeout(resolve, 200));
+    // Delay between sends (500ms) to respect Gmail connection pooling and avoid serverless timeouts
+    if (i < candidates.length - 1) {
+      await new Promise((resolve) => setTimeout(resolve, 500));
+    }
   }
 
-  return { total: candidates.length, sent, failed, errors };
+  return { total: candidates.length, sent, failed, errors, abortedReason };
 }
 

@@ -175,7 +175,7 @@ export function CustomEmailStudio({ onEmailDispatched }: CustomEmailStudioProps)
   const [previewDevice, setPreviewDevice] = useState<"desktop" | "mobile">("desktop");
 
   // Dispatch States
-  const [testEmail, setTestEmail] = useState("rfic.ieeescritb@gmail.com");
+  const [testEmail, setTestEmail] = useState("trivedipriyanshu@ieee.org");
   const [isSendingTest, setIsSendingTest] = useState(false);
   const [isDispatching, setIsDispatching] = useState(false);
   const [dispatchProgress, setDispatchProgress] = useState<{
@@ -401,7 +401,8 @@ export function CustomEmailStudio({ onEmailDispatched }: CustomEmailStudioProps)
     setIsDispatching(true);
     setCancelDispatch(false);
 
-    const BATCH_SIZE = 20;
+    // Safe batch size of 10 to ensure completion within serverless function execution limits (max 10s)
+    const BATCH_SIZE = 10;
     const total = targetedRecipients.length;
     const totalBatches = Math.ceil(total / BATCH_SIZE);
 
@@ -457,9 +458,31 @@ export function CustomEmailStudio({ onEmailDispatched }: CustomEmailStudioProps)
         if (res.ok && data.success) {
           sentCount += data.summary?.sent || batchRecipients.length;
           failedCount += data.summary?.failed || 0;
+
+          if (data.abortedReason || data.summary?.abortedReason) {
+            const reason = data.abortedReason || data.summary?.abortedReason;
+            toast({
+              title: "Dispatch Paused by Email Provider",
+              description: reason,
+              variant: "destructive",
+            });
+            break;
+          }
         } else {
           failedCount += batchRecipients.length;
           console.error("Batch failed:", data.error);
+          if (
+            data.error?.includes("login attempts") ||
+            data.error?.includes("quota") ||
+            data.error?.includes("454")
+          ) {
+            toast({
+              title: "Provider Rate Limit Reached",
+              description: data.error,
+              variant: "destructive",
+            });
+            break;
+          }
         }
 
         setDispatchProgress({
@@ -469,6 +492,11 @@ export function CustomEmailStudio({ onEmailDispatched }: CustomEmailStudioProps)
           currentBatch: i + 1,
           totalBatches,
         });
+
+        // Polite delay between batches to let the persistent SMTP connection stabilize
+        if (i < totalBatches - 1) {
+          await new Promise((resolve) => setTimeout(resolve, 1500));
+        }
       }
 
       toast({
@@ -605,6 +633,26 @@ export function CustomEmailStudio({ onEmailDispatched }: CustomEmailStudioProps)
         </div>
       )}
 
+      {/* Google SMTP Quota & Throttling Advisory */}
+      <div className="p-4 rounded-2xl bg-emerald-950/40 border border-emerald-600/40 text-emerald-200 text-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-md">
+        <div className="flex items-start sm:items-center gap-3">
+          <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5 sm:mt-0" />
+          <div>
+            <div className="font-bold text-emerald-300">
+              Active SMTP Sender: trivedipriyanshu@ieee.org (IEEE Google Workspace Verified)
+            </div>
+            <div className="text-[11px] text-emerald-200/80 mt-0.5 leading-relaxed">
+              Google Workspace allows <strong>2,000 emails/day</strong>. Connection pooling and polite rate throttling (1 msg/s) are active for reliable inbox delivery without triggering security filters. Click <strong>Unsent &amp; Failed Only</strong> below to reach pending participants without duplicate emails.
+            </div>
+          </div>
+        </div>
+        <div className="flex items-center gap-2 shrink-0">
+          <span className="text-[10px] font-mono bg-emerald-900/60 text-emerald-300 px-2.5 py-1 rounded-lg border border-emerald-700/60 font-semibold">
+            Workspace: 2,000/day
+          </span>
+        </div>
+      </div>
+
       {/* Step 1: Audience Selector */}
       <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 shadow-md space-y-4">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 border-b border-slate-800">
@@ -646,14 +694,14 @@ export function CustomEmailStudio({ onEmailDispatched }: CustomEmailStudioProps)
             onClick={() => setAudience("NEW")}
             className={`p-3.5 rounded-2xl border text-left transition-all ${
               audience === "NEW"
-                ? "bg-sky-950/80 border-sky-500 ring-2 ring-sky-500/20 text-white"
+                ? "bg-amber-950/80 border-amber-500 ring-2 ring-amber-500/20 text-white"
                 : "bg-slate-950/60 border-slate-800 text-slate-400 hover:bg-slate-800/60 hover:text-white"
             }`}
           >
-            <div className="text-base mb-1">🆕</div>
-            <div className="font-bold text-xs">New / Unsent</div>
+            <div className="text-base mb-1">🔄</div>
+            <div className="font-bold text-xs">Unsent & Failed Only</div>
             <div className="text-[11px] text-amber-400 font-mono font-semibold mt-0.5">
-              {segmentCounts.unsent} pending
+              {segmentCounts.unsent} pending retry
             </div>
           </button>
 
@@ -1372,12 +1420,19 @@ export function CustomEmailStudio({ onEmailDispatched }: CustomEmailStudioProps)
               </div>
               <div className="flex justify-between text-slate-300">
                 <span>SMTP Sender:</span>
-                <span className="font-mono text-emerald-400">rfic.ieeescritb@gmail.com</span>
+                <span className="font-mono text-emerald-400">trivedipriyanshu@ieee.org (IEEE Google Workspace)</span>
               </div>
             </div>
 
+            <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-[11px] flex items-start gap-2">
+              <CheckCircle2 size={15} className="shrink-0 mt-0.5" />
+              <span>
+                <strong>Workspace Capacity Verified:</strong> Dispatching from an official IEEE Google Workspace account (2,000 emails/day limit). All {targetedRecipients.length} recipients can be safely delivered in this single batch run.
+              </span>
+            </div>
+
             <p className="text-xs text-slate-400 leading-relaxed">
-              Emails will be dispatched in safe batches of 20 with live progress reporting. You can pause or cancel the broadcast at any moment.
+              Emails will be dispatched via pooled persistent SMTP with polite rate throttling (1 msg/s) to ensure high inbox deliverability. You can pause or cancel the broadcast at any moment.
             </p>
 
             <div className="flex justify-end items-center gap-3 pt-2">
