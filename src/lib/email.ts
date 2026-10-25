@@ -28,8 +28,15 @@ let globalSmtpTransporter: Transporter | null = null;
  * anti-abuse rate limiter ("454-4.7.0 Too many login attempts").
  */
 export function getSmtpTransporter(): Transporter | null {
-  const user = process.env.SMTP_USER || "trivedipriyanshu@ieee.org";
-  const pass = process.env.SMTP_PASS || "qjpcoljcvpzkajmg";
+  let user = (process.env.SMTP_USER || "trivedipriyanshu@ieee.org").trim();
+  let pass = (process.env.SMTP_PASS || "qjpcoljcvpzkajmg").trim();
+
+  // Automatic safeguard: If old throttled consumer gmail is in environment, upgrade to IEEE Google Workspace
+  if (user === "rfic.ieeescritb@gmail.com") {
+    user = "trivedipriyanshu@ieee.org";
+    pass = "qjpcoljcvpzkajmg";
+  }
+
   if (!user || !pass) return null;
 
   if (globalSmtpTransporter) {
@@ -73,8 +80,14 @@ export async function verifySmtpConnection(): Promise<{
   user?: string;
   requiresAppPassword?: boolean;
 }> {
-  const user = process.env.SMTP_USER || "trivedipriyanshu@ieee.org";
-  const pass = process.env.SMTP_PASS || "qjpcoljcvpzkajmg";
+  let user = (process.env.SMTP_USER || "trivedipriyanshu@ieee.org").trim();
+  let pass = (process.env.SMTP_PASS || "qjpcoljcvpzkajmg").trim();
+
+  if (user === "rfic.ieeescritb@gmail.com") {
+    user = "trivedipriyanshu@ieee.org";
+    pass = "qjpcoljcvpzkajmg";
+  }
+
   if (!user || !pass) {
     return {
       success: false,
@@ -159,10 +172,14 @@ export async function sendRegistrationEmail({
 
     // 2. Path A: Dispatch via SMTP (trivedipriyanshu@ieee.org) if configured
     if (smtpTransporter) {
-      const activeUser = process.env.SMTP_USER || "trivedipriyanshu@ieee.org";
-      const fromAddress =
-        process.env.EMAIL_FROM ||
-        `"IEEE Sensors Council RIT-B" <${activeUser}>`;
+      let activeUser = (process.env.SMTP_USER || "trivedipriyanshu@ieee.org").trim();
+      if (activeUser === "rfic.ieeescritb@gmail.com") {
+        activeUser = "trivedipriyanshu@ieee.org";
+      }
+      let fromAddress = process.env.EMAIL_FROM || `"IEEE Sensors Council RIT-B" <${activeUser}>`;
+      if (fromAddress.includes("rfic.ieeescritb@gmail.com")) {
+        fromAddress = `"IEEE Sensors Council RIT-B" <${activeUser}>`;
+      }
 
       try {
         const providerId = `smtp_${Date.now()}_${Math.random().toString(36).substring(7)}`;
@@ -501,10 +518,14 @@ export async function sendCustomBroadcastEmail({
     const smtpTransporter = getSmtpTransporter();
 
     if (smtpTransporter) {
-      const activeUser = process.env.SMTP_USER || "trivedipriyanshu@ieee.org";
-      const fromAddress =
-        process.env.EMAIL_FROM ||
-        `"IEEE Sensors Council RIT-B" <${activeUser}>`;
+      let activeUser = (process.env.SMTP_USER || "trivedipriyanshu@ieee.org").trim();
+      if (activeUser === "rfic.ieeescritb@gmail.com") {
+        activeUser = "trivedipriyanshu@ieee.org";
+      }
+      let fromAddress = process.env.EMAIL_FROM || `"IEEE Sensors Council RIT-B" <${activeUser}>`;
+      if (fromAddress.includes("rfic.ieeescritb@gmail.com")) {
+        fromAddress = `"IEEE Sensors Council RIT-B" <${activeUser}>`;
+      }
 
       try {
         const providerId = `smtp_custom_${Date.now()}_${Math.random().toString(36).substring(7)}`;
