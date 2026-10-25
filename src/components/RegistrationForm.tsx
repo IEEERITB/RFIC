@@ -21,7 +21,7 @@ import { useToast } from "@/hooks/use-toast";
 import { ExternalLink, CheckCircle2, X, AlertCircle, ShieldCheck, User, Building, Award, MessageCircle, Loader2 } from "lucide-react";
 import { ShimmerButton } from "./magicui/shimmer-button";
 
-export const WHATSAPP_GROUP_URL = "https://chat.whatsapp.com/H8zM8URfnS98mMCONT2E2L";
+export const WHATSAPP_GROUP_URL = "https://chat.whatsapp.com/JfuZqkbQqv1Elf2igdXFwS";
 
 export function RegistrationForm() {
   const { toast } = useToast();

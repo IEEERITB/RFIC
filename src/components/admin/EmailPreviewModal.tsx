@@ -59,7 +59,7 @@ export function EmailPreviewModal({
   const [customMessage, setCustomMessage] = useState("");
   const [includeCta, setIncludeCta] = useState(true);
   const [ctaText, setCtaText] = useState("Join Official WhatsApp Community");
-  const [ctaUrl, setCtaUrl] = useState("https://chat.whatsapp.com/H8zM8URfnS98mMCONT2E2L");
+  const [ctaUrl, setCtaUrl] = useState("https://chat.whatsapp.com/JfuZqkbQqv1Elf2igdXFwS");
   const [includeNote, setIncludeNote] = useState(false);
   const [additionalNote, setAdditionalNote] = useState("");
 

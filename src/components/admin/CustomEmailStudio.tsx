@@ -62,7 +62,7 @@ As we gear up for the live sessions, please review the key reminders below:
 
 We look forward to an enriching silicon design journey together!`,
     ctaText: "Join WhatsApp Community",
-    ctaUrl: "https://chat.whatsapp.com/H8zM8URfnS98mMCONT2E2L",
+    ctaUrl: "https://chat.whatsapp.com/JfuZqkbQqv1Elf2igdXFwS",
     note: "All live meeting links and virtual machine access tokens will be announced inside the community group.",
   },
   {
@@ -166,7 +166,7 @@ export function CustomEmailStudio({ onEmailDispatched }: CustomEmailStudioProps)
   );
   const [includeCta, setIncludeCta] = useState(true);
   const [ctaText, setCtaText] = useState("Join Official WhatsApp Community");
-  const [ctaUrl, setCtaUrl] = useState("https://chat.whatsapp.com/H8zM8URfnS98mMCONT2E2L");
+  const [ctaUrl, setCtaUrl] = useState("https://chat.whatsapp.com/JfuZqkbQqv1Elf2igdXFwS");
   const [includeNote, setIncludeNote] = useState(false);
   const [additionalNote, setAdditionalNote] = useState("");
 

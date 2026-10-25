@@ -26,7 +26,7 @@ export const RegistrationConfirmationEmail = ({
   institution = "Academic / Research Institution",
   customMessage,
 }: RegistrationConfirmationEmailProps) => {
-  const whatsappUrl = "https://chat.whatsapp.com/H8zM8URfnS98mMCONT2E2L";
+  const whatsappUrl = "https://chat.whatsapp.com/JfuZqkbQqv1Elf2igdXFwS";
   const calendarUrl =
     "https://calendar.google.com/calendar/render?action=TEMPLATE&text=IEEE+RF+IC+Design+Masterclass&dates=20261024T140000Z/20261024T160000Z&details=Masterclass+Weekend+Sessions+Saturdays+and+Sundays+7:30+PM+IST";
 
