@@ -40,6 +40,19 @@ export const advisoryStakeholders: Stakeholder[] = [
     githubUrl: "https://github.com/Eyantra698Sumanto",
   },
   {
+    id: "abdur_rahman",
+    name: "Abdur Rahman",
+    role: "Technical Mentor • Module 2 Lead",
+    category: "mentor",
+    categoryLabel: "Technical Mentor",
+    organization: "Scientist, IHP – Leibniz Institute for High Performance Microelectronics",
+    avatarUrl: "/stakeholders/abdur-rahman.jpg",
+    bio: "Scientist at the Leibniz Institute for High Performance Microelectronics (IHP) in Germany, working within the Technology / Research and Prototyping Service division. He holds an M.Sc. in Microelectronics and Microsystems from the Technical University of Hamburg (TUHH). His technical focus spans high-frequency device modeling, analog and mixed-signal IC design, and open-source EDA enablement, contributing directly to the IHP-Open-PDK ecosystem.",
+    linkedInUrl: "https://www.linkedin.com/in/arahman404",
+    githubUrl: "https://github.com/abdur-rahman-dev",
+    emails: ["rahman@ihp-microelectronics.com"],
+  },
+  {
     id: "souhadra_shrivastava",
     name: "Souhadra Shrivastava",
     role: "Course Curator",
@@ -122,6 +135,23 @@ Chair, 2023 IEEE TEMS Bangalore Chapter`,
     bio: "Associate Professor in the Department of Electronics and Communication Engineering at Indian Institute of Technology Roorkee (IIT Roorkee). His specialized research domains encompass RF and Mixed-Signal IC design, high-frequency transceiver architectures, frequency synthesizers (PLLs), and analog/RF open-source EDA methodologies.",
     linkedInUrl: "https://www.linkedin.com/in/darshak-bhatt-b0576424",
     portfolioUrl: "https://iitr.ac.in/Departments/Electronics%20and%20Communication%20Engineering%20Department/People/Faculty/100822.html",
+  },
+  {
+    id: "abdur_rahman_resource",
+    name: "Abdur Rahman",
+    role: "Resource Person • Module 2 Lead",
+    category: "resource",
+    categoryLabel: "Resource Person",
+    organization: "Scientist, IHP – Leibniz Institute for High Performance Microelectronics",
+    avatarUrl: "/stakeholders/abdur-rahman.jpg",
+    bio: `Abdur Rahman is a Scientist at the Leibniz Institute for High Performance Microelectronics (IHP) in Germany, working within the Technology / Research and Prototyping Service division in Frankfurt (Oder).
+
+He holds an M.Sc. in Microelectronics and Microsystems from the Technical University of Hamburg (TUHH). His technical focus and research interests include analog and mixed-signal circuit design, open-source EDA enablement, and advanced semiconductor technology development for microelectronics.
+
+With extensive hands-on experience in advanced semiconductor technologies, SiGe BiCMOS physics, and system-level IC design, he is an active contributor to open-source PDK enablement and design verification (including the IHP-Open-PDK initiative). In this IEEE Micro-Specialization series, he leads Module 2 on High-Frequency Device Modeling & PDK Architecture.`,
+    linkedInUrl: "https://www.linkedin.com/in/arahman404",
+    githubUrl: "https://github.com/abdur-rahman-dev",
+    emails: ["rahman@ihp-microelectronics.com"],
   },
 ];
 

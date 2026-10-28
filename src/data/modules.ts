@@ -33,7 +33,7 @@ export const modules: Module[] = [
       "Deep dive into Open-Source PDKs (OS PDKs)"
     ],
     fossTooling: ["Xschem", "Ngspice"],
-    date: "Oct 25, 2026",
+    date: "Oct 30, 2026",
     time: "From 7:30 PM IST",
     speakerIds: ["abdur_rahman"]
   },

@@ -60,7 +60,7 @@ export function StakeholdersSection() {
               Series Mentorship & Advisory
             </h3>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
             {advisoryStakeholders.map((person) => (
               <StakeholderCard
                 key={`advisory-${person.id}`}
@@ -79,7 +79,7 @@ export function StakeholdersSection() {
               Resource Persons of the Series
             </h3>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
             {resourcePersons.map((person) => (
               <StakeholderCard
                 key={`resource-${person.id}`}

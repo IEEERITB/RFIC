@@ -5,7 +5,7 @@ export function ScheduleSection() {
   const weekends = [
     {
       weekend: "Weekend 1",
-      dates: "Oct 24 - Oct 25, 2026",
+      dates: "Oct 24 & Oct 30, 2026",
       title: "Architecture & Device Physics",
       modules: "Module 1 (Part 1.1 & 1.2) & Module 2",
       lead: "Sumanto Kar (IIT-B), Dr. Darshak Bhatt (IIT-R), Abdur Rahman (IHP)",

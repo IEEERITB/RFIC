@@ -31,9 +31,11 @@ export const speakers: Speaker[] = [
   {
     id: "abdur_rahman",
     name: "Abdur Rahman",
-    roleTitle: "Module 2 Device Modeling Lead",
-    organization: "IHP Microelectronics",
-    bio: "Specializes in high-frequency device modeling and SiGe BiCMOS physics at IHP.",
+    roleTitle: "Module 2 Lead • Scientist, IHP",
+    organization: "IHP – Leibniz Institute for High Performance Microelectronics",
+    avatarUrl: "/stakeholders/abdur-rahman.jpg",
+    bio: "Scientist at IHP – Leibniz Institute for High Performance Microelectronics (Technology / Research & Prototyping Service). Holds an MSc in Microelectronics and Microsystems from TU Hamburg (TUHH). Specializes in high-frequency device modeling, analog-mixed signal design, and open-source PDK enablement for advanced BiCMOS technologies.",
+    linkedInUrl: "https://www.linkedin.com/in/arahman404",
   },
   {
     id: "yegappan_sethu",
